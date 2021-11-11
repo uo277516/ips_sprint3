@@ -22,6 +22,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import logica.AtletaDto;
 import logica.AtletaModel;
@@ -49,7 +50,7 @@ public class VentanaAtletaInscripcion extends JFrame {
 	private JLabel lblCategoria;
 	private JLabel lblFecha;
 	private JLabel lblEstado;
-	private InscripcionModel im;
+	private InscripcionModel im = new InscripcionModel();
 
 //	/**
 //	 * Launch the application.
@@ -86,8 +87,6 @@ public class VentanaAtletaInscripcion extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(getLblTituloInscripciones(), BorderLayout.NORTH);
 		contentPane.add(getPanel(), BorderLayout.CENTER);
-		this.im = new InscripcionModel();
-		updateEstadosIncripciones();
 	}
 
 	private JLabel getLblTituloInscripciones() {
@@ -118,11 +117,6 @@ public class VentanaAtletaInscripcion extends JFrame {
 	private AtletaDto getAtleta(String dni) throws SQLException {
 		AtletaModel am = new AtletaModel();
 		return am.findAtletaByDni(dni);
-	}
-
-	private List<InscripcionDto> getInscripciones() throws SQLException {
-		InscripcionModel im = new InscripcionModel();
-		return im.getInscripcionesDeUnaCompeticion(this.competition.getId());
 	}
 
 	private Panel getPanel() throws SQLException {
@@ -160,6 +154,7 @@ public class VentanaAtletaInscripcion extends JFrame {
 	private JTable getTable() throws SQLException {
 		if (table == null) {
 			table = new JTable();
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			table.setToolTipText("Inscripciones");
 			table.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
 			table.setSelectionBackground(new Color(106, 31, 109));
@@ -172,6 +167,13 @@ public class VentanaAtletaInscripcion extends JFrame {
 			modelo.addColumn("Categoría");
 			modelo.addColumn("Fecha");
 			modelo.addColumn("Estado");
+
+			TableColumn columna;
+			columna = table.getColumn("Categoría");
+			columna.setMinWidth(100);
+			columna = table.getColumn("Estado");
+			columna.setMinWidth(150);
+
 			String[][] info = new String[getInscripciones().size()][5];
 			List<InscripcionDto> inscripciones = getInscripciones();
 			AtletaDto a;
@@ -212,8 +214,35 @@ public class VentanaAtletaInscripcion extends JFrame {
 		}
 		return lblEstado;
 	}
+	
+	private List<InscripcionDto> getInscripciones() throws SQLException {
+		InscripcionModel im = new InscripcionModel();
+		//Actualizar las del banco
+		updateEstadoInsBanco();
+		//Actualizar las anuladas
+		updateEstadoIns();
+		return im.getInscripcionesDeUnaCompeticion(this.competition.getId());
+	}
 
-	private void updateEstadosIncripciones() {
+	private void updateEstadoIns() {
+		//Coger las inscripciones con estado Pre-inscrito
+		List<InscripcionDto> ins = im.getInscripcionesMetodoPagoEstado("transferencia", "Pre-inscrito");
+		LocalDate hoy = LocalDate.now();
+		for(InscripcionDto i : ins) {
+			String[] fecha = i.getFecha().split("/");
+			LocalDate fechaIns = LocalDate.of(Integer.valueOf(fecha[2]), Integer.valueOf(fecha[1]),
+					Integer.valueOf(fecha[0]));
+
+			long dias = ChronoUnit.DAYS.between(fechaIns, hoy);
+
+			// La fecha de inscripción es previa a la de hoy y ha pasado el plazo de 48h
+			if (fechaIns.compareTo(hoy) <= 0 && dias >= 3) {
+				im.actualizarInscripcionEstado("Anulada", i.getDni_a(), i.getId_c());
+			}
+		}
+	}
+
+	private void updateEstadoInsBanco() {
 		File archivo = null;
 		FileReader fr = null;
 		BufferedReader br = null;
@@ -226,29 +255,21 @@ public class VentanaAtletaInscripcion extends JFrame {
 			br = new BufferedReader(fr);
 
 			// Lectura del fichero
+			InscripcionDto ins;
 			String linea;
 			List<String[]> transferenciasBanco = new LinkedList<>();
-			List<String> dniTransferenciasBanco = new LinkedList<>();
-			List<InscripcionDto> transferencias = im.getInscripcionesMetodoPago("transferencia");
 
 			while ((linea = br.readLine()) != null) {
-				String[] line = linea.split("@");
-				transferenciasBanco.add(line);
-				dniTransferenciasBanco.add(line[0]);
+				transferenciasBanco.add(linea.split("@"));
 			}
-
-			for (InscripcionDto ins : transferencias) {
-				if (dniTransferenciasBanco.contains(ins.getDni_a())) {
-					// Transferencia del banco
-					int index = dniTransferenciasBanco.indexOf(ins.getDni_a());
-					updateEstadoInsTransBanco(transferenciasBanco.get(index));
-				} else {
-					// Todavía no ha pagado
-					updateEstadoInsTrans(ins);
+			
+			for(String[] i : transferenciasBanco) {
+				//Comprobar si existe
+				ins = im.findInsByDniId(i[0], this.competition.getId());
+				if(ins!=null) {
+					updateEstadoInsTransBanco(i, ins.getFecha());
 				}
-
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -261,26 +282,8 @@ public class VentanaAtletaInscripcion extends JFrame {
 			}
 		}
 	}
-
-	private void updateEstadoInsTrans(InscripcionDto ins) {
-		// Obtenemos la fecha de inscripción
-		String[] fecha = ins.getFecha().split("/");
-		LocalDate fechaIns = LocalDate.of(Integer.valueOf(fecha[2]), Integer.valueOf(fecha[1]),
-				Integer.valueOf(fecha[0]));
-
-		// Obtenemos la fecha de hoy
-		LocalDate hoy = LocalDate.now();
-		long dias = ChronoUnit.DAYS.between(fechaIns, hoy);
-
-		// La fecha de inscripción es previa a la de hoy y ha pasado el plazo de 48h
-		if (fechaIns.compareTo(hoy) < 0 && dias >= 3) {
-			im.actualizarInscripcionEstado("Anulada", ins.getDni_a(), ins.getId_c());
-		} else if (fechaIns.compareTo(hoy) < 0) {
-			im.actualizarInscripcionEstado("Pre-inscrito", ins.getDni_a(), ins.getId_c());
-		}
-	}
-
-	private void updateEstadoInsTransBanco(String[] line) {
+	
+	private void updateEstadoInsTransBanco(String[] line, String insFecha) {
 		// DNI @ dia-mes-año @ cantidad ingresada
 //		// Obtenemos los datos;
 		String dnia = line[0];
@@ -291,15 +294,12 @@ public class VentanaAtletaInscripcion extends JFrame {
 		LocalDate fechaPago = LocalDate.of(Integer.valueOf(dateFichero[2]), Integer.valueOf(dateFichero[1]),
 				Integer.valueOf(dateFichero[0]));
 
-		// Obtenemos la inscripción del atleta
-		InscripcionDto ins = im.findInsByDniId(dnia, this.competition.getId());
-
 		// Obtenemos la fecha de la inscripción
-		String[] fecha = ins.getFecha().split("/");
+		String[] fecha = insFecha.split("/");
 		LocalDate fechaIns = LocalDate.of(Integer.valueOf(fecha[2]), Integer.valueOf(fecha[1]),
 				Integer.valueOf(fecha[0]));
 
-		if (fechaIns.compareTo(ahora) < 0 && fechaIns.compareTo(fechaPago) < 0) {
+		if (fechaIns.compareTo(ahora) <= 0 && fechaIns.compareTo(fechaPago) <= 0) {
 			// La fecha de inscripción es antes de que la actual y la de pago
 			long dias = ChronoUnit.DAYS.between(fechaIns, fechaPago);
 			if (dias >= 3) {

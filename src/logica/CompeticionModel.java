@@ -129,7 +129,11 @@ public class CompeticionModel {
 
 	private List<CompeticionDto> filtrarPorFecha(String fecha) throws SQLException {
 		List<CompeticionDto> listaCompeticiones = new ArrayList<CompeticionDto>();
-
+		
+		String[] cosas = fecha.split("/");
+		cosas[0] = String.valueOf(Integer.parseInt(cosas[0])+1);
+		String f = cosas[0]+"/"+cosas[1]+"/"+cosas[2];
+		System.out.println(f);
 		// Conexi�n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
@@ -140,7 +144,7 @@ public class CompeticionModel {
 			rs = pst.executeQuery();
 
 			// A�adimos los pedidos a la lista
-			listaCompeticiones = DtoAssembler.toCompeticionDtoListPorFecha(rs, fecha);
+			listaCompeticiones = DtoAssembler.toCompeticionDtoListPorFecha(rs, f);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

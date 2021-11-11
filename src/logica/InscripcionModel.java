@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 import util.BaseDatos;
 import util.DtoAssembler;
 
@@ -33,6 +34,8 @@ public class InscripcionModel {
 	public static String sql_InscripcionesPorTiempoYSexo = "select  * from inscripcion i, atleta a where i.dni_a = a.dni and i.id_c = ? and a.sexo=? order by horas is null, minutos is null, horas, minutos asc";
 	public static String sql_InscripcionesPorTiempoYEdad = "select * from inscripcion i, atleta a where i.dni_a = a.dni and i.id_c = ? and i.categoria = ? order by horas is null, minutos is null, horas, minutos asc";
 	public static String sql_InscripcionesMetodoPago = "select * from inscripcion where metodo_pago=?";
+	public static String sql_InscripcionesMetodoPagoCompId = "select * from inscripcion where metodo_pago=? and id_c=?";
+	public static String sql_InscripcionesMetodoPagoEstado = "select * from inscripcion where metodo_pago=? and estado=?";
 
 	public static String sqlActualizarDorsales = "update inscripcion set dorsal=? where id_c=? and dni_a=?";
 	public static String sqlActEnComp = "update competicion set d_asig=1 where id=?";
@@ -417,9 +420,9 @@ public class InscripcionModel {
 			pst.setString(1, dni_a);
 			pst.setString(2, id_c);
 			rs = pst.executeQuery();
-			rs.next();
-
-			a = DtoAssembler.toInscripcionDto(rs);
+			if(rs.next()) {
+				a = DtoAssembler.toInscripcionDto(rs);
+			}
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -732,4 +735,85 @@ public class InscripcionModel {
 		}
 	}
 
+	public List<InscripcionDto> getInscripcionesMetodoPagoComp(String metodoPago, String id) {
+		List<InscripcionDto> ins = null;
+		try {
+			ins = getInscripcionesMetodoPagoCompP(metodoPago.toLowerCase(), id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ins;
+	}
+
+	private List<InscripcionDto> getInscripcionesMetodoPagoCompP(String metodoPago, String id) throws SQLException {
+		List<InscripcionDto> listaInscrpcines = new ArrayList<InscripcionDto>();
+
+		// Conexi�n a la base de datos
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(sql_InscripcionesMetodoPagoCompId);
+			pst.setString(1, metodoPago);
+			pst.setString(2, id);
+			rs = pst.executeQuery();
+
+			// A�adimos los pedidos a la lista
+			listaInscrpcines = DtoAssembler.toInscripcionDtoList(rs);
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
+
+		for (InscripcionDto atletaDto : listaInscrpcines) {
+			System.out.println(atletaDto);
+		}
+		return listaInscrpcines;
+	}
+	
+	public List<InscripcionDto> getInscripcionesMetodoPagoEstado(String metodoPago, String estado) {
+		List<InscripcionDto> ins = null;
+		try {
+			ins = getInscripcionesMetodoPagoEstadoP(metodoPago.toLowerCase(), estado);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ins;
+	}
+
+	private List<InscripcionDto> getInscripcionesMetodoPagoEstadoP(String metodoPago, String estado) throws SQLException {
+		List<InscripcionDto> listaInscrpcines = new ArrayList<InscripcionDto>();
+
+		// Conexi�n a la base de datos
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(sql_InscripcionesMetodoPagoEstado);
+			pst.setString(1, metodoPago);
+			pst.setString(2, estado);
+			rs = pst.executeQuery();
+
+			// A�adimos los pedidos a la lista
+			listaInscrpcines = DtoAssembler.toInscripcionDtoList(rs);
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
+
+		for (InscripcionDto atletaDto : listaInscrpcines) {
+			System.out.println(atletaDto);
+		}
+		return listaInscrpcines;
+	}
 }
