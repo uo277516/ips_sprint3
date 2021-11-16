@@ -22,6 +22,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import igu.atleta.VentanaInscripcionesAtleta;
+import igu.atleta.VentanaMostrarCarreras;
+import igu.organizador.VentanaAsignarDorsales;
+import igu.organizador.VentanaCrearCompeticion;
+import igu.organizador.VentanaMostrarCarrerasOrganizador;
 import logica.CompeticionModel;
 import logica.MarcaTiempo;
 

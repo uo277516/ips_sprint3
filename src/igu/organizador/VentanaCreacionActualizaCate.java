@@ -1,4 +1,4 @@
-package igu;
+package igu.organizador;
 
 import java.awt.Color;
 import java.awt.Font;

@@ -1,4 +1,4 @@
-package igu;
+package igu.atleta;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import igu.VentanaInicial;
 import logica.CompeticionModel;
 import logica.InscripcionDto;
 import logica.InscripcionModel;
