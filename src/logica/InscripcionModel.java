@@ -30,7 +30,7 @@ public class InscripcionModel {
 	public static String sql7UpdatePago = "update inscripcion set metodo_pago=? where dni_a=? and id_c=?";
 
 	public static String sql_InscripcionesPorTiempo = "select  * from inscripcion i, atleta a where i.dni_a = a.dni and id_c = ? order by horas is null, minutos is null, horas, minutos asc";
-	public static String sql_InscripcionesPorTiempoYCategoria = "select  * from inscripcion i, atleta a where i.dni_a = a.dni and ? order by horas is null, minutos is null, horas, minutos asc";
+	public static String sql_InscripcionesPorTiempoYCategoria = "select  * from inscripcion i, atleta a, competicion c where i.dni_a = a.dni and i.id_c = c.id and c.id = ?order by i.categoria, horas is null, minutos is null, horas, minutos asc";
 	public static String sql_InscripcionesPorTiempoYSexo = "select  * from inscripcion i, atleta a where i.dni_a = a.dni and i.id_c = ? and a.sexo=? order by horas is null, minutos is null, horas, minutos asc";
 	public static String sql_InscripcionesPorTiempoYEdad = "select * from inscripcion i, atleta a where i.dni_a = a.dni and i.id_c = ? and i.categoria = ? order by horas is null, minutos is null, horas, minutos asc";
 	public static String sql_InscripcionesMetodoPago = "select * from inscripcion where metodo_pago=?";
@@ -527,6 +527,31 @@ public class InscripcionModel {
 
 	}
 
+	public List<InscripcionDto> getInscripcionesPorTiempoYCategoria(String carreraId) throws SQLException {
+		List<InscripcionDto> listaInscripciones = new ArrayList<InscripcionDto>();
+
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(sql_InscripcionesPorTiempoYCategoria);
+			pst.setString(1, carreraId);
+			rs = pst.executeQuery();
+
+			listaInscripciones = DtoAssembler.toInscripcionDtoList(rs);
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
+
+		return listaInscripciones;
+	}
+	
 	public List<InscripcionDto> getInscripcionesPorTiempo(String carreraId) throws SQLException {
 		List<InscripcionDto> listaInscripciones = new ArrayList<InscripcionDto>();
 
