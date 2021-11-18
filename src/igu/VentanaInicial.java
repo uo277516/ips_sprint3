@@ -39,6 +39,10 @@ public class VentanaInicial extends JFrame {
 	private JPanel contentPane;
 	private JFileChooser chooser;
 
+	private int ndatos;
+	private String competicionId;
+	private CompeticionModel cm;
+
 	/**
 	 * Launch the application.
 	 */
@@ -59,6 +63,8 @@ public class VentanaInicial extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaInicial() {
+		ndatos = 0;
+		cm = new CompeticionModel();
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 541, 363);
@@ -89,7 +95,6 @@ public class VentanaInicial extends JFrame {
 				try {
 					elegirAsOrganizador();
 				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -129,7 +134,8 @@ public class VentanaInicial extends JFrame {
 		} // moises
 		else if (seleccion == 2) {
 			if (actualizarClasificaciones())
-				JOptionPane.showMessageDialog(this, "Los tiempos han sido asignados correctamente.");
+				JOptionPane.showMessageDialog(this, "Datos de " + cm.getCompeticionById(competicionId).get(0).getNombre() + " cargados. \n"
+						+ "Se han actualizado los tiempos de " + ndatos + " atletas");
 			else
 				JOptionPane.showMessageDialog(this, "Los Tiempos no ha podido cargarse."); // moises
 		} else if (seleccion == 3) {
@@ -149,27 +155,24 @@ public class VentanaInicial extends JFrame {
 	}
 
 	private boolean actualizarClasificaciones() throws FileNotFoundException {
-		File[] files = cargarFicherosTiempos();
-		for (int i = 0; i < files.length; i++) {
-			if (!getValues(files[i]))
-				return false;
-			return true;
-		}
-		return false;
+		File file = cargarFicherosTiempos();
+		if (!getValues(file))
+			return false;
+		return true;
 
 	}
 
-	protected File[] cargarFicherosTiempos() {
+	protected File cargarFicherosTiempos() {
 		int respuesta = getChooser().showOpenDialog(null);
 		if (respuesta == 0) {
-			File[] files = (File[]) chooser.getSelectedFiles();
-			return files;
+			File file = (File) chooser.getSelectedFile();
+			return file;
 		}
 		return null;
 	}
 
 	public boolean getValues(File file) {
-		String competicionId = null;
+		competicionId = null;
 		CompeticionModel cm = new CompeticionModel();
 		MarcaTiempo mt;
 		FileInputStream stream = null;
@@ -187,13 +190,15 @@ public class VentanaInicial extends JFrame {
 				if (trozos.length == 1)
 					competicionId = trozos[0];
 				else if (trozos.length == 3) {
+					ndatos++;
 					mt = new MarcaTiempo();
 					mt.setDorsal(trozos[0]);
 					mt.setTiempoInicial(trozos[1]);
 					mt.setTiempoFinal(trozos[2]);
 					tiempos.add(mt);
 				} else {
-					JOptionPane.showMessageDialog(this, "El archivo " + file.getName() + " no sigue el formato correcto"); // moises
+					JOptionPane.showMessageDialog(this,
+							"El archivo " + file.getName() + " no sigue el formato correcto"); // moises
 					return false;
 				}
 			}
