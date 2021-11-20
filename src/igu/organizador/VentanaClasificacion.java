@@ -3,22 +3,20 @@ package igu.organizador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
-import logica.CategoriaDto;
 import logica.CompeticionModel;
+import logica.MarcaTiempo;
 
 public class VentanaClasificacion extends JFrame {
 
@@ -27,22 +25,13 @@ public class VentanaClasificacion extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	@SuppressWarnings("unused")
-	private JTextArea textArea;
-	private JList<String> clasificacion;
-	@SuppressWarnings("unused")
+
 	private JTable table;
 	private JLabel label;
 
 	CompeticionModel cm = new CompeticionModel();
 	private String id;
 	private int n;
-//	private JScrollPane scrollPane;
-//	private JPanel panel;
-//	private JLabel lblNewLabel;
-	private JList<String> list;
-	private JPanel panel_1;
-	private List<CategoriaDto> categorias;
 
 	/**
 	 * Launch the application.
@@ -67,7 +56,6 @@ public class VentanaClasificacion extends JFrame {
 	 */
 	public VentanaClasificacion(String id) throws SQLException {
 		this.id = id;
-		categorias = cm.getCategoriasByCompeticion(id);
 		setTitle("Clasificación:");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 825, 488);
@@ -77,10 +65,8 @@ public class VentanaClasificacion extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(getLblCompeticiones(), BorderLayout.NORTH);
-		contentPane.add(getPanel_1(), BorderLayout.CENTER);
-		// contentPane.add(getScrollPane());
-		
-		crearClasificaciones();
+		contentPane.add(getScrollPane());
+
 	}
 
 	private JLabel getLblCompeticiones() {
@@ -92,104 +78,53 @@ public class VentanaClasificacion extends JFrame {
 		return label;
 	}
 
-	private JList<String> getListaClasificacion(String categoria) {
-		DefaultListModel<String> model = new DefaultListModel<String>();
-		if (clasificacion == null) {
-			clasificacion = new JList<String>();
-
-			try {
-				cm.getClasificacionPorEdad(id, categoria).forEach(s -> model.addElement(s));
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		clasificacion.setModel(model);
-		return clasificacion;
-	}
-
-//	private JPanel getPanel(String categoria, int n) {
-//		JPanel panel = null;
-//		if (panel == null) {
-//			panel = new JPanel();
-//			panel.setBounds(24, n * 47, 442, 142);
-//			panel.add(getLblCategoria(categoria));
-//			panel.add(getScrollLista(categoria));
-//		}
-//		return panel;
-//	}
-//
-//	private JScrollPane getScrollLista(String categoria) {
-//		JScrollPane scrollLista = null;
-//		if (scrollLista == null) {
-//			scrollLista = new JScrollPane();
-//			scrollLista.setViewportView(getListaClasificacion(categoria));
-//		}
-//		return scrollLista;
-//	}
-//
-//	private JLabel getLblCategoria(String categoria) {
-//		JLabel labelCategoria = null;
-//		if (labelCategoria == null) {
-//			labelCategoria = new JLabel("Categoria " + categoria);
-//			labelCategoria.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-//		}
-//		return labelCategoria;
-//	}
-
-	private void crearClasificaciones() throws SQLException {
-		n = 1;
-		
-		for (CategoriaDto c : categorias)
-			crearClasificacion(c, n++);
-
-	}
-
-	private void crearClasificacion(CategoriaDto c, int n) throws SQLException {
-		cm.getClasificacionPorEdad(id, c.getNombre()).forEach((a) -> System.out.println(a));
-		panel_1.add(getScrollPane(c.getNombre(), n));
-	}
-
-	private JScrollPane getScrollPane(String categoria, int n) {
+	private JScrollPane getScrollPane() throws SQLException {
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(34, 100*n, 916, 96);
-		scrollPane.setViewportView(getPanel(categoria));
-		scrollPane.setColumnHeaderView(getLblNewLabel(categoria));
+		scrollPane.setBounds(34, 100 * n, 916, 96);
+		scrollPane.setViewportView(getTable());
 		return scrollPane;
 	}
 
-	private JPanel getPanel(String categoria) {
-		JPanel panel = new JPanel();
-		panel.add(getList(categoria));
-		//panel.add(getLblNewLabel(categoria));
+	private JTable getTable() throws SQLException {
+		if (table == null) {
+			table = new JTable();
+			table.setBorder(UIManager.getBorder("Table.scrollPaneBorder"));
+			table.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			table.setSelectionBackground(Color.YELLOW);
+			table.setBackground(Color.LIGHT_GRAY);
+			@SuppressWarnings("serial")
+			DefaultTableModel modelo = new DefaultTableModel() {
+				@Override
+				public boolean isCellEditable(int row, int column) { // all cells false
+					return false;
+				}
 
-		return panel;
-	}
-
-	private JLabel getLblNewLabel(String categoria) {
-		JLabel lblNewLabel = new JLabel("Categoria " + categoria);
-		return lblNewLabel;
-	}
-
-	private JList<String> getList(String categoria) {
-		DefaultListModel<String> model = new DefaultListModel<String>();
-		JList<String> clasificacion = new JList<String>();
-
-		try {
-			cm.getClasificacionPorEdad(id, categoria).forEach(s -> model.addElement(s));
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			};
+			table.setModel(modelo);
+			modelo.addColumn("Pos");
+			modelo.addColumn("Dorsal");
+			modelo.addColumn("Nombre");
+			modelo.addColumn("Sexo");
+			modelo.addColumn("Edad");
+			modelo.addColumn("Horas");
+			modelo.addColumn("Minutos");
+			modelo.addColumn("Categoría");
+			List<MarcaTiempo> tiempos = cm.getClasificacion(id);
+			String[][] info = new String[tiempos.size()][8];
+			tiempos = cm.ordenarPorCategoria(tiempos);
+			for (int i = 0; i < tiempos.size(); i++) {
+				info[i][0] = String.valueOf(tiempos.get(i).getPosicion());
+				info[i][1] = tiempos.get(i).getDorsal();
+				info[i][2] = tiempos.get(i).getNombre();
+				info[i][3] = tiempos.get(i).getSexo();
+				info[i][4] = tiempos.get(i).getEdad();
+				info[i][5] = String.valueOf(tiempos.get(i).getHoras());
+				info[i][6] = String.valueOf(tiempos.get(i).getMinutos());
+				info[i][7] = tiempos.get(i).getCategoria();
+				modelo.addRow(info[i]);
+			}
 		}
 
-		clasificacion.setModel(model);
-		return clasificacion;
-	}
-	private JPanel getPanel_1() {
-		if (panel_1 == null) {
-			panel_1 = new JPanel();
-			panel_1.setLayout(new GridLayout(categorias.size(), 0, 0, 0));
-		}
-		return panel_1;
+		return table;
 	}
 }
