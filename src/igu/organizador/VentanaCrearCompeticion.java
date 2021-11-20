@@ -1,7 +1,6 @@
 package igu.organizador;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -257,7 +256,7 @@ public class VentanaCrearCompeticion extends JFrame {
 								txtDistancia.setEditable(false);
 								txtFechaComp.setEditable(false);
 								txtPlazas.setEditable(false);
-								
+								comboBox.setEditable(false);
 								txtDorsales.setEditable(false);
 							}
 						} catch (ParseException e1) {
