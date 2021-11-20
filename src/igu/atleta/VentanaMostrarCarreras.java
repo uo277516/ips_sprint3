@@ -220,7 +220,15 @@ public class VentanaMostrarCarreras extends JFrame {
 			table.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			table.setSelectionBackground(Color.YELLOW);
 			table.setBackground(Color.LIGHT_GRAY);
-			DefaultTableModel modelo = new DefaultTableModel();
+			@SuppressWarnings("serial")
+			DefaultTableModel modelo = new DefaultTableModel() {
+				public boolean isCellEditable(int fila, int columnas) {
+					if (columnas == 8)
+						return true;
+					return false;
+
+				}
+			};
 			table.setModel(modelo);
 			modelo.addColumn("Iden");modelo.addColumn("Nombre");modelo.addColumn("Fecha Comp");modelo.addColumn("Tipo");modelo.addColumn("Distancia");modelo.addColumn("Cuota");modelo.addColumn("Fecha Fin Insc");modelo.addColumn("Plazas");
 			List<CompeticionDto> competiciones = comp.getCompetcionesFechaLista(textFecha.getText());
