@@ -1,7 +1,7 @@
 package igu.organizador;
 
 import java.awt.Color;
-import java.awt.EventQueue;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +13,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -41,7 +43,6 @@ public class VentanaCrearCompeticion extends JFrame {
 	private JTextField txtFechaComp;
 	private JLabel lblFormato;
 	private JLabel lblTipo;
-	private JTextField txtTipo;
 	private JLabel lblDistancia;
 	private JTextField txtDistancia;
 	private JLabel lblPlazas;
@@ -67,6 +68,7 @@ public class VentanaCrearCompeticion extends JFrame {
 	private JLabel lblGestionarCat;
 	private JButton btnGestionar;
 	private JButton btnFinalizar;
+	private JComboBox<String> comboBox;
 
 	/**
 	 * Create the frame.
@@ -76,6 +78,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		setTitle("Creaci\u00F3n de competiciones:");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 640, 655);
+		//setBounds(100,40000,900,1000);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -90,7 +93,6 @@ public class VentanaCrearCompeticion extends JFrame {
 		txtDistancia.setEditable(true);
 		txtFechaComp.setEditable(true);
 		txtPlazas.setEditable(true);
-		txtTipo.setEditable(true);
 		txtDorsales.setEditable(true);
 		contentPane.add(getLblGestionarCat());
 		contentPane.add(getBtnGestionar());
@@ -98,6 +100,9 @@ public class VentanaCrearCompeticion extends JFrame {
 		lblGestionarCat.setVisible(false);
 		btnGestionar.setVisible(false);
 		btnFinalizar.setVisible(false);
+		//this.setMinimumSize(new Dimension(900,1000));
+		//this.setMaximumSize(new Dimension(901,1001));
+		this.setResizable(false);
 	}
 	private JTextArea getTxtAreaInfo() {
 		if (txtAreaInfo == null) {
@@ -122,7 +127,6 @@ public class VentanaCrearCompeticion extends JFrame {
 			pnDatosBasicos.add(getTxtFechaComp());
 			pnDatosBasicos.add(getLblFormato());
 			pnDatosBasicos.add(getLblTipo());
-			pnDatosBasicos.add(getTxtTipo());
 			pnDatosBasicos.add(getLblDistancia());
 			pnDatosBasicos.add(getTxtDistancia());
 			pnDatosBasicos.add(getLblPlazas());
@@ -132,6 +136,7 @@ public class VentanaCrearCompeticion extends JFrame {
 			pnDatosBasicos.add(getLblKm());
 			pnDatosBasicos.add(getLblDorsales());
 			pnDatosBasicos.add(getTxtDorsales());
+			pnDatosBasicos.add(getComboBox());
 		}
 		return pnDatosBasicos;
 	}
@@ -184,14 +189,6 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblTipo;
 	}
-	private JTextField getTxtTipo() {
-		if (txtTipo == null) {
-			txtTipo = new JTextField();
-			txtTipo.setBounds(103, 99, 121, 22);
-			txtTipo.setColumns(10);
-		}
-		return txtTipo;
-	}
 	private JLabel getLblDistancia() {
 		if (lblDistancia == null) {
 			lblDistancia = new JLabel("Distancia:");
@@ -224,12 +221,13 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return txtPlazas;
 	}
+	
 	private JButton getBtnValidar() {
 		if (btnValidar == null) {
 			btnValidar = new JButton("Validar");
 			btnValidar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (txtNombre.getText().equals("") || txtTipo.getText().equals("") || txtFechaComp.getText().equals("") || txtPlazas.getText().equals("")|| txtDistancia.getText().equals("")) {
+					if (txtNombre.getText().equals("") || txtFechaComp.getText().equals("") || txtPlazas.getText().equals("")|| txtDistancia.getText().equals("")) {
 						System.out.println("Hola");
 						mostrarCamposVacios();
 					}else {
@@ -240,9 +238,6 @@ public class VentanaCrearCompeticion extends JFrame {
 							}else if(!fechaValida(txtFechaComp.getText())) {
 								mostrarErrorFecha();
 								txtFechaComp.setText("");
-							}else if(!comprobarTipo(getTxtTipo().getText())) {
-								mostrarErrorTipo();
-								txtTipo.setText("");
 							}else if (!compruebaSoloNumeros(getTxtDistancia().getText())) {
 								mostrarErrorDistancia();
 								txtDistancia.setText("");
@@ -262,7 +257,7 @@ public class VentanaCrearCompeticion extends JFrame {
 								txtDistancia.setEditable(false);
 								txtFechaComp.setEditable(false);
 								txtPlazas.setEditable(false);
-								txtTipo.setEditable(false);
+								
 								txtDorsales.setEditable(false);
 							}
 						} catch (ParseException e1) {
@@ -285,23 +280,10 @@ public class VentanaCrearCompeticion extends JFrame {
 	private void insertarDatosBasicos() {
 		String id = UUID.randomUUID().toString();
 		this.id_comp=id;
-		String tipo = sacarTipo();
+		String tipo = getComboBox().getSelectedItem().toString();
 		comp.insertarDatosBasicos(id,getTxtNombre().getText(), getTxtFechaComp().getText(), 
 				tipo, Integer.parseInt(getTxtDistancia().getText()), Integer.parseInt(getTxtPlazas().getText()),Integer.parseInt(getTxtDorsales().getText()));
 
-	}
-
-	private String sacarTipo() {
-		String tipo = getTxtTipo().getText();
-		if (tipo.equals("montaña")|| tipo.equals("Montaña") || tipo.equals("MONTAÑA"))
-			return "montaña";
-		return "asfalto";
-	}
-
-	private boolean comprobarTipo(String text) {
-		if (text.equals("montaña") || text.equals("asfalto") || text.equals("Montaña") || text.equals("Asfalto") || text.equals("MONTAÑA") || text.equals("ASFALTO"))
-			return true;
-		return false;
 	}
 
 	private void mostrarDatosBasicosCorrectos() {
@@ -323,10 +305,6 @@ public class VentanaCrearCompeticion extends JFrame {
 
 	}
 
-	private void mostrarErrorTipo() {
-		JOptionPane.showMessageDialog(this, "Error: Tipo de carrera incorrecto.");
-
-	}
 
 	private void mostrarErrorFecha() {
 		JOptionPane.showMessageDialog(this, "Error: Fecha incorrecta.");
@@ -410,6 +388,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblTiposCarreras;
 	}
+	
 	private JLabel getLblKm() {
 		if (lblKm == null) {
 			lblKm = new JLabel("En km");
@@ -418,6 +397,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblKm;
 	}
+	
 	private JPanel getPnPlazos() {
 		if (pnPlazos == null) {
 			pnPlazos = new JPanel();
@@ -718,7 +698,7 @@ public class VentanaCrearCompeticion extends JFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(30, 57, 317, 101);
+			scrollPane.setBounds(30, 57, 376, 101);
 			scrollPane.setViewportView(getTextArea());
 		}
 		return scrollPane;
@@ -798,8 +778,16 @@ public class VentanaCrearCompeticion extends JFrame {
 			btnFinalizar.setForeground(Color.WHITE);
 			btnFinalizar.setBackground(Color.RED);
 			btnFinalizar.setFont(new Font("Tahoma", Font.PLAIN, 15));
-			btnFinalizar.setBounds(527, 584, 89, 23);
+			btnFinalizar.setBounds(485, 585, 89, 23);
 		}
 		return btnFinalizar;
+	}
+	private JComboBox<String> getComboBox() {
+		if (comboBox == null) {
+			comboBox = new JComboBox<String>();
+			comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"monta\u00F1a", "asfalto"}));
+			comboBox.setBounds(103, 98, 121, 22);
+		}
+		return comboBox;
 	}
 }
