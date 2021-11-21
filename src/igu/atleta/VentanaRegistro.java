@@ -1,4 +1,4 @@
-package igu;
+package igu.atleta;
 
 import java.awt.Color;
 import java.awt.Font;

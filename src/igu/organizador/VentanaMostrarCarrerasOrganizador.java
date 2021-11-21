@@ -1,4 +1,4 @@
-package igu;
+package igu.organizador;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
+import igu.VentanaInicial;
+import igu.atleta.VentanaAtletaInscripcion;
 import logica.CompeticionDto;
 import logica.CompeticionModel;
 

@@ -1,4 +1,4 @@
-package igu;
+package igu.atleta;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

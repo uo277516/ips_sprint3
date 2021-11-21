@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import util.BaseDatos;
@@ -129,10 +130,10 @@ public class CompeticionModel {
 
 	private List<CompeticionDto> filtrarPorFecha(String fecha) throws SQLException {
 		List<CompeticionDto> listaCompeticiones = new ArrayList<CompeticionDto>();
-		
+
 		String[] cosas = fecha.split("/");
-		cosas[0] = String.valueOf(Integer.parseInt(cosas[0])+1);
-		String f = cosas[0]+"/"+cosas[1]+"/"+cosas[2];
+		cosas[0] = String.valueOf(Integer.parseInt(cosas[0]) + 1);
+		String f = cosas[0] + "/" + cosas[1] + "/" + cosas[2];
 		System.out.println(f);
 		// Conexiï¿½n a la base de datos
 		Connection c = null;
@@ -366,58 +367,75 @@ public class CompeticionModel {
 
 	}
 
-	public List<String> getClasificacion(String carreraId) throws SQLException {
-		List<String> clasificacion = new ArrayList<String>();
+	public List<MarcaTiempo> getClasificacion(String carreraId) throws SQLException {
+		List<MarcaTiempo> clasificacion = new ArrayList<MarcaTiempo>();
 		AtletaDto a;
+		MarcaTiempo mt;
+		int posicion = 1;
 		List<InscripcionDto> inscripciones = im.getInscripcionesPorTiempo(carreraId);
 		for (InscripcionDto i : inscripciones) {
+			mt = new MarcaTiempo();
 			a = am.findAtletaByDni(i.getDni_a());
-			if (i.getHoras() == 0 && i.getMinutos() == 0)
-				clasificacion.add("Nombre: " + a.getNombre() + " - Sexo: " + a.getSexo() + " - Tiempo: --- ");
-			else
-				clasificacion.add("Nombre: " + a.getNombre() + " - Sexo: " + a.getSexo() + " - Tiempo: " + i.getHoras()
-						+ "h " + i.getMinutos() + " minutos");
+			mt.setPosicion(String.valueOf(posicion++));
+			mt.setNombre(a.getNombre());
+			mt.setSexo(a.getSexo());
+			mt.setHoras(i.getHoras());
+			mt.setDorsal(i.getDorsal());
+			mt.setEdad(a.getF_nac());
+			mt.setMinutos(i.getMinutos());
+			mt.setCategoria(i.getCategoria());
+			clasificacion.add(mt);
+
 		}
 		return clasificacion;
 	}
 
-	public List<String> getClasificacionPorSexo(String id, String categoria) throws SQLException {
+	public List<MarcaTiempo> ordenarPorCategoria(List<MarcaTiempo> listaSinOrdenar) {
+		listaSinOrdenar.sort(Comparator.comparing(MarcaTiempo::getCategoria));
+		return listaSinOrdenar;
+	}
+
+	public List<MarcaTiempo> getClasificacionPorSexo(String id, String categoria) throws SQLException {
 		if (categoria == "General") {
 			return getClasificacion(id);
 		} else {
-			List<String> clasificacion = new ArrayList<String>();
+			List<MarcaTiempo> clasificacion = new ArrayList<MarcaTiempo>();
 			AtletaDto a;
+			MarcaTiempo mt;
 			List<InscripcionDto> inscripciones = im.getInscripcionesPorTiempoYSexo(id, categoria);
 			for (InscripcionDto i : inscripciones) {
 				a = am.findAtletaByDni(i.getDni_a());
-				if (i.getHoras() == 0 && i.getMinutos() == 0)
-					clasificacion.add("Nombre: " + a.getNombre() + " - Sexo: " + a.getSexo() + " - Tiempo: --- ");
-				else
-					clasificacion.add("Nombre: " + a.getNombre() + " - Sexo: " + a.getSexo() + " - Tiempo: "
-							+ i.getHoras() + "h " + i.getMinutos() + " minutos");
+				mt = new MarcaTiempo();
+				mt.setNombre(a.getNombre());
+				mt.setSexo(a.getSexo());
+				mt.setHoras(i.getHoras());
+				mt.setMinutos(i.getMinutos());
+				clasificacion.add(mt);
 			}
 			return clasificacion;
 		}
 	}
 
-	public List<String> getClasificacionPorEdad(String id, String categoria) throws SQLException {
+	public List<MarcaTiempo> getClasificacionPorEdad(String id, String categoria) throws SQLException {
 		int posicion = 1;
 		if (categoria == "General") {
 			return getClasificacion(id);
 		} else {
-			List<String> clasificacion = new ArrayList<String>();
+			List<MarcaTiempo> clasificacion = new ArrayList<MarcaTiempo>();
 			AtletaDto a;
+			MarcaTiempo mt;
 			List<InscripcionDto> inscripciones = im.getInscripcionesPorTiempoYEdad(id, categoria);
 			for (InscripcionDto i : inscripciones) {
 				a = am.findAtletaByDni(i.getDni_a());
-				if (i.getHoras() == 0 && i.getMinutos() == 0)
-					clasificacion.add(
-							"Posición: " + posicion++ + " - Dorsal: " + i.getDorsal() + " - Nombre: " + a.getNombre()
-									+ " - Sexo: " + a.getSexo() + " - Edad: " + a.getF_nac() + " - Tiempo: --- ");
-				else
-					clasificacion.add("Posición: " + posicion++ + " - Dorsal: " + i.getDorsal() + " - Nombre: "
-							+ a.getNombre() + " - Sexo: " + a.getSexo() + " - Edad: " + a.getF_nac() + " - Tiempo: "
-							+ i.getHoras() + "h " + i.getMinutos() + " minutos");
+				mt = new MarcaTiempo();
+				mt.setNombre(a.getNombre());
+				mt.setSexo(a.getSexo());
+				mt.setHoras(i.getHoras());
+				mt.setMinutos(i.getMinutos());
+				mt.setPosicion(String.valueOf(posicion++));
+				mt.setDorsal(i.getDorsal());
+				mt.setEdad(a.getF_nac());
+				clasificacion.add(mt);
 			}
 			return clasificacion;
 		}
