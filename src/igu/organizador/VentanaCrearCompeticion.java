@@ -76,7 +76,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		comp = new CompeticionModel();
 		setTitle("Creaci\u00F3n de competiciones:");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 640, 655);
+		setBounds(100, 100, 598, 655);
 		//setBounds(100,40000,900,1000);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);

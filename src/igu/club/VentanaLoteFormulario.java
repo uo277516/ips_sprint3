@@ -29,6 +29,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import logica.AtletaDto;
+import logica.AtletaModel;
+import logica.CompeticionDto;
+import logica.CompeticionModel;
+import logica.InscripcionDto;
+import logica.InscripcionModel;
 
 @SuppressWarnings("serial")
 public class VentanaLoteFormulario extends JFrame {
@@ -58,6 +63,11 @@ public class VentanaLoteFormulario extends JFrame {
 	private JLabel lblNewLabel;
 
 	private List<AtletaDto> list = new ArrayList<>();
+	private String idComp = "87654321";
+	private CompeticionModel cmodel = new CompeticionModel();
+	private InscripcionModel inmodel = new InscripcionModel();
+	private CompeticionDto comp =cmodel.getCompeticionById(idComp).get(0);
+	
 
 	/**
 	 * Launch the application.
@@ -98,6 +108,8 @@ public class VentanaLoteFormulario extends JFrame {
 		contentPane.add(getLblAtletasLote());
 		contentPane.add(getScrollPane());
 		contentPane.add(getBtnAnadirLote());
+		txtNombreComp.setText(comp.getNombre());
+		txtNombreComp.setEditable(false);
 	}
 	private JTextArea getTxtrParaInscribirA() {
 		if (txtrParaInscribirA == null) {
@@ -259,11 +271,16 @@ public class VentanaLoteFormulario extends JFrame {
 					}else if(!fechaValida(txtFecha.getText())) {
 						mostrarErrorFecha();
 						txtFecha.setText("");
-
+					}else if(atletaYaEnCarrera()) {
+						mostrarAtletaYaEnCarrera(getTxtDni().getText());
+						borrarTodosTxt();
 					}else {
 						
 						mostrarAtletaInsertado(getTxtDni().getText());
 						actualizarTabla();
+						borrarTodosTxt();
+						txtNombreClub.setEditable(false);
+						txtNombreComp.setEditable(false);
 					}
 				}
 			});
@@ -273,6 +290,24 @@ public class VentanaLoteFormulario extends JFrame {
 			btnValidar.setBounds(452, 191, 89, 23);
 		}
 		return btnValidar;
+	}
+	
+	private boolean atletaYaEnCarrera() {
+		List<InscripcionDto> aux = inmodel.findInscripcionByDniId(getTxtDni().getText(), comp.getId());
+		if (aux.isEmpty())
+			return false;
+		return true;
+	}
+	
+	private void mostrarAtletaYaEnCarrera(String dni) {
+		JOptionPane.showMessageDialog(this, "Atleta con DNI "+dni+" ya registrado en la competicion.");
+	}
+	
+	private void borrarTodosTxt() {
+		txtNombre.setText("");
+		txtEmail.setText("");
+		txtFecha.setText("");
+		txtDni.setText("");
 	}
 
 	private void actualizarTabla() {

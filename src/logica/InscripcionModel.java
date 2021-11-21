@@ -42,6 +42,46 @@ public class InscripcionModel {
 
 	public static String updateTimes = "update inscripcion set horas = ? , minutos = ? where dorsal = ? and id_c = ?";
 
+	public static String findInscripcionByDniId = "select * from inscripcion where dni_a=? and id_c=?";
+
+	public List<InscripcionDto> findInscripcionByDniId(String dni,String id_c){
+		List<InscripcionDto> a = new ArrayList<>();
+		try {
+			a = findInscripcionByDniIdP(dni,id_c);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return a;
+	}
+
+	private List<InscripcionDto> findInscripcionByDniIdP(String dni, String id_c) throws SQLException {
+		List<InscripcionDto> listaInscrpcines = new ArrayList<InscripcionDto>();
+
+		// Conexi�n a la base de datos
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(findInscripcionByDniId);
+			pst.setString(1,dni);
+			pst.setString(2, id_c);
+			rs = pst.executeQuery();
+
+			// A�adimos los pedidos a la lista
+			listaInscrpcines = DtoAssembler.toInscripcionDtoList(rs);
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
+		return listaInscrpcines;
+	}
+
 	public AtletaDto findAtletaEmail(String email) {
 		AtletaDto a = null;
 		try {
@@ -178,12 +218,12 @@ public class InscripcionModel {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
-//        	if (rs==null) return false;
-//        	else {
+			//        	if (rs==null) return false;
+			//        	else {
 			rs.close();
 			pst.close();
 			c.close();
-//        	}
+			//        	}
 		}
 
 		if (listaAtletas.size() > 0)
@@ -208,7 +248,7 @@ public class InscripcionModel {
 		// Conexi�n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
-//        ResultSet rs = null;
+		//        ResultSet rs = null;
 		try {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(sql3);
@@ -447,7 +487,7 @@ public class InscripcionModel {
 		// Conexi�n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
-//        ResultSet rs = null;
+		//        ResultSet rs = null;
 		try {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(sql7UpdateEstado);
@@ -478,7 +518,7 @@ public class InscripcionModel {
 		// Conexi�n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
-//        ResultSet rs = null;
+		//        ResultSet rs = null;
 		try {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(sql7UpdateFecha);
@@ -509,7 +549,7 @@ public class InscripcionModel {
 		// Conexi�n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
-//        ResultSet rs = null;
+		//        ResultSet rs = null;
 		try {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(sql7UpdatePago);
@@ -553,7 +593,7 @@ public class InscripcionModel {
 		return listaInscripciones;
 	}
 
-//aver
+	//aver
 	public List<InscripcionDto> getInscripcionesPorTiempoYSexo(String carreraId, String sexo) throws SQLException {
 		List<InscripcionDto> listaInscripciones = new ArrayList<InscripcionDto>();
 
@@ -775,7 +815,7 @@ public class InscripcionModel {
 		}
 		return listaInscrpcines;
 	}
-	
+
 	public List<InscripcionDto> getInscripcionesMetodoPagoEstado(String metodoPago, String estado) {
 		List<InscripcionDto> ins = null;
 		try {

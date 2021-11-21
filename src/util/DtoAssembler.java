@@ -136,6 +136,8 @@ public class DtoAssembler {
 			i.setMinutos(Integer.parseInt(rs.getString("minutos")));
 		if (rs.getString("estado")!=null)
 			i.setEstado(rs.getString("estado"));
+		if (rs.getString("dorsal")!=null)
+			i.setDorsal(rs.getString("dorsal"));
 		return i;
 	}
 
