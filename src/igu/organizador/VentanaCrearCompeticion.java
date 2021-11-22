@@ -90,6 +90,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		setTitle("Creaci\u00F3n de competiciones:");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+
 //		setBounds(100, 100, 746, 655);
 //
 //		setBounds(100, 100, 598, 655);
