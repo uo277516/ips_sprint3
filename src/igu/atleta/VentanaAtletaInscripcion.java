@@ -154,7 +154,7 @@ public class VentanaAtletaInscripcion extends JFrame {
 	private JTable getTable() throws SQLException {
 		if (table == null) {
 			table = new JTable();
-			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 			table.setToolTipText("Inscripciones");
 			table.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
 			table.setSelectionBackground(new Color(106, 31, 109));
@@ -228,8 +228,9 @@ public class VentanaAtletaInscripcion extends JFrame {
 		//Coger las inscripciones con estado Pre-inscrito
 		List<InscripcionDto> ins = im.getInscripcionesMetodoPagoEstado("transferencia", "Pre-inscrito");
 		LocalDate hoy = LocalDate.now();
+		String[] fecha;
 		for(InscripcionDto i : ins) {
-			String[] fecha = i.getFecha().split("/");
+			fecha = i.getFecha().split("/");
 			LocalDate fechaIns = LocalDate.of(Integer.valueOf(fecha[2]), Integer.valueOf(fecha[1]),
 					Integer.valueOf(fecha[0]));
 
