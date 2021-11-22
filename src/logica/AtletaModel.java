@@ -416,4 +416,40 @@ public class AtletaModel {
 			c.close();
 		}
 	}
+
+	public List<AtletaDto> atletaYaEnBaseDatosDni(String dni) {
+		List<AtletaDto> list = new ArrayList<>();
+		try {
+			list = atletaYaEnBaseDatosDniP(dni);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	private List<AtletaDto> atletaYaEnBaseDatosDniP(String dni) throws SQLException {
+		List<AtletaDto> atletas = new ArrayList<AtletaDto>();
+
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(sqlFindByDni);
+			pst.setString(1, dni);
+			rs = pst.executeQuery();
+
+			atletas = DtoAssembler.toAtletaDtoList(rs);
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
+
+		return atletas;
+	}
 }

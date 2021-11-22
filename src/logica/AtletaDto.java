@@ -5,17 +5,7 @@ public class AtletaDto {
 	private String nombre;
 	private String email;
 	private String dni;
-	private String club;
 	
-	
-	public String getClub() {
-		return club;
-	}
-
-
-	public void setClub(String club) {
-		this.club = club;
-	}
 
 
 	public String getEmail() {

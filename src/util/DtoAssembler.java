@@ -41,9 +41,9 @@ public class DtoAssembler {
 		a.setEmail(rs.getString("email"));
 		return a;
 	}
-	
-	
-	
+
+
+
 	public static List<CompeticionDto> toCompeticionDtoList (ResultSet rs)
 	{
 		List<CompeticionDto> lista = new ArrayList<CompeticionDto>();
@@ -106,14 +106,14 @@ public class DtoAssembler {
 		return lista;
 	}
 
-	
-	
+
+
 	public static InscripcionDto toInscripcionDto(ResultSet rs) throws SQLException {
 
-        return cogerDatosInscripcion(rs);
-    }
-	
-	
+		return cogerDatosInscripcion(rs);
+	}
+
+
 	private static InscripcionDto cogerDatosInscripcion(ResultSet rs) throws SQLException {
 		InscripcionDto i = new InscripcionDto();
 		if (rs.getString("cantidad_pagada")!=null)
@@ -138,13 +138,16 @@ public class DtoAssembler {
 			i.setEstado(rs.getString("estado"));
 		if (rs.getString("dorsal")!=null)
 			i.setDorsal(rs.getString("dorsal"));
+		if (rs.getString("club")!=null)
+			i.setClub(rs.getString("club"));
+
 		return i;
 	}
 
 	public static AtletaDto toAtletaDto(ResultSet rs) throws SQLException {
 		return cogerDatosAtleta(rs);
 	}
-	
+
 	public static List<CompeticionDto> toCompeticionDtoListPorFecha (ResultSet rs,String fecha) 
 	{
 		List<CompeticionDto> lista = new ArrayList<CompeticionDto>();
@@ -152,6 +155,7 @@ public class DtoAssembler {
 			while(rs.next())
 			{
 				try {
+
 					if (rs.getString("f_fin3") != null) {
 						if (compararFecha(rs.getString("f_fin3"),fecha,rs.getString("f_inicio3")))
 							lista.add(cogerDatosCompeticion(rs));
@@ -172,19 +176,50 @@ public class DtoAssembler {
 		}
 		return lista;
 	}
-	
+
+	public static List<CompeticionDto> toCompeticionDtoListPorFechaPlazasMayor3 (ResultSet rs,String fecha) 
+	{
+		List<CompeticionDto> lista = new ArrayList<CompeticionDto>();
+		try {
+			while(rs.next())
+			{
+				try {
+					if (Integer.parseInt(rs.getString("num_plazas")) >= 3) {
+						if (rs.getString("f_fin3") != null) {
+							if (compararFecha(rs.getString("f_fin3"),fecha,rs.getString("f_inicio3")))
+								lista.add(cogerDatosCompeticion(rs));
+						}else if(rs.getString("f_fin2") != null) {
+							if (compararFecha(rs.getString("f_fin2"),fecha,rs.getString("f_inicio2")))
+								lista.add(cogerDatosCompeticion(rs));
+						}else
+							if (compararFecha(rs.getString("f_fin1"),fecha,rs.getString("f_inicio1")))
+								lista.add(cogerDatosCompeticion(rs));
+					}
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return lista;
+	}
+
 	public static boolean compararFecha(String ffin, String fecha,String fechaInicio) throws ParseException{
-//		String[] fechaFin = ffin.split("/");
-//		String[] fechaAcomparar = fecha.split("/");
-//		String[] fInicio = fechaInicio.split("/");
+		//		String[] fechaFin = ffin.split("/");
+		//		String[] fechaAcomparar = fecha.split("/");
+		//		String[] fInicio = fechaInicio.split("/");
 		SimpleDateFormat formato =new SimpleDateFormat("dd/MM/yyyy");
-		
+
 		Date fechaFin2 = formato.parse(ffin);
 
 		Date fecha2 = formato.parse(fecha);
-		
+
 		Date fechaI2 = formato.parse(fechaInicio);
-		
+
 		if (fechaFin2.before(fecha2)) {
 			return false;
 		}
@@ -193,7 +228,7 @@ public class DtoAssembler {
 		}
 
 		return true;
-		
+
 
 	}
 
@@ -201,12 +236,12 @@ public class DtoAssembler {
 		List<CompeticionDto> lista = toCompeticionDtoList(rs);
 		for (CompeticionDto competicionDto : lista) {
 			System.out.println(competicionDto.getF_fin1());
-			
+
 		}
 		System.out.println("acabado");
 		List<CompeticionDto> ret = new ArrayList<CompeticionDto>();
 		SimpleDateFormat formato =new SimpleDateFormat("dd/MM/yyyy");
-		
+
 		for (CompeticionDto c : lista) {
 			try {
 				if (formato.parse(fecha).before(formato.parse(c.getF_comp())) && c.getD_asig()==0) { 
@@ -250,7 +285,7 @@ public class DtoAssembler {
 		//System.out.println(ret.get(0));
 		return ret;
 	}
-	
+
 	public static List<CategoriaDto> toCategoriaDtoList (ResultSet rs)
 	{
 		List<CategoriaDto> lista = new ArrayList<CategoriaDto>();
@@ -268,7 +303,7 @@ public class DtoAssembler {
 
 	private static CategoriaDto cogerDatosCategoria(ResultSet rs) throws SQLException {
 		CategoriaDto a = new CategoriaDto();
-		
+
 		a.setId((rs.getString("id")));
 		a.setNombre(rs.getString("nombre"));
 		a.setEdad_min(Integer.parseInt(rs.getString("edad_min")));

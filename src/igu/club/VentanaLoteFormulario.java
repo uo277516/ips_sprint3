@@ -1,7 +1,6 @@
 package igu.club;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +29,8 @@ import javax.swing.table.DefaultTableModel;
 
 import logica.AtletaDto;
 import logica.AtletaModel;
+import logica.CategoriaDto;
+import logica.CategoriaModel;
 import logica.CompeticionDto;
 import logica.CompeticionModel;
 import logica.InscripcionDto;
@@ -63,33 +64,19 @@ public class VentanaLoteFormulario extends JFrame {
 	private JLabel lblNewLabel;
 
 	private List<AtletaDto> list = new ArrayList<>();
-	private String idComp = "87654321";
+	//private String idComp = "cfd49f81-6dd1-4991-8c46-cbc1f5e48044";
 	private CompeticionModel cmodel = new CompeticionModel();
 	private InscripcionModel inmodel = new InscripcionModel();
-	private CompeticionDto comp =cmodel.getCompeticionById(idComp).get(0);
-	
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaLoteFormulario frame = new VentanaLoteFormulario();
-					frame.setVisible(true);
-					frame.setLocationRelativeTo(null);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	//private CompeticionDto comp =cmodel.getCompeticionById(idComp).get(0);
+	private CompeticionDto comp;
+	private AtletaModel amodel = new AtletaModel();
+	private JButton btnFinalizar;
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaLoteFormulario() {
+	public VentanaLoteFormulario(CompeticionDto com) {
+		this.comp=com;
 		setTitle("Ventana Inscripcion Club");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 599, 666);
@@ -110,6 +97,7 @@ public class VentanaLoteFormulario extends JFrame {
 		contentPane.add(getBtnAnadirLote());
 		txtNombreComp.setText(comp.getNombre());
 		txtNombreComp.setEditable(false);
+		contentPane.add(getBtnFinalizar());
 	}
 	private JTextArea getTxtrParaInscribirA() {
 		if (txtrParaInscribirA == null) {
@@ -275,12 +263,12 @@ public class VentanaLoteFormulario extends JFrame {
 						mostrarAtletaYaEnCarrera(getTxtDni().getText());
 						borrarTodosTxt();
 					}else {
-						
 						mostrarAtletaInsertado(getTxtDni().getText());
 						actualizarTabla();
 						borrarTodosTxt();
 						txtNombreClub.setEditable(false);
 						txtNombreComp.setEditable(false);
+						btnAnadirLote.setEnabled(true);
 					}
 				}
 			});
@@ -291,18 +279,18 @@ public class VentanaLoteFormulario extends JFrame {
 		}
 		return btnValidar;
 	}
-	
+
 	private boolean atletaYaEnCarrera() {
 		List<InscripcionDto> aux = inmodel.findInscripcionByDniId(getTxtDni().getText(), comp.getId());
 		if (aux.isEmpty())
 			return false;
 		return true;
 	}
-	
+
 	private void mostrarAtletaYaEnCarrera(String dni) {
 		JOptionPane.showMessageDialog(this, "Atleta con DNI "+dni+" ya registrado en la competicion.");
 	}
-	
+
 	private void borrarTodosTxt() {
 		txtNombre.setText("");
 		txtEmail.setText("");
@@ -314,7 +302,6 @@ public class VentanaLoteFormulario extends JFrame {
 		AtletaDto atleta = new AtletaDto();
 		atleta.setDni(getTxtDni().getText());
 		atleta.setNombre(getTxtNombre().getText());
-		atleta.setClub(getTxtNombreClub().getText());
 		atleta.setSexo(comSexo.getSelectedItem().toString());
 		atleta.setEmail(getTxtEmail().getText());
 		atleta.setF_nac(getTxtFecha().getText());
@@ -448,19 +435,164 @@ public class VentanaLoteFormulario extends JFrame {
 	private JButton getBtnAnadirLote() {
 		if (btnAnadirLote == null) {
 			btnAnadirLote = new JButton("A\u00F1adir");
+			btnAnadirLote.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int numAtletasInsertados = insertarAtletasIns();
+					btnAnadirLote.setEnabled(false);
+					btnValidar.setEnabled(false);
+					btnFinalizar.setEnabled(true);
+					mesnajeAtletasInsertados(numAtletasInsertados);
+					
+				}
+			});
 			btnAnadirLote.setEnabled(false);
 			btnAnadirLote.setForeground(Color.WHITE);
 			btnAnadirLote.setBackground(Color.GREEN);
 			btnAnadirLote.setFont(new Font("Tahoma", Font.PLAIN, 15));
-			btnAnadirLote.setBounds(486, 597, 89, 23);
+			btnAnadirLote.setBounds(388, 597, 89, 23);
 		}
 		return btnAnadirLote;
 	}
+	
+	private void mesnajeAtletasInsertados(int num) {
+		String cadena = "Se ha rellenado la solicitud de forma correcta.\n";
+		String cadenaExtra="Los siguientes atletas no tienen plaza: \n";
+		if (num != list.size()) {
+			for (int i = num; i < list.size(); i++) {
+				cadenaExtra+=list.get(i).getDni()+"\n";
+			}
+			cadena +=cadenaExtra;
+			JOptionPane.showMessageDialog(this,cadena );
+		}else {
+			JOptionPane.showMessageDialog(this,cadena );
+		}
+		
+	}
+
+	private int insertarAtletasIns() {
+		int plazas1=0;
+		int contador=0;
+		String categoria="";
+		float cuota =  10.f + cogerCuotaSegunFecha();
+		for (int i = 0; i < list.size(); i++) {
+			plazas1 = cmodel.findNumPlazas(comp.getId());
+			if (plazas1 >0) {
+				categoria = calcularCategoria(list.get(i).getF_nac(), comp.getId(), list.get(i).getSexo());
+				//insertar atleta
+				List<AtletaDto> at = amodel.atletaYaEnBaseDatosDni(list.get(i).getDni());
+				if (at.isEmpty()) {
+					amodel.addAtleta(list.get(i).getDni(), list.get(i).getNombre(),list.get(i).getSexo(), list.get(i).getF_nac(),list.get(i).getEmail());
+				}
+				//insertar inscripcion
+				inmodel.insertarInscripcionClub(list.get(i).getDni(),comp.getId(),categoria,list.get(i).getEmail(),cambiarForFecha(),"por_club",
+						cuota,"CLUB",getTxtNombreClub().getText());
+				//restarPlazas
+				cmodel.actualizarPlazas(comp.getId());
+				contador++;
+			}else {
+				break;
+			}
+		}
+		return contador;
+
+	}
+	
+	private float cogerCuotaSegunFecha() {
+		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+		Date fechaActual = null;
+		Date fechaInicio1 = null;
+		Date fechaInicio2 = null;
+		Date fechaInicio3 = null;
+		Date fechaFin1 = null;
+		Date fechaFin2 = null;
+		Date fechaFin3 = null;
+
+		try {
+			fechaActual = formato.parse(cambiarFormatoFecha());
+			if (comp.getF_inicio1() != null) {
+				fechaInicio1 = formato.parse(comp.getF_inicio1());
+				fechaFin1 = formato.parse(comp.getF_fin1());
+			}
+			if (comp.getF_inicio2() != null) {
+				fechaInicio2 = formato.parse(comp.getF_inicio2());
+				fechaFin2 = formato.parse(comp.getF_fin2());
+			}
+			if (comp.getF_inicio3() != null) {
+				fechaInicio3 = formato.parse(comp.getF_inicio3());
+				fechaFin3 = formato.parse(comp.getF_fin3());
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (comp.getF_inicio1() != null) {
+			if (fechaActual.before(fechaFin1) && fechaActual.after(fechaInicio1)) {
+				return comp.getCuota1();
+			}
+		} else if (comp.getF_inicio2() != null) {
+			if (fechaActual.before(fechaFin2) && fechaActual.after(fechaInicio2)) {
+				return comp.getCuota2();
+			}
+		} else if (comp.getF_inicio3() != null) {
+			if (fechaActual.before(fechaFin3) && fechaActual.after(fechaInicio3)) {
+				return comp.getCuota3();
+			}
+		}
+		return -600;
+	}
+
+	
+	private String calcularCategoria(String fecha, String idComp, String sexo) {
+		CategoriaModel cm = new CategoriaModel();
+		List<CategoriaDto> categorias = cm.findCateBySex(idComp, sexo);
+
+		String[] fechaArray = fecha.split("/");
+		int year = Integer.valueOf(fechaArray[2]);
+		int yearActual = LocalDate.now().getYear();
+		int cat = yearActual - year;
+
+		for (CategoriaDto c : categorias) {
+			if (c.getEdad_min() <= cat && cat <= c.getEdad_max()) {
+				return c.getNombre();
+			}
+		}
+		return null;
+	}
+
+	private String cambiarForFecha() {
+		String fechaString = String.valueOf(LocalDate.now());
+		String[] fechaPartida = fechaString.split("-");
+		String result = "";
+		for (int i = 0; i < fechaPartida.length; i++) {
+			result = "/" + fechaPartida[i] + result;
+		}
+		return result.substring(1);
+
+	}
+
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("dd/MM/aaaa");
 			lblNewLabel.setBounds(316, 98, 75, 14);
 		}
 		return lblNewLabel;
+	}
+	private JButton getBtnFinalizar() {
+		if (btnFinalizar == null) {
+			btnFinalizar = new JButton("Finalizar");
+			btnFinalizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
+			btnFinalizar.setForeground(Color.WHITE);
+			btnFinalizar.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			btnFinalizar.setEnabled(false);
+			btnFinalizar.setBackground(Color.RED);
+			btnFinalizar.setBounds(487, 599, 89, 23);
+			btnFinalizar.setEnabled(false);
+		}
+		return btnFinalizar;
 	}
 }

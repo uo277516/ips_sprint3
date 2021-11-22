@@ -43,7 +43,10 @@ public class InscripcionModel {
 	public static String updateTimes = "update inscripcion set horas = ? , minutos = ? where dorsal = ? and id_c = ?";
 
 	public static String findInscripcionByDniId = "select * from inscripcion where dni_a=? and id_c=?";
-
+	
+	public static String sqlInsertarClub = "insert into inscripcion (dni_a,id_c,categoria,email,fecha,metodo_pago,cantidad_pagada,estado,club) values (?,?,?,?,?,?,?,?,?)";
+	
+	
 	public List<InscripcionDto> findInscripcionByDniId(String dni,String id_c){
 		List<InscripcionDto> a = new ArrayList<>();
 		try {
@@ -855,5 +858,44 @@ public class InscripcionModel {
 			System.out.println(atletaDto);
 		}
 		return listaInscrpcines;
+	}
+
+	public void insertarInscripcionClub(String dni, String id, String categoria, String email,
+			String fecha,String metodo, float cuota, String estado, String club) {
+		try {
+			insertarInscripcionClubP(dni, id,categoria,email,fecha,metodo,cuota,estado,club);
+		} catch (SQLException e) {
+			System.out.println("no se pudo a�adir -- inscripcion model");
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void insertarInscripcionClubP(String dni, String id, String categoria, String email, String fecha,String metodo,
+			float cuota, String estado, String club) throws SQLException {
+		Connection c = null;
+		PreparedStatement pst = null;
+		// ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(sqlInsertarClub);
+			pst.setString(1,dni);
+			pst.setString(2,id);
+			pst.setString(3,categoria);
+			pst.setString(4,email);
+			pst.setString(5,fecha);
+			pst.setString(6,metodo);
+			pst.setFloat(7,cuota);
+			pst.setString(8,estado);
+			pst.setString(9,club);
+			pst.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			pst.close();
+			c.close();
+		}
+		
 	}
 }
