@@ -238,13 +238,17 @@ public class InscripcionModel {
 		int year = Integer.valueOf(fechaArray[2]);
 		int yearActual = LocalDate.now().getYear();
 		int cat = yearActual - year;
+		
+		String retorno="";
 
 		for (CategoriaDto c : categorias) {
 			if (c.getEdad_min() <= cat && cat <= c.getEdad_max()) {
-				return c.getNombre();
+				retorno= c.getNombre();
 			}
 		}
-		return null;
+		if (retorno.equals(""))
+			retorno="Absoluta";
+		return retorno;
 	}
 
 	public List<InscripcionDto> buscarInsByDni(String dni) {
