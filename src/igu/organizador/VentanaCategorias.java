@@ -46,8 +46,8 @@ public class VentanaCategorias extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaCategorias(VentanaCrearCompeticion vcc, String id) {
-		this.vcc = vcc;
+	public VentanaCategorias(VentanaCrearCompeticion ventanaCrearCompeticion, String id) {
+		this.vcc = ventanaCrearCompeticion;
 		this.id_comp = id;
 		cat = new CategoriaModel();
 		setTitle("Ventana categorias:");
@@ -107,7 +107,6 @@ public class VentanaCategorias extends JFrame {
 			tableEstandar.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			tableEstandar.setSelectionBackground(Color.YELLOW);
 			tableEstandar.setBackground(Color.LIGHT_GRAY);
-			String[] tabla = { "Id", "Nombre", "Edad Min", "Edad Max", "Sexo" };
 			DefaultTableModel modelo = new DefaultTableModel() {
 				public boolean isCellEditable(int fila, int columnas) {
 					if (columnas == 5)
@@ -126,8 +125,6 @@ public class VentanaCategorias extends JFrame {
 			String[][] info = new String[competiciones.size()][5];
 			// List<AtletaDto> atletas = getAtletas();
 			// List<InscripcionDto> inscripciones = getInscripciones();
-			float cuota = 0;
-			String fecha = "";
 			for (int i = 0; i < competiciones.size(); i++) {
 				info[i][0] = competiciones.get(i).getId();
 				info[i][1] = competiciones.get(i).getNombre();
@@ -239,14 +236,12 @@ public class VentanaCategorias extends JFrame {
 	}
 
 	public void actualizarTablaCategorias(CategoriaDto catNueva) {
-		int size = tableCate.getRowCount();
 		tableCate = new JTable();
 		tableCate.setBorder(UIManager.getBorder("Table.scrollPaneBorder"));
 		tableCate.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		tableCate.setSelectionBackground(Color.YELLOW);
 		tableCate.setBackground(Color.LIGHT_GRAY);
 		btnConfirmar.setEnabled(true);
-		String[] tabla = { "Id", "Nombre", "Edad Min", "Edad Max", "Sexo" };
 		DefaultTableModel modelo = new DefaultTableModel() {
 			public boolean isCellEditable(int fila, int columnas) {
 				if (columnas == 5)
@@ -265,8 +260,6 @@ public class VentanaCategorias extends JFrame {
 		String[][] info = new String[competiciones.size()][5];
 		// List<AtletaDto> atletas = getAtletas();
 		// List<InscripcionDto> inscripciones = getInscripciones();
-		float cuota = 0;
-		String fecha = "";
 		for (int i = 0; i < competiciones.size(); i++) {
 			info[i][0] = competiciones.get(i).getId();
 			info[i][1] = competiciones.get(i).getNombre();
@@ -279,7 +272,6 @@ public class VentanaCategorias extends JFrame {
 	}
 
 	private CategoriaDto crearNuevaCategoria(CategoriaDto cate) {
-		boolean aux = false;
 		List<CategoriaDto> categorias = new ArrayList<>();
 		String id = UUID.randomUUID().toString();
 		String[] nombrePartido = cate.getNombre().split(" ");
@@ -462,6 +454,7 @@ public class VentanaCategorias extends JFrame {
 			tableCate.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			tableCate.setSelectionBackground(Color.YELLOW);
 			tableCate.setBackground(Color.LIGHT_GRAY);
+			@SuppressWarnings("unused")
 			String[] tabla = { "Id", "Nombre", "Edad Min", "Edad Max", "Sexo" };
 			DefaultTableModel modelo = new DefaultTableModel() {
 				public boolean isCellEditable(int fila, int columnas) {

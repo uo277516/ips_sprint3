@@ -212,6 +212,8 @@ public class VentanaInscripcion extends JFrame {
 		System.out.println(cSeleccionada.getId());
 		float n = 10.0f + cSeleccionada.getCuota1();
 		ins.agregarInscripcion(txtEmail.getText(), cSeleccionada.getId(), n, cambiarFormatoFecha());
+		int numeroplazasact = cSeleccionada.getNum_plazas();
+		comp.reducirNumPlazas(numeroplazasact-1, cSeleccionada.getId());
 
 	}
 

@@ -24,7 +24,6 @@ import javax.swing.border.TitledBorder;
 import logica.AtletaDto;
 import logica.AtletaModel;
 import logica.CompeticionDto;
-import logica.CompeticionModel;
 import logica.InscripcionDto;
 import logica.InscripcionModel;
 import util.DtoAssembler;
@@ -54,7 +53,7 @@ public class VentanaTarjetaCredito extends JFrame {
 	private InscripcionDto inscripcion;
 	@SuppressWarnings("unused")
 	private AtletaModel atl;
-	private CompeticionModel comp;
+	//private CompeticionModel comp;
 	private InscripcionModel ins;
 	private JScrollPane scrollPane;
 	private JTextArea textAreaJusti;
@@ -70,7 +69,7 @@ public class VentanaTarjetaCredito extends JFrame {
 		this.atleta=aDto;
 		ins = new InscripcionModel();
 		atl = new AtletaModel();
-		comp = new CompeticionModel();
+		//comp = new CompeticionModel();
 		setTitle("Pago con tarjeta de cr\u00E9dito:");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 691, 671);
@@ -325,7 +324,7 @@ public class VentanaTarjetaCredito extends JFrame {
 
 	private void consultasUpdate() {
 		ins.actualizarInscripcionEstado("Inscrito",atleta.getDni(),competicion.getId());
-		comp.actualizarPlazas(competicion.getId());
+		//comp.actualizarPlazas(competicion.getId());
 		ins.actualizarInscripcionFecha(cambiarFormatoFecha(), atleta.getDni(), competicion.getId());
 		ins.cambiarMetodoPago("tarjeta bancaria",atleta.getDni(), competicion.getId());
 	}

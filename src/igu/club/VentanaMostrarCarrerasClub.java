@@ -1,4 +1,4 @@
-package igu.atleta;
+package igu.club;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -28,7 +28,7 @@ import logica.CompeticionDto;
 import logica.CompeticionModel;
 import logica.InscripcionModel;
 
-public class VentanaMostrarCarreras extends JFrame {
+public class VentanaMostrarCarrerasClub extends JFrame {
 
 	/**
 	 * 
@@ -70,7 +70,7 @@ public class VentanaMostrarCarreras extends JFrame {
 	 * @param vI 
 	 * @throws ParseException 
 	 */
-	public VentanaMostrarCarreras(VentanaInicial vI) {
+	public VentanaMostrarCarrerasClub(VentanaInicial vI) {
 		this.vi=vI;
 		ins = new InscripcionModel();
 		atl = new AtletaModel();
@@ -159,7 +159,7 @@ public class VentanaMostrarCarreras extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     try {
                         if (table.getSelectedRow() != -1) {
-                            pasarAInscripcion();
+                            pasarALote();
                         }else {
                             errorNoCarreraSeleccionada();
                         }
@@ -180,10 +180,10 @@ public class VentanaMostrarCarreras extends JFrame {
 		 JOptionPane.showMessageDialog(this, "Error: Seleccione una carrera para registrarse");
 	}
 
-	protected void pasarAInscripcion() throws SQLException {
+	protected void pasarALote() throws SQLException {
 		this.dispose();
 		CompeticionDto competicion = crearCompeticion();
-		VentanaInscripcion vPal = new VentanaInscripcion(this, competicion);
+		VentanaLoteFormulario vPal = new VentanaLoteFormulario(competicion);
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
 	}
@@ -231,7 +231,7 @@ public class VentanaMostrarCarreras extends JFrame {
 			};
 			table.setModel(modelo);
 			modelo.addColumn("Iden");modelo.addColumn("Nombre");modelo.addColumn("Fecha Comp");modelo.addColumn("Tipo");modelo.addColumn("Distancia");modelo.addColumn("Cuota");modelo.addColumn("Fecha Fin Insc");modelo.addColumn("Plazas");
-			List<CompeticionDto> competiciones = comp.getCompetcionesFechaLista(textFecha.getText());
+			List<CompeticionDto> competiciones = comp.getCompetcionesFechaListaPlazasMayor3(textFecha.getText());
 			String[][] info = new String[competiciones.size()][8];
 			//List<AtletaDto> atletas = getAtletas();
 			//List<InscripcionDto> inscripciones = getInscripciones();

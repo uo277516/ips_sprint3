@@ -5,6 +5,14 @@ public class AtletaDto {
 	private String nombre;
 	private String email;
 	private String dni;
+	
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
 	public String getNombre() {//nombre
 		return nombre;
 	}
