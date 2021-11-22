@@ -13,7 +13,7 @@ import util.DtoAssembler;
 
 public class CompeticionModel {
 
-	public static String sql1 = "select * from competicion";
+	public static String sql1 = "select * from competicion where num_plazas>0";
 	public static String sql2ById = "select * from competicion where id=?";
 	public static String sqlActualizarPlazas = "update competicion set num_plazas = num_plazas-1 where id =?";
 	public static String sqlInsertarCompeticionBasicos = "insert into competicion (nombre,f_comp,tipo,distancia,num_plazas,dorsales_vip,id,d_asig, hay_politica) values (?,?,?,?,?,?,?,0,0)";
@@ -550,6 +550,38 @@ public class CompeticionModel {
 			c.close();
 		}
 		
+	}
+
+	public void reducirNumPlazas(int num_plazas, String id)
+	{
+		try {
+			reducirNumPlazasP(num_plazas, id);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	private void reducirNumPlazasP(int num_plazas, String id) throws SQLException {
+		Connection c = null;
+		PreparedStatement pst = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement("update competicion set num_plazas = ? where competicion.id=?");
+			if (pst != null)
+				System.out.println("Adios");
+
+			pst.setInt(1, num_plazas);
+			pst.setString(2, id);
+
+			pst.executeUpdate();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			pst.close();
+			c.close();
+		}
 	}
 
 }
