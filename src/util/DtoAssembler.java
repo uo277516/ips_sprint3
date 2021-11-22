@@ -79,6 +79,12 @@ public class DtoAssembler {
 			a.setDorsales_vip(Integer.parseInt(rs.getString("dorsales_vip")));
 		if (rs.getString("d_asig") != null)
 			a.setD_asig(Integer.parseInt(rs.getString("d_asig")));
+		if (rs.getString("f_canc") != null)
+			a.setF_canc(rs.getString("f_canc"));
+		if (rs.getString("hay_politica") != null)
+			a.setHay_politica(Integer.parseInt(rs.getString("hay_politica")));
+		if (rs.getString("p_cuota_canc") != null)
+			a.setP_cuota_canc(Double.parseDouble(rs.getString("p_cuota_canc")));
 		a.setId((rs.getString("id")));
 		a.setNombre(rs.getString("nombre"));
 		a.setNum_plazas(Integer.parseInt(rs.getString("num_plazas")));

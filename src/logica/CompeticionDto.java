@@ -19,6 +19,9 @@ public class CompeticionDto {
 	private String f_inicio3;
 	private int dorsales_vip;
 	private int d_asig; //1-> true | 0-> false
+	private double p_cuota_canc;
+	private String f_canc;
+	private int hay_politica;  //1-> true | 0-> false
 	
 	public String getId() {
 		return id;
@@ -136,6 +139,24 @@ public class CompeticionDto {
 	}
 	public void setD_asig(int d_asig) {
 		this.d_asig = d_asig;
+	}
+	public double getP_cuota_canc() {
+		return p_cuota_canc;
+	}
+	public void setP_cuota_canc(double p_cuota_canc) {
+		this.p_cuota_canc = p_cuota_canc;
+	}
+	public String getF_canc() {
+		return f_canc;
+	}
+	public void setF_canc(String string) {
+		this.f_canc = string;
+	}
+	public int getHay_politica() {
+		return hay_politica;
+	}
+	public void setHay_politica(int hay_politica) {
+		this.hay_politica = hay_politica;
 	}
 	
 	

@@ -28,6 +28,8 @@ import javax.swing.border.TitledBorder;
 
 import logica.CompeticionDto;
 import logica.CompeticionModel;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
 @SuppressWarnings("serial")
 public class VentanaCrearCompeticion extends JFrame {
@@ -68,6 +70,17 @@ public class VentanaCrearCompeticion extends JFrame {
 	private JButton btnGestionar;
 	private JButton btnFinalizar;
 	private JComboBox<String> comboBox;
+	private JLabel lblCanc;
+	private JRadioButton radioSiC;
+	private JRadioButton radioNoC;
+	private JPanel panel;
+	private JLabel lblFMC;
+	private JLabel lblNewLabel;
+	private JTextField txtFMC;
+	private JTextField txtPCCanc;
+	private JLabel lblDdmmaaaa;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JLabel lblNewLabel_1;
 
 	/**
 	 * Create the frame.
@@ -76,7 +89,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		comp = new CompeticionModel();
 		setTitle("Creaci\u00F3n de competiciones:");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 640, 655);
+		setBounds(100, 100, 1262, 655);
 		//setBounds(100,40000,900,1000);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
@@ -118,7 +131,7 @@ public class VentanaCrearCompeticion extends JFrame {
 			pnDatosBasicos = new JPanel();
 			pnDatosBasicos.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Datos b\u00E1sicos", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 			pnDatosBasicos.setBackground(Color.WHITE);
-			pnDatosBasicos.setBounds(30, 100, 551, 253);
+			pnDatosBasicos.setBounds(30, 100, 551, 444);
 			pnDatosBasicos.setLayout(null);
 			pnDatosBasicos.add(getLblNombre());
 			pnDatosBasicos.add(getTxtNombre());
@@ -136,6 +149,10 @@ public class VentanaCrearCompeticion extends JFrame {
 			pnDatosBasicos.add(getLblDorsales());
 			pnDatosBasicos.add(getTxtDorsales());
 			pnDatosBasicos.add(getComboBox());
+			pnDatosBasicos.add(getLblCanc());
+			pnDatosBasicos.add(getRadioSiC());
+			pnDatosBasicos.add(getRadioNoC());
+			pnDatosBasicos.add(getPanel());
 		}
 		return pnDatosBasicos;
 	}
@@ -226,7 +243,8 @@ public class VentanaCrearCompeticion extends JFrame {
 			btnValidar = new JButton("Validar");
 			btnValidar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (txtNombre.getText().equals("") || txtFechaComp.getText().equals("") || txtPlazas.getText().equals("")|| txtDistancia.getText().equals("")) {
+					if (txtNombre.getText().equals("") || txtFechaComp.getText().equals("") || txtPlazas.getText().equals("")|| txtDistancia.getText().equals("")
+							|| (radioSiC.isSelected() && txtFMC.getText().equals("") || radioSiC.isSelected() && txtPCCanc.getText().equals(""))) {
 						System.out.println("Hola");
 						mostrarCamposVacios();
 					}else {
@@ -247,6 +265,20 @@ public class VentanaCrearCompeticion extends JFrame {
 							else if (!compruebaSoloNumeros(getTxtDorsales().getText())) {
 								mostrarErrorPlazas();
 								txtDorsales.setText("");
+							} else if (radioSiC.isSelected() && !fechaValida(txtFMC.getText())) {
+									mostrarErrorFecha();
+									txtFMC.setText("");
+							} else if (radioSiC.isSelected()) {
+								insertarDatosBasicosConCancelacion();
+								mostrarDatosBasicosCorrectos();
+								btnValidar.setEnabled(false);
+								pnPlazos.setVisible(true);
+								txtNombre.setEditable(false);
+								txtDistancia.setEditable(false);
+								txtFechaComp.setEditable(false);
+								txtPlazas.setEditable(false);
+								comboBox.setEditable(false);
+								txtDorsales.setEditable(false);
 							}else {
 								insertarDatosBasicos();
 								mostrarDatosBasicosCorrectos();
@@ -271,11 +303,20 @@ public class VentanaCrearCompeticion extends JFrame {
 			btnValidar.setForeground(Color.WHITE);
 			btnValidar.setBackground(Color.GREEN);
 			btnValidar.setFont(new Font("Tahoma", Font.PLAIN, 15));
-			btnValidar.setBounds(440, 223, 101, 22);
+			btnValidar.setBounds(440, 411, 101, 22);
 		}
 		return btnValidar;
 	}
 
+	protected void insertarDatosBasicosConCancelacion() {
+		String id = UUID.randomUUID().toString();
+		this.id_comp=id;
+		String tipo = getComboBox().getSelectedItem().toString();
+		comp.insertarDatosBasicosConCancelacion(id,getTxtNombre().getText(), getTxtFechaComp().getText(), 
+				tipo, Integer.parseInt(getTxtDistancia().getText()), Integer.parseInt(getTxtPlazas().getText()),
+				Integer.parseInt(getTxtDorsales().getText()), getTxtFMC().getText(), Double.parseDouble(getTxtPCCanc().getText()));
+		
+	}
 	private void insertarDatosBasicos() {
 		String id = UUID.randomUUID().toString();
 		this.id_comp=id;
@@ -402,7 +443,7 @@ public class VentanaCrearCompeticion extends JFrame {
 			pnPlazos = new JPanel();
 			pnPlazos.setBorder(new TitledBorder(null, "Plazos", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			pnPlazos.setBackground(Color.WHITE);
-			pnPlazos.setBounds(30, 364, 551, 189);
+			pnPlazos.setBounds(619, 100, 551, 189);
 			pnPlazos.setLayout(null);
 			pnPlazos.add(getLblFechaInicio());
 			pnPlazos.add(getTxtFechaIniico());
@@ -788,5 +829,116 @@ public class VentanaCrearCompeticion extends JFrame {
 			comboBox.setBounds(103, 98, 121, 22);
 		}
 		return comboBox;
+	}
+	private JLabel getLblCanc() {
+		if (lblCanc == null) {
+			lblCanc = new JLabel("\u00BFDeseas aplicar una pol\u00EDtica de cancelaci\u00F3n?");
+			lblCanc.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			lblCanc.setBounds(10, 255, 299, 13);
+		}
+		return lblCanc;
+	}
+	private JRadioButton getRadioSiC() {
+		if (radioSiC == null) {
+			radioSiC = new JRadioButton("Si");
+			radioSiC.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					txtFMC.setEnabled(true);
+					txtPCCanc.setEnabled(true);
+					lblFMC.setEnabled(true);
+					lblNewLabel.setEnabled(true);
+				}
+			});
+			buttonGroup.add(radioSiC);
+			radioSiC.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			radioSiC.setBounds(23, 286, 103, 21);
+		}
+		return radioSiC;
+	}
+	private JRadioButton getRadioNoC() {
+		if (radioNoC == null) {
+			radioNoC = new JRadioButton("No");
+			radioNoC.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					txtFMC.setEnabled(false);
+					txtPCCanc.setEnabled(false);
+					lblFMC.setEnabled(false);
+					lblNewLabel.setEnabled(false);
+				}
+			});
+			radioNoC.setSelected(true);
+			buttonGroup.add(radioNoC);
+			radioNoC.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			radioNoC.setBounds(148, 286, 103, 21);
+		}
+		return radioNoC;
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			panel.setBorder(new TitledBorder(null, "Cancelaci\u00F3n", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panel.setBackground(Color.WHITE);
+			panel.setBounds(10, 313, 516, 88);
+			panel.setLayout(null);
+			panel.add(getLblFMC());
+			panel.add(getLblNewLabel());
+			panel.add(getTxtFMC());
+			panel.add(getTxtPCCanc());
+			panel.add(getLblDdmmaaaa());
+			txtFMC.setEnabled(false);
+			txtPCCanc.setEnabled(false);
+			lblFMC.setEnabled(false);
+			lblNewLabel.setEnabled(false);
+			panel.add(getLblNewLabel_1());
+			}
+		return panel;
+	}
+	private JLabel getLblFMC() {
+		if (lblFMC == null) {
+			lblFMC = new JLabel("Fecha m\u00E1xima cancelaci\u00F3n:");
+			lblFMC.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			lblFMC.setBounds(10, 30, 200, 13);
+		}
+		return lblFMC;
+	}
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("Porcentaje cuota a devolver:");
+			lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			lblNewLabel.setBounds(10, 53, 200, 13);
+		}
+		return lblNewLabel;
+	}
+	private JTextField getTxtFMC() {
+		if (txtFMC == null) {
+			txtFMC = new JTextField();
+			txtFMC.setBounds(197, 28, 128, 19);
+			txtFMC.setColumns(10);
+		}
+		return txtFMC;
+	}
+	private JTextField getTxtPCCanc() {
+		if (txtPCCanc == null) {
+			txtPCCanc = new JTextField();
+			txtPCCanc.setBounds(197, 53, 128, 19);
+			txtPCCanc.setColumns(10);
+		}
+		return txtPCCanc;
+	}
+	private JLabel getLblDdmmaaaa() {
+		if (lblDdmmaaaa == null) {
+			lblDdmmaaaa = new JLabel("dd/MM/aaaa");
+			lblDdmmaaaa.setFont(new Font("Tahoma", Font.PLAIN, 11));
+			lblDdmmaaaa.setBounds(335, 29, 95, 17);
+		}
+		return lblDdmmaaaa;
+	}
+	private JLabel getLblNewLabel_1() {
+		if (lblNewLabel_1 == null) {
+			lblNewLabel_1 = new JLabel("Formato: xx.yy");
+			lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+			lblNewLabel_1.setBounds(335, 54, 100, 13);
+		}
+		return lblNewLabel_1;
 	}
 }

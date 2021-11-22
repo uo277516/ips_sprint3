@@ -16,7 +16,9 @@ public class CompeticionModel {
 	public static String sql1 = "select * from competicion";
 	public static String sql2ById = "select * from competicion where id=?";
 	public static String sqlActualizarPlazas = "update competicion set num_plazas = num_plazas-1 where id =?";
-	public static String sqlInsertarCompeticionBasicos = "insert into competicion (nombre,f_comp,tipo,distancia,num_plazas,dorsales_vip,id,d_asig) values (?,?,?,?,?,?,?,0)";
+	public static String sqlInsertarCompeticionBasicos = "insert into competicion (nombre,f_comp,tipo,distancia,num_plazas,dorsales_vip,id,d_asig, hay_politica) values (?,?,?,?,?,?,?,0,0)";
+	public static String sqlInsertarCompeticionBasicosConCancelacion = "insert into competicion (nombre,f_comp,tipo,distancia,num_plazas,dorsales_vip,id,d_asig, f_canc, p_cuota_canc, hay_politica) values (?,?,?,?,?,?,?,0,?,?,1)";
+
 	public static String sqlFinCom = "select * from competicion where id =?";
 	public static String sqlActualizarCompeticion1 = "update competicion set f_inicio1=?, f_fin1=?, cuota1=? where id=?";
 	public static String sqlActualizarCompeticion2 = "update competicion set f_inicio2=?, f_fin2=?, cuota2=? where id=?";
@@ -508,6 +510,46 @@ public class CompeticionModel {
 			im.actualizarTiempoDorsal(competicionId, t.getDorsal(), t.getHoras(), t.getMinutos());
 		}
 		System.out.println("Tiempos actualizados");
+	}
+
+	public void insertarDatosBasicosConCancelacion(String id, String nombre, String fecha, String tipo, int distancia,
+			int plazas, int dorsales, String f_max_c, double p_cuota_canc) {
+		try {
+			insertarDatosBasicosConCancelacionPrivado(id, nombre, fecha, tipo, distancia, plazas, dorsales, f_max_c, p_cuota_canc);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
+	private void insertarDatosBasicosConCancelacionPrivado(String id, String nombre, String fecha, String tipo,
+			int distancia, int plazas, int dorsales, String f_max_c, double p_cuota_canc) throws SQLException {
+		Connection c = null;
+		PreparedStatement pst = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(sqlInsertarCompeticionBasicosConCancelacion);
+			if (pst != null)
+				System.out.println("Adios");
+
+			pst.setString(1, nombre);
+			pst.setString(2, fecha);
+			pst.setString(3, tipo);
+			pst.setInt(4, distancia);
+			pst.setInt(5, plazas);
+			pst.setInt(6, dorsales);
+			pst.setString(7, id);
+			pst.setString(8, f_max_c);
+			pst.setDouble(9, p_cuota_canc);
+
+			pst.executeUpdate();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			pst.close();
+			c.close();
+		}
+		
 	}
 
 }
