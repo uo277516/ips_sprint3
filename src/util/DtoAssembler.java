@@ -139,8 +139,8 @@ public class DtoAssembler {
 			i.setDorsal(rs.getString("dorsal"));
 		if (rs.getString("dorsal")!=null)
 			i.setDorsal(rs.getString("dorsal"));
-		if (rs.getString("club")!=null)
-			i.setClub(rs.getString("club"));
+//		if (rs.getString("club")!=null)
+//			i.setClub(rs.getString("club"));
 		return i;
 	}
 

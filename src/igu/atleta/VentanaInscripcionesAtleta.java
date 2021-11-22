@@ -55,6 +55,8 @@ public class VentanaInscripcionesAtleta extends JFrame {
 	@SuppressWarnings("unused")
 	private DefaultListModel<String> listaINs;
 	private JTable table;
+	private JButton btnCancelar;
+	private JButton btnFinalizar;
 	
 	/**
 	 * Launch the application.
@@ -80,7 +82,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		im= new InscripcionModel();
 		cm = new CompeticionModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 575, 498);
+		setBounds(100, 100, 664, 518);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
@@ -95,6 +97,8 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		contentPane.add(getTxtDNI());
 		contentPane.add(getLblEmail());
 		contentPane.add(getBtnMostrar());
+		contentPane.add(getBtnCancelar());
+		contentPane.add(getBtnFinalizar());
 //		contentPane.add(getScrollPane());
 		//contentPane.add(getList());
 	}
@@ -279,21 +283,74 @@ public class VentanaInscripcionesAtleta extends JFrame {
 			table.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			table.setSelectionBackground(Color.YELLOW);
 			table.setBackground(Color.LIGHT_GRAY);
-			table.setEnabled(false);
+//			table.setEnabled(false);
 			DefaultTableModel modelo = new DefaultTableModel();
 			table.setModel(modelo);
+			modelo.addColumn("ID comp");
 			modelo.addColumn("Nombre");
 			modelo.addColumn("Estado");
 			modelo.addColumn("Fecha último cambio");
-			String[][] info = new String[insAtleta.size()][3];
+			String[][] info = new String[insAtleta.size()][4];
 			for(int i = 0; i < insAtleta.size(); i++) {
-				info[i][0] = String.valueOf(cm.getCompeticionById(insAtleta.get(i).getId_c()).get(0).getNombre());
-				info[i][1] = insAtleta.get(i).getEstado();
-				info[i][2] = insAtleta.get(i).getFecha();
+				info[i][0] = insAtleta.get(i).getId_c();
+				info[i][1] = String.valueOf(cm.getCompeticionById(insAtleta.get(i).getId_c()).get(0).getNombre());
+				info[i][2] = insAtleta.get(i).getEstado();
+				info[i][3] = insAtleta.get(i).getFecha();
 				modelo.addRow(info[i]);
 			}
 		
 		}
 		return table;
+	}
+	private JButton getBtnCancelar() {
+		if (btnCancelar == null) {
+			btnCancelar = new JButton("Cancelar inscripci\u00F3n");
+			btnCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cancelarInscripcion();
+				}
+			});
+			btnCancelar.setBackground(new Color(255, 255, 51));
+			btnCancelar.setForeground(Color.BLACK);
+			btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			btnCancelar.setBounds(30, 439, 178, 21);
+		}
+		return btnCancelar;
+	}
+	
+	protected void cancelarInscripcion() {
+		if (table.getSelectedRow() != -1) {
+			System.out.println("a ver: " + insAtleta.get(table.getSelectedRow()).getDni_a()
+					+ " -- " + insAtleta.get(table.getSelectedRow()).getId_c());
+			if ( insAtleta.get(table.getSelectedRow()).getEstado().toUpperCase().equals("INSCRITO") )
+			{
+	            im.cancelarInscripcionPagada(insAtleta.get(table.getSelectedRow()).getDni_a(), 
+	            		insAtleta.get(table.getSelectedRow()).getId_c());
+
+			}
+            im.cancelarInscripcion(insAtleta.get(table.getSelectedRow()).getDni_a(), insAtleta.get(table.getSelectedRow()).getId_c());
+            cm.reducirPlazas(insAtleta.get(table.getSelectedRow()).getId_c());
+    		JOptionPane.showMessageDialog(this, "A continuación, se imprimirá un justificante con la siguiente información:"
+    				+ "\n Competición: "  + cm.getCompeticionById(insAtleta.get(table.getSelectedRow()).getId_c())
+    				+ "\n Dinero a devolver " + " xxxx ");
+
+		}else {
+            errorNoCarreraSeleccionada();
+        }
+		
+	}
+	
+	protected void errorNoCarreraSeleccionada() {
+		 JOptionPane.showMessageDialog(this, "Error: Seleccione una carrera para registrarse");
+	}
+
+	private JButton getBtnFinalizar() {
+		if (btnFinalizar == null) {
+			btnFinalizar = new JButton("Finalizar");
+			btnFinalizar.setBackground(new Color(255, 0, 0));
+			btnFinalizar.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			btnFinalizar.setBounds(555, 450, 85, 21);
+		}
+		return btnFinalizar;
 	}
 }

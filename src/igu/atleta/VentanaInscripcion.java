@@ -40,7 +40,6 @@ public class VentanaInscripcion extends JFrame {
 	private JLabel lblInfoJus;
 	private InscripcionModel ins;
 	private AtletaModel atl;
-	@SuppressWarnings("unused")
 	private CompeticionModel comp;
 	private CompeticionDto cSeleccionada;
 	@SuppressWarnings("unused")
