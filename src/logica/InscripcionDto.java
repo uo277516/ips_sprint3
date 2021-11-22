@@ -20,6 +20,17 @@ public class InscripcionDto {
 	private int horas;
 	private int minutos;
 	private String estado;
+	private String club;
+
+
+	public String getClub() {
+		return club;
+	}
+
+
+	public void setClub(String club) {
+		this.club = club;
+	}
 
 	public String getDni_a() {
 		return dni_a;

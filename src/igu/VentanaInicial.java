@@ -24,6 +24,7 @@ import javax.swing.border.EmptyBorder;
 
 import igu.atleta.VentanaInscripcionesAtleta;
 import igu.atleta.VentanaMostrarCarreras;
+import igu.club.VentanaMostrarCarrerasClub;
 import igu.organizador.VentanaAsignarDorsales;
 import igu.organizador.VentanaCrearCompeticion;
 import igu.organizador.VentanaMostrarCarrerasOrganizador;
@@ -38,6 +39,7 @@ public class VentanaInicial extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JFileChooser chooser;
+	private JButton btnClub;
 
 	private int ndatos;
 	private String competicionId;
@@ -86,7 +88,7 @@ public class VentanaInicial extends JFrame {
 			}
 		});
 		btnAtleta.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnAtleta.setBounds(80, 210, 131, 35);
+		btnAtleta.setBounds(39, 210, 131, 35);
 		contentPane.add(btnAtleta);
 
 		JButton btnOrganizador = new JButton("Organizador");
@@ -100,13 +102,14 @@ public class VentanaInicial extends JFrame {
 			}
 		});
 		btnOrganizador.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnOrganizador.setBounds(303, 210, 122, 35);
+		btnOrganizador.setBounds(370, 210, 122, 35);
 		contentPane.add(btnOrganizador);
 
 		JLabel llblBienvenido = new JLabel("\u00A1Bienvenido!");
 		llblBienvenido.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		llblBienvenido.setBounds(218, 50, 131, 29);
 		contentPane.add(llblBienvenido);
+		contentPane.add(getBtnClub());
 	}
 
 	protected void elegirAsOrganizador() throws FileNotFoundException {
@@ -282,6 +285,43 @@ public class VentanaInicial extends JFrame {
 		this.dispose();
 		// CompeticionDto competicion = crearCompeticion();
 		VentanaMostrarCarreras vPal = new VentanaMostrarCarreras(this);
+		vPal.setLocationRelativeTo(this);
+		vPal.setVisible(true);
+
+	}
+	private JButton getBtnClub() {
+		if (btnClub == null) {
+			btnClub = new JButton("Club");
+			btnClub.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					elegirSiNoClub();
+				}
+			});
+			btnClub.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			btnClub.setBounds(205, 210, 131, 35);
+		}
+		return btnClub;
+	}
+	
+	protected void elegirSiNoClub() {
+		int seleccion = JOptionPane.showOptionDialog(this,
+				"¿Desea inscribir un lote de atletas?", "Inscripcion de lotes",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null para icono por defecto.
+				new Object[] { "Si"}, // null para YES, NO y CANCEL
+				"opcion 1");
+
+		if (seleccion != -1)
+			System.out.println("seleccionada opcion " + (seleccion + 1));
+		if (seleccion == 0) // tarjeta de credito
+		{
+			mostrarVentanaCarrerasClub();
+		}
+	}
+	
+	private void mostrarVentanaCarrerasClub() {
+		this.dispose();
+		// CompeticionDto competicion = crearCompeticion();
+		VentanaMostrarCarrerasClub vPal = new VentanaMostrarCarrerasClub(this);
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
 

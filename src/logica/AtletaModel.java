@@ -26,6 +26,10 @@ public class AtletaModel {
 	public static String sqlFindById = "select * from atleta where id=?";
 	// String dni, String nombre, String sexo, String fecha, String email
 	public static String sqlAdd = "insert into Atleta(dni, nombre, sexo, f_nac, email) values (?,?,?,?,?)";
+	
+	public static String findAtletaByDniId= "select * from atleta, inscripcion, competicion" + "		where "
+			+ " 	atleta.dni = inscripcion.dni_a and " + "     inscripcion.id_c = competicion.id and "
+			+ "		inscripcion.dni_a=? and " + "     competicion.nombre=?";
 
 	public List<AtletaDto> getAtletas() throws SQLException {
 		return getAllAtletas();
@@ -85,6 +89,58 @@ public class AtletaModel {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(sql2);
 			pst.setString(1, emailAtleta);
+			pst.setString(2, nombreCompe);
+			rs = pst.executeQuery();
+
+			// A�adimos los pedidos a la lista
+			listaAtletas = DtoAssembler.toAtletaDtoList(rs);
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
+
+//        for (AtletaDto atletaDto : listaAtletas) {
+//			System.out.println(atletaDto.getDni() + " " + atletaDto.getF_nac()
+//			);
+//		}
+		if (listaAtletas.size() > 0) { // si ya esta registrado en esa carrera
+			System.out.println("Ya se ha registrado en esta competicion");
+			return true;
+		} else {
+			System.out.println("no registrado, puede registrarse");
+			return false;
+		}
+	}
+	
+	public boolean findAtletaByDniId(String dni, String cmpe) {
+		boolean op = false;
+		try {
+			op = findAtletaByDniIdP(dni, cmpe);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return op;
+	}
+
+	/*
+	 * true si ya esta registrado, false si no (lo guay false)
+	 */
+	private boolean findAtletaByDniIdP(String dniAtleta, String nombreCompe) throws SQLException {
+		List<AtletaDto> listaAtletas = new ArrayList<AtletaDto>();
+
+		// Conexi�n a la base de datos
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(findAtletaByDniId);
+			pst.setString(1, dniAtleta);
 			pst.setString(2, nombreCompe);
 			rs = pst.executeQuery();
 
@@ -359,5 +415,41 @@ public class AtletaModel {
 			pst.close();
 			c.close();
 		}
+	}
+
+	public List<AtletaDto> atletaYaEnBaseDatosDni(String dni) {
+		List<AtletaDto> list = new ArrayList<>();
+		try {
+			list = atletaYaEnBaseDatosDniP(dni);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	private List<AtletaDto> atletaYaEnBaseDatosDniP(String dni) throws SQLException {
+		List<AtletaDto> atletas = new ArrayList<AtletaDto>();
+
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(sqlFindByDni);
+			pst.setString(1, dni);
+			rs = pst.executeQuery();
+
+			atletas = DtoAssembler.toAtletaDtoList(rs);
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
+
+		return atletas;
 	}
 }

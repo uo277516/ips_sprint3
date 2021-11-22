@@ -89,7 +89,11 @@ public class VentanaCrearCompeticion extends JFrame {
 		comp = new CompeticionModel();
 		setTitle("Creaci\u00F3n de competiciones:");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		setBounds(100, 100, 1262, 655);
+
+		setBounds(100, 100, 598, 655);
+
 		//setBounds(100,40000,900,1000);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
@@ -237,7 +241,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return txtPlazas;
 	}
-	
+
 	private JButton getBtnValidar() {
 		if (btnValidar == null) {
 			btnValidar = new JButton("Validar");
@@ -266,8 +270,8 @@ public class VentanaCrearCompeticion extends JFrame {
 								mostrarErrorPlazas();
 								txtDorsales.setText("");
 							} else if (radioSiC.isSelected() && !fechaValida(txtFMC.getText())) {
-									mostrarErrorFecha();
-									txtFMC.setText("");
+								mostrarErrorFecha();
+								txtFMC.setText("");
 							} else if (radioSiC.isSelected()) {
 								insertarDatosBasicosConCancelacion();
 								mostrarDatosBasicosCorrectos();
@@ -315,7 +319,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		comp.insertarDatosBasicosConCancelacion(id,getTxtNombre().getText(), getTxtFechaComp().getText(), 
 				tipo, Integer.parseInt(getTxtDistancia().getText()), Integer.parseInt(getTxtPlazas().getText()),
 				Integer.parseInt(getTxtDorsales().getText()), getTxtFMC().getText(), Double.parseDouble(getTxtPCCanc().getText()));
-		
+
 	}
 	private void insertarDatosBasicos() {
 		String id = UUID.randomUUID().toString();
@@ -369,7 +373,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}else
 			return false;
 	}
-	
+
 	private boolean fechaValida(String fecha) throws ParseException {
 		SimpleDateFormat formato =new SimpleDateFormat("dd/MM/yyyy");
 
@@ -428,7 +432,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblTiposCarreras;
 	}
-	
+
 	private JLabel getLblKm() {
 		if (lblKm == null) {
 			lblKm = new JLabel("En km");
@@ -437,7 +441,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblKm;
 	}
-	
+
 	private JPanel getPnPlazos() {
 		if (pnPlazos == null) {
 			pnPlazos = new JPanel();
@@ -566,13 +570,13 @@ public class VentanaCrearCompeticion extends JFrame {
 				}
 
 
-				
+
 			});
 			btnInsertar.setBounds(440, 157, 101, 23);
 		}
 		return btnInsertar;
 	}
-	
+
 	private void actualizarCompeticion(int plazos) {
 		if (plazos==1) {
 			comp.actualizarCopeticion1(getTxtFechaIniico().getText(), getTxtFechaFin().getText(), Float.parseFloat(getTxtCuota().getText()), id_comp);
@@ -581,7 +585,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}else
 			comp.actualizarCopeticion3(getTxtFechaIniico().getText(), getTxtFechaFin().getText(), Float.parseFloat(getTxtCuota().getText()), id_comp);
 	}
-	
+
 	private void actualizarTxtInicio() throws ParseException {
 		SimpleDateFormat formato =new SimpleDateFormat("dd/MM/yyyy");
 
@@ -590,17 +594,17 @@ public class VentanaCrearCompeticion extends JFrame {
 		String nuevaStirng = formato.format(nuevaFecha);
 		txtFechaIniico.setText(nuevaStirng);
 		txtFechaIniico.setEditable(false);
-		
+
 	}
-	
+
 	public static Date sumarDiasAFecha(Date fecha, int dias){
-	      if (dias==0) return fecha;
-	      Calendar calendar = Calendar.getInstance();
-	      calendar.setTime(fecha); 
-	      calendar.add(Calendar.DAY_OF_YEAR, dias);  
-	      return calendar.getTime(); 
+		if (dias==0) return fecha;
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fecha); 
+		calendar.add(Calendar.DAY_OF_YEAR, dias);  
+		return calendar.getTime(); 
 	}
-	
+
 	private void actualizarTextArea(int plazos) {
 		String cadena = textArea.getText();
 		if (plazos == 1) {
@@ -611,41 +615,41 @@ public class VentanaCrearCompeticion extends JFrame {
 					"    Fecha Inicio: "+getTxtFechaIniico().getText()+"----Fecha Fin: "+ getTxtFechaFin().getText()+"----Cuota: "+getTxtCuota().getText()+"\u20AC";
 		}
 		textArea.setText(cadena);
-		
+
 	}
-	
+
 	private void mensajeMaximoPlazos() {
 		JOptionPane.showMessageDialog(this, "Se han alcanzado el máximo de plazos.");
-		
+
 	}
-	
+
 	private void mostrarErrorCuota() {
 		JOptionPane.showMessageDialog(this, "Error: La cuota solo pueden ser números");
-		
+
 	}
 
 	private void mostrarFechaFinIncorrecta() {
 		JOptionPane.showMessageDialog(this, "Error: La fecha fin debe ser anterior a la de competeción y posterior a la de inicio");
-		
+
 	}
-	
+
 
 	private void mostrarFechaInicioNoBineFormada() {
 		JOptionPane.showMessageDialog(this, "Error: Fecha incorrecta.");
-		
+
 	}
-	
+
 
 	private void mostrarFechaFinNoBineFormada() {
 		JOptionPane.showMessageDialog(this, "Error: Fecha incorrecta.");
-		
+
 	}
 
 	private void mostrarFechaInicioIncorrecta() {
 		JOptionPane.showMessageDialog(this, "Error: La fecha inicio debe ser anterior a la competición");
-		
+
 	}
-	
+
 	private boolean fechaValidaFin(String fecha) throws ParseException {
 		List<CompeticionDto> competicion = comp.getCompeticionById(this.id_comp);
 		String fecha_comp = competicion.get(0).getF_comp();
@@ -679,7 +683,7 @@ public class VentanaCrearCompeticion extends JFrame {
 				contador++;
 			}
 		}
-		
+
 
 		if (contador==2 && minumero.length()==8) {
 			if (posiciones[2] != null && posiciones[5]!=null) {
@@ -689,7 +693,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}else
 			return false;
 	}
-	
+
 	private boolean fechaValidaInicio(String fecha) throws ParseException {
 		List<CompeticionDto> competicion = comp.getCompeticionById(this.id_comp);
 		String fecha_comp = competicion.get(0).getF_comp();
@@ -705,7 +709,7 @@ public class VentanaCrearCompeticion extends JFrame {
 	}
 
 	private boolean soloNumerosFechaInicioPlazos(String fecha){
-		
+
 
 		String numero="";
 		int contador =0;
@@ -724,7 +728,7 @@ public class VentanaCrearCompeticion extends JFrame {
 				contador++;
 			}
 		}
-		
+
 
 		if (contador==2 && minumero.length()==8) {
 			if (posiciones[2] != null && posiciones[5]!=null) {
@@ -781,7 +785,7 @@ public class VentanaCrearCompeticion extends JFrame {
 					mostratVentanaCrearCategorias();
 				}
 
-				
+
 			});
 			btnGestionar.setBackground(Color.GREEN);
 			btnGestionar.setForeground(Color.WHITE);
@@ -794,19 +798,19 @@ public class VentanaCrearCompeticion extends JFrame {
 		this.setVisible(true);
 		btnFinalizar.setVisible(true);
 		btnGestionar.setEnabled(false);
-		
+
 	}
-	
+
 	private void mostratVentanaCrearCategorias() {
-		
+
 		VentanaCategorias vc = new VentanaCategorias(this,id_comp);
 		this.setVisible(false);
 		vc.setLocationRelativeTo(this);
 		vc.setVisible(true);
-		
+
 	}
-	
-	
+
+
 	private JButton getBtnFinalizar() {
 		if (btnFinalizar == null) {
 			btnFinalizar = new JButton("Finalizar");
@@ -890,7 +894,7 @@ public class VentanaCrearCompeticion extends JFrame {
 			lblFMC.setEnabled(false);
 			lblNewLabel.setEnabled(false);
 			panel.add(getLblNewLabel_1());
-			}
+		}
 		return panel;
 	}
 	private JLabel getLblFMC() {
