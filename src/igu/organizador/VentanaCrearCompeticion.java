@@ -90,11 +90,11 @@ public class VentanaCrearCompeticion extends JFrame {
 		setTitle("Creaci\u00F3n de competiciones:");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		setBounds(100, 100, 1262, 655);
+//		setBounds(100, 100, 746, 655);
+//
+//		setBounds(100, 100, 598, 655);
 
-		setBounds(100, 100, 598, 655);
-
-		//setBounds(100,40000,900,1000);
+		setBounds(100,40000,1250,662);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -116,9 +116,6 @@ public class VentanaCrearCompeticion extends JFrame {
 		lblGestionarCat.setVisible(false);
 		btnGestionar.setVisible(false);
 		btnFinalizar.setVisible(false);
-		//this.setMinimumSize(new Dimension(900,1000));
-		//this.setMaximumSize(new Dimension(901,1001));
-		this.setResizable(false);
 	}
 	private JTextArea getTxtAreaInfo() {
 		if (txtAreaInfo == null) {
@@ -822,7 +819,7 @@ public class VentanaCrearCompeticion extends JFrame {
 			btnFinalizar.setForeground(Color.WHITE);
 			btnFinalizar.setBackground(Color.RED);
 			btnFinalizar.setFont(new Font("Tahoma", Font.PLAIN, 15));
-			btnFinalizar.setBounds(485, 585, 89, 23);
+			btnFinalizar.setBounds(1126, 579, 89, 23);
 		}
 		return btnFinalizar;
 	}

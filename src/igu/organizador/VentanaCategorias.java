@@ -46,8 +46,8 @@ public class VentanaCategorias extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaCategorias(VentanaCrearCompeticion vcc, String id) {
-		this.vcc = vcc;
+	public VentanaCategorias(VentanaCrearCompeticion ventanaCrearCompeticion, String id) {
+		this.vcc = ventanaCrearCompeticion;
 		this.id_comp = id;
 		cat = new CategoriaModel();
 		setTitle("Ventana categorias:");
