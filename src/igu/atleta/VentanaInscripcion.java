@@ -272,11 +272,12 @@ public class VentanaInscripcion extends JFrame {
 
 		try {
 			fechaActual = formato.parse(cambiarFormatoFecha());
-			if (cSeleccionada.getF_inicio1() != null) {
+			if (cSeleccionada.getF_inicio1() != null) { 
 				fechaInicio1 = formato.parse(cSeleccionada.getF_inicio1());
 				fechaFin1 = formato.parse(cSeleccionada.getF_fin1());
 			}
 			if (cSeleccionada.getF_inicio2() != null) {
+				System.out.println("noooo deberia de entrar");
 				fechaInicio2 = formato.parse(cSeleccionada.getF_inicio2());
 				fechaFin2 = formato.parse(cSeleccionada.getF_fin2());
 			}
@@ -290,15 +291,16 @@ public class VentanaInscripcion extends JFrame {
 		}
 
 		if (cSeleccionada.getF_inicio1() != null) {
-			if (fechaActual.before(fechaFin1) && fechaActual.after(fechaInicio1)) {
+			if (fechaActual.before(fechaFin1) && (  fechaActual.after(fechaInicio1) || fechaActual.equals(fechaInicio1) )) {
+				System.out.println(cSeleccionada.getCuota1());
 				return cSeleccionada.getCuota1();
 			}
 		} else if (cSeleccionada.getF_inicio2() != null) {
-			if (fechaActual.before(fechaFin2) && fechaActual.after(fechaInicio2)) {
+			if (fechaActual.before(fechaFin2) && ( fechaActual.after(fechaInicio2) || fechaActual.equals(fechaInicio2))) {
 				return cSeleccionada.getCuota2();
 			}
 		} else if (cSeleccionada.getF_inicio3() != null) {
-			if (fechaActual.before(fechaFin3) && fechaActual.after(fechaInicio3)) {
+			if (fechaActual.before(fechaFin3) && ( fechaActual.after(fechaInicio3) || fechaActual.equals(fechaInicio3))) {
 				return cSeleccionada.getCuota3();
 			}
 		}

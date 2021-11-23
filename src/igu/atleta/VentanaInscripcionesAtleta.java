@@ -224,6 +224,8 @@ public class VentanaInscripcionesAtleta extends JFrame {
 			btnMostrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					mostrarInscripciones();
+					btnCancelar.setEnabled(true);
+					btnFinalizar.setEnabled(true);
 				}
 			});
 			btnMostrar.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -310,6 +312,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton("Cancelar inscripci\u00F3n");
+			btnCancelar.setEnabled(false);
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					cancelarInscripcion();
@@ -329,14 +332,17 @@ public class VentanaInscripcionesAtleta extends JFrame {
 			InscripcionDto ins = insAtleta.get(table.getSelectedRow());
 			
 			if (compe.getHay_politica()==1 && compararFecha(compe.getF_canc()) ) { //si tiene política y no se pasó la fecha de cancelación 
+				double dinero = (compe.getP_cuota_canc()/100)*ins.getCantidad_pagada();
+				
 				if ( ins.getEstado().toUpperCase().equals("INSCRITO") )
 				{
+					
 					System.out.println("entra");
 		            im.cancelarInscripcionPagada(ins.getDni_a(), ins.getId_c());
 		            cm.reducirPlazas(ins.getId_c());
 		    		JOptionPane.showMessageDialog(this, "Se ha desinscrito de la competición. A continuación, se imprimirá un justificante con la siguiente información:"
 		    				+ "\n    Competición: "  + compe
-		    				+ "\n    Dinero a devolver " + " xxxx ");
+		    				+ "\n    Dinero a devolver: " + dinero);
 	
 				}
 				else if (ins.getEstado().toUpperCase().equals("CANCELADO") || 
@@ -350,7 +356,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		            cm.reducirPlazas(ins.getId_c());
 		    		JOptionPane.showMessageDialog(this, "Se ha desinscrito de la competición. A continuación, se imprimirá un justificante con la siguiente información:"
 		    				+ "\n     Competición: "  + compe
-		    				+ "\n     Dinero a devolver " + " xxxx ");
+		    				+ "\n     Dinero a devolver " + dinero );
 				}
 			}
 			else {
@@ -406,6 +412,8 @@ public class VentanaInscripcionesAtleta extends JFrame {
 	private JButton getBtnFinalizar() {
 		if (btnFinalizar == null) {
 			btnFinalizar = new JButton("Finalizar");
+			btnFinalizar.setForeground(Color.WHITE);
+			btnFinalizar.setEnabled(false);
 			btnFinalizar.setBackground(new Color(255, 0, 0));
 			btnFinalizar.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			btnFinalizar.setBounds(555, 450, 85, 21);
