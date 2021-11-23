@@ -26,6 +26,8 @@ public class CompeticionModel {
 	public static String findCategoriasByCompeticion = "select * from categoria c, pertenece p, competicion co where co.id = p.id_comp and c.id = p.id_cat and co.id = ?";
 	public static String findCompByIdListaEspera = "select * from competicion where id_listaespera = ?";
 
+	public static String actualizarIdListaEspera = "update competicion set id_listaespera = ? where id = ?";
+
 	private InscripcionModel im = new InscripcionModel();
 	private AtletaModel am = new AtletaModel();
 
@@ -712,4 +714,31 @@ public class CompeticionModel {
 		return comp;
 	}
 
+	public void actualizarCompeticionIdLista(String idLista, String idComp) {
+		try {
+			actualizarCompeticionIdListaP(idLista, idComp);
+		} catch (SQLException e) {
+			System.out.println("no se pudo actualizar");
+			e.printStackTrace();
+		}
+	}
+
+	private void actualizarCompeticionIdListaP(String idLista, String idComp) throws SQLException {
+		Connection c = null;
+		PreparedStatement pst = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(sqlActualizarCompeticion3);
+			pst.setString(1, idLista);
+			pst.setString(2, idComp);
+			pst.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			pst.close();
+			c.close();
+		}
+
+	}
 }

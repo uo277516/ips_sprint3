@@ -30,6 +30,7 @@ import javax.swing.border.TitledBorder;
 
 import logica.CompeticionDto;
 import logica.CompeticionModel;
+import logica.ListaEsperaDto;
 
 @SuppressWarnings("serial")
 public class VentanaCrearCompeticion extends JFrame {
@@ -83,8 +84,9 @@ public class VentanaCrearCompeticion extends JFrame {
 	private JLabel lblNewLabel_1;
 	private JPanel pnlListaEspera;
 	private JLabel lblListaEspera;
-	private JRadioButton rdbtnSi;
-	private JRadioButton rdbtnNo;
+	private JRadioButton rdbtnSiLista;
+	private JRadioButton rdbtnNoLista;
+	private final ButtonGroup buttonGroupListaEspera = new ButtonGroup();
 
 	/**
 	 * Create the frame.
@@ -121,6 +123,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		lblGestionarCat.setVisible(false);
 		btnGestionar.setVisible(false);
 		btnFinalizar.setVisible(false);
+		pnlListaEspera.setVisible(false);
 	}
 
 	private JTextArea getTxtAreaInfo() {
@@ -295,6 +298,7 @@ public class VentanaCrearCompeticion extends JFrame {
 								mostrarDatosBasicosCorrectos();
 								btnValidar.setEnabled(false);
 								pnPlazos.setVisible(true);
+								pnlListaEspera.setVisible(true);
 								txtNombre.setEditable(false);
 								txtDistancia.setEditable(false);
 								txtFechaComp.setEditable(false);
@@ -306,6 +310,7 @@ public class VentanaCrearCompeticion extends JFrame {
 								mostrarDatosBasicosCorrectos();
 								btnValidar.setEnabled(false);
 								pnPlazos.setVisible(true);
+								pnlListaEspera.setVisible(true);
 								txtNombre.setEditable(false);
 								txtDistancia.setEditable(false);
 								txtFechaComp.setEditable(false);
@@ -845,6 +850,12 @@ public class VentanaCrearCompeticion extends JFrame {
 			btnFinalizar = new JButton("Finalizar");
 			btnFinalizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					if (getRdbtnSiLista().isSelected()) {
+						// Añadir lista de espera
+						ListaEsperaDto lista = new ListaEsperaDto();
+						// TODO CREAR LISTA DE ESPERA
+						comp.actualizarCompeticionIdLista("", id_comp);
+					}
 					System.exit(0);
 				}
 			});
@@ -997,8 +1008,9 @@ public class VentanaCrearCompeticion extends JFrame {
 			pnlListaEspera.setBounds(619, 301, 551, 97);
 			pnlListaEspera.setLayout(null);
 			pnlListaEspera.add(getLblListaEspera());
-			pnlListaEspera.add(getRdbtnSi());
-			pnlListaEspera.add(getRdbtnNo());
+			pnlListaEspera.add(getRdbtnSiLista());
+			pnlListaEspera.add(getRdbtnNoLista());
+			pnlListaEspera.setVisible(false);
 		}
 		return pnlListaEspera;
 	}
@@ -1011,22 +1023,22 @@ public class VentanaCrearCompeticion extends JFrame {
 		return lblListaEspera;
 	}
 
-	private JRadioButton getRdbtnSi() {
-		if (rdbtnSi == null) {
-			rdbtnSi = new JRadioButton("Sí");
-			buttonGroup.add(rdbtnSi);
-			rdbtnSi.setBounds(18, 57, 60, 23);
+	private JRadioButton getRdbtnSiLista() {
+		if (rdbtnSiLista == null) {
+			rdbtnSiLista = new JRadioButton("Sí");
+			buttonGroupListaEspera.add(rdbtnSiLista);
+			rdbtnSiLista.setBounds(18, 57, 70, 23);
 		}
-		return rdbtnSi;
+		return rdbtnSiLista;
 	}
 
-	private JRadioButton getRdbtnNo() {
-		if (rdbtnNo == null) {
-			rdbtnNo = new JRadioButton("No");
-			buttonGroup.add(rdbtnNo);
-			rdbtnNo.setSelected(true);
-			rdbtnNo.setBounds(90, 57, 65, 23);
+	private JRadioButton getRdbtnNoLista() {
+		if (rdbtnNoLista == null) {
+			rdbtnNoLista = new JRadioButton("No");
+			buttonGroupListaEspera.add(rdbtnNoLista);
+			rdbtnNoLista.setSelected(true);
+			rdbtnNoLista.setBounds(88, 57, 70, 23);
 		}
-		return rdbtnNo;
+		return rdbtnNoLista;
 	}
 }
