@@ -14,7 +14,6 @@ import logica.CompeticionDto;
 import logica.InscripcionDto;
 import logica.ListaEsperaDto;
 
-@SuppressWarnings("unused")
 public class DtoAssembler {
 
 	public static List<AtletaDto> toAtletaDtoList(ResultSet rs) {
@@ -48,10 +47,19 @@ public class DtoAssembler {
 				lista.add(cogerDatosCompeticion(rs));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return lista;
+	}
+
+	public static CompeticionDto toCompeticionDto(ResultSet rs) {
+		CompeticionDto c = null;
+		try {
+			c = cogerDatosCompeticion(rs);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return c;
 	}
 
 	private static CompeticionDto cogerDatosCompeticion(ResultSet rs) throws SQLException {
@@ -309,6 +317,10 @@ public class DtoAssembler {
 			e.printStackTrace();
 		}
 		return lista;
+	}
+
+	public static ListaEsperaDto toListaDto(ResultSet rs) throws SQLException {
+		return cogerDatosLista(rs);
 	}
 
 	private static ListaEsperaDto cogerDatosLista(ResultSet rs) throws SQLException {

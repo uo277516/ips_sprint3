@@ -15,13 +15,14 @@ public class CategoriaModel {
 	public static String sqlListarTodas = "select * from categoria where length(id) < 3 order by edad_min";
 	public static String sqlFindById = "select * from categoria where id =?";
 	public static String sqlInsertarCategoria = "insert into categoria (id,nombre,edad_min,edad_max,sexo) values (?,?,?,?,?)";
-	public static String sqlCategoriasPropias ="select c.id,c.nombre,c.edad_min,c.edad_max,c.sexo from categoria c, competicion com, pertenece p where com.id=p.id_comp and p.id_cat=c.id and com.id=? order by c.edad_min";
+	public static String sqlCategoriasPropias = "select c.id,c.nombre,c.edad_min,c.edad_max,c.sexo from categoria c, competicion com, pertenece p where com.id=p.id_comp and p.id_cat=c.id and com.id=? order by c.edad_min";
 	public static String sqlInsertarPertenece = "insert into pertenece (id_cat,id_comp) values (?,?)";
 	public static String sqlContarMas = "select c.id,c.nombre,c.edad_min,c.edad_max,c.sexo from categoria c, competicion com, pertenece p where com.id=p.id_comp and p.id_cat=c.id and com.id=? and c.sexo='masculino'";
 	public static String sqlContarFem = "select c.id,c.nombre,c.edad_min,c.edad_max,c.sexo from categoria c, competicion com, pertenece p where com.id=p.id_comp and p.id_cat=c.id and com.id=? and c.sexo='femenino'";
 	public static String sqlFinfByTodos = "select c.id,c.nombre,c.edad_min,c.edad_max,c.sexo from categoria c, competicion com, pertenece p where com.id=p.id_comp and p.id_cat=c.id and com.id=? and c.nombre=? and c.edad_min=? and c.edad_max=? and c.sexo=?";
 	public static String sqlFindEdadMax = "select max(edad_max) as maximo  from categoria c, competicion com, pertenece p where com.id=p.id_comp and p.id_cat=c.id and com.id=?";
 	public static String sqlFinfBySexo = "select c.id,c.nombre,c.edad_min,c.edad_max,c.sexo from categoria c, competicion com, pertenece p where com.id=p.id_comp and p.id_cat=c.id and com.id=? and c.sexo=?";
+
 	public List<CategoriaDto> getCategorias() {
 		List<CategoriaDto> lista = new ArrayList<>();
 		try {
@@ -47,7 +48,7 @@ public class CategoriaModel {
 	private List<CategoriaDto> getAllCompeticionesP() throws SQLException {
 		List<CategoriaDto> listaCat = new ArrayList<CategoriaDto>();
 
-		// Conexión a la base de datos
+		// Conexiï¿½n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -56,7 +57,7 @@ public class CategoriaModel {
 			pst = c.prepareStatement(sqlListarTodas);
 			rs = pst.executeQuery();
 
-			// Añadimos los pedidos a la lista
+			// Aï¿½adimos los pedidos a la lista
 			listaCat = DtoAssembler.toCategoriaDtoList(rs);
 
 		} catch (SQLException e) {
@@ -80,11 +81,10 @@ public class CategoriaModel {
 		return lista;
 	}
 
-
 	public List<CategoriaDto> findCatById(String id) throws SQLException {
 		List<CategoriaDto> listaCat = new ArrayList<CategoriaDto>();
 
-		// Conexión a la base de datos
+		// Conexiï¿½n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -94,7 +94,7 @@ public class CategoriaModel {
 			pst.setString(1, id);
 			rs = pst.executeQuery();
 
-			// Añadimos los pedidos a la lista
+			// Aï¿½adimos los pedidos a la lista
 			listaCat = DtoAssembler.toCategoriaDtoList(rs);
 
 		} catch (SQLException e) {
@@ -107,17 +107,17 @@ public class CategoriaModel {
 		return listaCat;
 	}
 
-	public void insertarNueva(String id,String nombre, int edad_min,int edad_max,String sexo){
+	public void insertarNueva(String id, String nombre, int edad_min, int edad_max, String sexo) {
 		try {
-			insertarNuevaP(id, nombre, edad_min,edad_max,sexo);
+			insertarNuevaP(id, nombre, edad_min, edad_max, sexo);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
 
-	private void insertarNuevaP(String id,String nombre, int edad_min,int edad_max,String sexo) throws SQLException {
-		// Conexión a la base de datos
+	private void insertarNuevaP(String id, String nombre, int edad_min, int edad_max, String sexo) throws SQLException {
+		// Conexiï¿½n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
 		try {
@@ -153,7 +153,7 @@ public class CategoriaModel {
 	private List<CategoriaDto> getCategoriasPropiasP(String id_comp) throws SQLException {
 		List<CategoriaDto> listaCat = new ArrayList<CategoriaDto>();
 
-		// Conexión a la base de datos
+		// Conexiï¿½n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -163,7 +163,7 @@ public class CategoriaModel {
 			pst.setString(1, id_comp);
 			rs = pst.executeQuery();
 
-			// Añadimos los pedidos a la lista
+			// Aï¿½adimos los pedidos a la lista
 			listaCat = DtoAssembler.toCategoriaDtoList(rs);
 
 		} catch (SQLException e) {
@@ -193,7 +193,6 @@ public class CategoriaModel {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(sqlInsertarPertenece);
 
-
 			pst.setString(1, id);
 			pst.setString(2, id_comp);
 
@@ -208,9 +207,9 @@ public class CategoriaModel {
 	}
 
 	public List<CategoriaDto> cuentaCategoriasMas(String id) {
-		List<CategoriaDto> result =new ArrayList<>();
+		List<CategoriaDto> result = new ArrayList<>();
 		try {
-			result =cuentaCategoriasMasP(id);
+			result = cuentaCategoriasMasP(id);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -219,8 +218,8 @@ public class CategoriaModel {
 	}
 
 	private List<CategoriaDto> cuentaCategoriasMasP(String id) throws SQLException {
-		List<CategoriaDto> result =new ArrayList<>();
-		ResultSet rs =null;
+		List<CategoriaDto> result = new ArrayList<>();
+		ResultSet rs = null;
 		Connection c = null;
 		PreparedStatement pst = null;
 		try {
@@ -245,9 +244,9 @@ public class CategoriaModel {
 	}
 
 	public List<CategoriaDto> cuentaCategoriasFem(String id) {
-		List<CategoriaDto> result =new ArrayList<>();
+		List<CategoriaDto> result = new ArrayList<>();
 		try {
-			result =cuentaCategoriasFemP(id);
+			result = cuentaCategoriasFemP(id);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -256,8 +255,8 @@ public class CategoriaModel {
 	}
 
 	private List<CategoriaDto> cuentaCategoriasFemP(String id) throws SQLException {
-		List<CategoriaDto> result =new ArrayList<>();
-		ResultSet rs =null;
+		List<CategoriaDto> result = new ArrayList<>();
+		ResultSet rs = null;
 		Connection c = null;
 		PreparedStatement pst = null;
 		try {
@@ -280,10 +279,11 @@ public class CategoriaModel {
 
 	}
 
-	public List<CategoriaDto> findCategoriaByTodo(String id_comp,String nombre, int edad_min, int edad_max, String sexo) {
-		List<CategoriaDto> result =new ArrayList<>();
+	public List<CategoriaDto> findCategoriaByTodo(String id_comp, String nombre, int edad_min, int edad_max,
+			String sexo) {
+		List<CategoriaDto> result = new ArrayList<>();
 		try {
-			result =findCategoriaByTodoP(id_comp,nombre, edad_min,edad_max, sexo);
+			result = findCategoriaByTodoP(id_comp, nombre, edad_min, edad_max, sexo);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -291,10 +291,11 @@ public class CategoriaModel {
 		return result;
 	}
 
-	private List<CategoriaDto> findCategoriaByTodoP(String id_comp,String nombre, int edad_min, int edad_max, String sexo) throws SQLException{
+	private List<CategoriaDto> findCategoriaByTodoP(String id_comp, String nombre, int edad_min, int edad_max,
+			String sexo) throws SQLException {
 		List<CategoriaDto> listaCat = new ArrayList<CategoriaDto>();
 
-		// Conexión a la base de datos
+		// Conexiï¿½n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -307,15 +308,15 @@ public class CategoriaModel {
 			pst.setInt(4, edad_max);
 			pst.setString(5, sexo);
 			rs = pst.executeQuery();
-			// Añadimos los pedidos a la lista
+			// Aï¿½adimos los pedidos a la lista
 			if (rs != null)
 				listaCat = DtoAssembler.toCategoriaDtoList(rs);
-			System.out.println("Tamaño: "+listaCat.size());
+			System.out.println("Tamaï¿½o: " + listaCat.size());
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
-			if (rs!= null)
+			if (rs != null)
 				rs.close();
 			pst.close();
 			c.close();
@@ -324,9 +325,9 @@ public class CategoriaModel {
 	}
 
 	public int findEdadMax(String id_comp) {
-		int result =0;
+		int result = 0;
 		try {
-			result =findEdadMaxP(id_comp);
+			result = findEdadMaxP(id_comp);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -335,8 +336,8 @@ public class CategoriaModel {
 	}
 
 	private int findEdadMaxP(String id_comp) throws SQLException {
-		// Conexión a la base de datos
-		int result =0;
+		// Conexiï¿½n a la base de datos
+		int result = 0;
 		Connection c = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -344,10 +345,10 @@ public class CategoriaModel {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(sqlFindEdadMax);
 			pst.setString(1, id_comp);
-			
+
 			rs = pst.executeQuery();
-			result=rs.getInt("maximo");
-			// Añadimos los pedidos a la lista
+			result = rs.getInt("maximo");
+			// Aï¿½adimos los pedidos a la lista
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
@@ -359,9 +360,9 @@ public class CategoriaModel {
 	}
 
 	public List<CategoriaDto> findCateBySex(String id_comp, String sexo) {
-		List<CategoriaDto> result =new ArrayList<>();
+		List<CategoriaDto> result = new ArrayList<>();
 		try {
-			result =findCateBySexP(id_comp,sexo);
+			result = findCateBySexP(id_comp, sexo);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -372,7 +373,7 @@ public class CategoriaModel {
 	private List<CategoriaDto> findCateBySexP(String id_comp, String sexo) throws SQLException {
 		List<CategoriaDto> listaCat = new ArrayList<CategoriaDto>();
 
-		// Conexión a la base de datos
+		// Conexiï¿½n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -382,14 +383,14 @@ public class CategoriaModel {
 			pst.setString(1, id_comp);
 			pst.setString(2, sexo);
 			rs = pst.executeQuery();
-			// Añadimos los pedidos a la lista
+			// Aï¿½adimos los pedidos a la lista
 			if (rs != null)
 				listaCat = DtoAssembler.toCategoriaDtoList(rs);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
-			if (rs!= null)
+			if (rs != null)
 				rs.close();
 			pst.close();
 			c.close();

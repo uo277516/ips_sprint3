@@ -40,7 +40,6 @@ public class VentanaInscripcion extends JFrame {
 	private JLabel lblInfoJus;
 	private InscripcionModel ins;
 	private AtletaModel atl;
-	@SuppressWarnings("unused")
 	private CompeticionModel comp;
 	private CompeticionDto cSeleccionada;
 	@SuppressWarnings("unused")
@@ -213,7 +212,7 @@ public class VentanaInscripcion extends JFrame {
 		float n = 10.0f + cSeleccionada.getCuota1();
 		ins.agregarInscripcion(txtEmail.getText(), cSeleccionada.getId(), n, cambiarFormatoFecha());
 		int numeroplazasact = cSeleccionada.getNum_plazas();
-		comp.reducirNumPlazas(numeroplazasact-1, cSeleccionada.getId());
+		comp.reducirNumPlazas(numeroplazasact - 1, cSeleccionada.getId());
 
 	}
 
