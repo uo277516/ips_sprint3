@@ -927,4 +927,66 @@ public class InscripcionModel {
 		}
 		
 	}
+	
+	
+	public void cancelarInscripcion(String dni_a, String id_c)  
+	{
+		try {
+			cancelarInscripcionP(dni_a, id_c);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void cancelarInscripcionP(String dni_a, String id_c) throws SQLException {
+		Connection c = null;
+		PreparedStatement pst = null;
+		// ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement("update inscripcion set estado='Cancelado' where dni_a=? and id_c=?");
+			pst.setString(1,dni_a);
+			pst.setString(2,id_c);
+			pst.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			pst.close();
+			c.close();
+		}
+	}
+	
+	
+	
+	public void cancelarInscripcionPagada(String dni_a, String id_c)  
+	{
+		try {
+			cancelarInscripcionPagadaP(dni_a, id_c);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void cancelarInscripcionPagadaP(String dni_a, String id_c) throws SQLException {
+		Connection c = null;
+		PreparedStatement pst = null;
+		// ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement("update inscripcion set estado='Cancelado-Pendiente de devolucion' where dni_a=? and id_c=?");
+			pst.setString(1,dni_a);
+			pst.setString(2,id_c);
+			pst.executeUpdate();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			pst.close();
+			c.close();
+		}
+	}
+
+	
 }

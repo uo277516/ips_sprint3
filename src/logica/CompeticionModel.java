@@ -15,7 +15,9 @@ public class CompeticionModel {
 
 	public static String sql1 = "select * from competicion where num_plazas>0";
 	public static String sql2ById = "select * from competicion where id=?";
-	public static String sqlActualizarPlazas = "update competicion set num_plazas = num_plazas-1 where id =?";
+	public static String sqlReducirPlazas = "update competicion set num_plazas = num_plazas-1 where id =?";
+	public static String sqlAumentarPlazas = "update competicion set num_plazas = num_plazas+1 where id =?";
+
 	public static String sqlInsertarCompeticionBasicos = "insert into competicion (nombre,f_comp,tipo,distancia,num_plazas,dorsales_vip,id,d_asig, hay_politica) values (?,?,?,?,?,?,?,0,0)";
 	public static String sqlInsertarCompeticionBasicosConCancelacion = "insert into competicion (nombre,f_comp,tipo,distancia,num_plazas,dorsales_vip,id,d_asig, f_canc, p_cuota_canc, hay_politica) values (?,?,?,?,?,?,?,0,?,?,1)";
 
@@ -289,23 +291,55 @@ public class CompeticionModel {
 		return listaCompeticiones;
 	}
 
-	public void actualizarPlazas(String id) {
+	public void reducirPlazas(String id) {
 		try {
-			actualizarPlazasP(id);
+			reducirPlazasP(id);
 		} catch (SQLException e) {
 			System.out.println("no se pudo actuliazar");
 			e.printStackTrace();
 		}
 	}
 
-	private void actualizarPlazasP(String id) throws SQLException {
+	private void reducirPlazasP(String id) throws SQLException {
 		// Conexi�n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
 		// ResultSet rs = null;
 		try {
 			c = BaseDatos.getConnection();
-			pst = c.prepareStatement(sqlActualizarPlazas);
+			pst = c.prepareStatement(sqlReducirPlazas);
+			pst.setString(1, id);
+			pst.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			pst.close();
+			c.close();
+		}
+
+	}
+	
+	
+	
+	
+	public void aumentarPlazas(String id) {
+		try {
+			aumentarPlazasP(id);
+		} catch (SQLException e) {
+			System.out.println("no se pudo actuliazar");
+			e.printStackTrace();
+		}
+	}
+
+	private void aumentarPlazasP(String id) throws SQLException {
+		// Conexi�n a la base de datos
+		Connection c = null;
+		PreparedStatement pst = null;
+		// ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(sqlAumentarPlazas);
 			pst.setString(1, id);
 			pst.executeUpdate();
 

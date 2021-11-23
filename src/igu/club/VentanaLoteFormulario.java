@@ -487,7 +487,7 @@ public class VentanaLoteFormulario extends JFrame {
 				inmodel.insertarInscripcionClub(list.get(i).getDni(),comp.getId(),categoria,list.get(i).getEmail(),cambiarForFecha(),"por_club",
 						cuota,"CLUB",getTxtNombreClub().getText());
 				//restarPlazas
-				cmodel.actualizarPlazas(comp.getId());
+				cmodel.reducirPlazas(comp.getId());
 				contador++;
 			}else {
 				break;
