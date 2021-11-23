@@ -253,7 +253,7 @@ public class VentanaInscripcion extends JFrame {
 	 */
 	private String getInformacion() {
 		String s = "";
-		float n = 10.0f + cogerCuotaSegunFecha();
+		float n = cogerCuotaSegunFecha();
 		atleta = ins.findAtletaEmail(txtEmail.getText());
 		return s += "Nombre del atleta: " + atleta.getNombre() + "\n" + "Competición: " + cSeleccionada.getNombre()
 				+ "\n" + "Categoría: " + ins.getCategoriaByDniId(atleta.getDni(), cSeleccionada.getId()) + "\n"

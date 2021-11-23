@@ -963,7 +963,7 @@ public class InscripcionModel {
 	public void cancelarInscripcionPagada(String dni_a, String id_c)  
 	{
 		try {
-			cancelarInscripcionP(dni_a, id_c);
+			cancelarInscripcionPagadaP(dni_a, id_c);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

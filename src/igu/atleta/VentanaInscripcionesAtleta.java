@@ -5,6 +5,10 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -24,6 +28,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import igu.VentanaInicial;
+import logica.CompeticionDto;
 import logica.CompeticionModel;
 import logica.InscripcionDto;
 import logica.InscripcionModel;
@@ -320,26 +325,80 @@ public class VentanaInscripcionesAtleta extends JFrame {
 	
 	protected void cancelarInscripcion() {
 		if (table.getSelectedRow() != -1) {
-			System.out.println("a ver: " + insAtleta.get(table.getSelectedRow()).getDni_a()
-					+ " -- " + insAtleta.get(table.getSelectedRow()).getId_c());
-			if ( insAtleta.get(table.getSelectedRow()).getEstado().toUpperCase().equals("INSCRITO") )
-			{
-	            im.cancelarInscripcionPagada(insAtleta.get(table.getSelectedRow()).getDni_a(), 
-	            		insAtleta.get(table.getSelectedRow()).getId_c());
+			CompeticionDto compe = cm.getCompeticionById(insAtleta.get(table.getSelectedRow()).getId_c()).get(0);
+			InscripcionDto ins = insAtleta.get(table.getSelectedRow());
+			
+			if (compe.getHay_politica()==1 && compararFecha(compe.getF_canc()) ) { //si tiene política y no se pasó la fecha de cancelación 
+				if ( ins.getEstado().toUpperCase().equals("INSCRITO") )
+				{
+					System.out.println("entra");
+		            im.cancelarInscripcionPagada(ins.getDni_a(), ins.getId_c());
+		            cm.reducirPlazas(ins.getId_c());
+		    		JOptionPane.showMessageDialog(this, "Se ha desinscrito de la competición. A continuación, se imprimirá un justificante con la siguiente información:"
+		    				+ "\n    Competición: "  + compe
+		    				+ "\n    Dinero a devolver " + " xxxx ");
+	
+				}
+				else if (ins.getEstado().toUpperCase().equals("CANCELADO") || 
+						ins.getEstado().toUpperCase().equals("CANCELADO-PENDIENTE DE DEVOLUCION"))
+				{
+		    		JOptionPane.showMessageDialog(this, "Usted ya se ha desinscrito de esta competición");
 
+				}
+				else {
+		            im.cancelarInscripcion(ins.getDni_a(), ins.getId_c());
+		            cm.reducirPlazas(ins.getId_c());
+		    		JOptionPane.showMessageDialog(this, "Se ha desinscrito de la competición. A continuación, se imprimirá un justificante con la siguiente información:"
+		    				+ "\n     Competición: "  + compe
+		    				+ "\n     Dinero a devolver " + " xxxx ");
+				}
 			}
-            im.cancelarInscripcion(insAtleta.get(table.getSelectedRow()).getDni_a(), insAtleta.get(table.getSelectedRow()).getId_c());
-            cm.reducirPlazas(insAtleta.get(table.getSelectedRow()).getId_c());
-    		JOptionPane.showMessageDialog(this, "A continuación, se imprimirá un justificante con la siguiente información:"
-    				+ "\n Competición: "  + cm.getCompeticionById(insAtleta.get(table.getSelectedRow()).getId_c())
-    				+ "\n Dinero a devolver " + " xxxx ");
-
+			else {
+				 JOptionPane.showMessageDialog(this, "Error: No se puede cancelar su inscripción.");
+			}
 		}else {
             errorNoCarreraSeleccionada();
         }
 		
 	}
 	
+	private boolean compararFecha(String fecha) {
+		// TODO Auto-generated method stub
+		
+		
+		String[] cosas = fecha.split("/");
+		cosas[0] = String.valueOf(Integer.parseInt(cosas[0]) + 1);
+		String f = cosas[0] + "/" + cosas[1] + "/" + cosas[2];
+		
+		SimpleDateFormat formato =new SimpleDateFormat("dd/MM/yyyy");
+		Date fechaFinCancelacion = null;
+		Date fechaHoy = null;
+		
+		
+		try {
+			fechaFinCancelacion = formato.parse(f);
+			fechaHoy = formato.parse(cambiarFormatoFecha());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (fechaHoy.before(fechaFinCancelacion))
+			return true;
+		else
+			return false;
+	}
+	
+	private String cambiarFormatoFecha() {
+		String fechaString = String.valueOf(LocalDate.now());
+		String[] fechaPartida = fechaString.split("-");
+		String result ="";
+		for (int i = 0; i < fechaPartida.length; i++) {
+			result="/"+fechaPartida[i]+result;
+		}
+		return result.substring(1);
+		
+	}
+
 	protected void errorNoCarreraSeleccionada() {
 		 JOptionPane.showMessageDialog(this, "Error: Seleccione una carrera para registrarse");
 	}
