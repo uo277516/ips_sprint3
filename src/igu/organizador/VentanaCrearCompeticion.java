@@ -30,13 +30,14 @@ import javax.swing.border.TitledBorder;
 
 import logica.CompeticionDto;
 import logica.CompeticionModel;
-import logica.ListaEsperaDto;
+import logica.ListaEsperaModel;
 
 @SuppressWarnings("serial")
 public class VentanaCrearCompeticion extends JFrame {
 
 	private JPanel contentPane;
 	private CompeticionModel comp;
+	private ListaEsperaModel listam;
 	private JTextArea txtAreaInfo;
 	private JPanel pnDatosBasicos;
 	private JLabel lblNombre;
@@ -93,6 +94,7 @@ public class VentanaCrearCompeticion extends JFrame {
 	 */
 	public VentanaCrearCompeticion() {
 		comp = new CompeticionModel();
+		listam = new ListaEsperaModel();
 		setTitle("Creaci\u00F3n de competiciones:");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -852,9 +854,9 @@ public class VentanaCrearCompeticion extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					if (getRdbtnSiLista().isSelected()) {
 						// Añadir lista de espera
-						ListaEsperaDto lista = new ListaEsperaDto();
-						// TODO CREAR LISTA DE ESPERA
-						comp.actualizarCompeticionIdLista("", id_comp);
+						String idLista = UUID.randomUUID().toString();
+						listam.addLista(idLista, id_comp);
+						comp.actualizarCompeticionIdLista(idLista, id_comp);
 					}
 					System.exit(0);
 				}

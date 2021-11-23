@@ -261,7 +261,7 @@ public class CompeticionModel {
 		return listaCompeticiones;
 	}
 
-	public List<CompeticionDto> getCompeticionByIdP(String identificador) throws SQLException {
+	private List<CompeticionDto> getCompeticionByIdP(String identificador) throws SQLException {
 		List<CompeticionDto> listaCompeticiones = new ArrayList<CompeticionDto>();
 
 		// Conexi�n a la base de datos
@@ -319,10 +319,7 @@ public class CompeticionModel {
 		}
 
 	}
-	
-	
-	
-	
+
 	public void aumentarPlazas(String id) {
 		try {
 			aumentarPlazasP(id);
@@ -762,7 +759,7 @@ public class CompeticionModel {
 		PreparedStatement pst = null;
 		try {
 			c = BaseDatos.getConnection();
-			pst = c.prepareStatement(sqlActualizarCompeticion3);
+			pst = c.prepareStatement(actualizarIdListaEspera);
 			pst.setString(1, idLista);
 			pst.setString(2, idComp);
 			pst.executeUpdate();
@@ -773,6 +770,5 @@ public class CompeticionModel {
 			pst.close();
 			c.close();
 		}
-
 	}
 }

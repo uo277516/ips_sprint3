@@ -113,14 +113,14 @@ public class VentanaInicial extends JFrame {
 	}
 
 	protected void elegirAsOrganizador() throws FileNotFoundException {
-		int seleccion = JOptionPane.showOptionDialog(this, "Seleccione la opción que quiere realizar",
+		int seleccion = JOptionPane.showOptionDialog(this, "Seleccione la opciï¿½n que quiere realizar",
 				"Inicio como organizador", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null
 																													// para
 																													// icono
 																													// por
 																													// defecto.
 				new Object[] { "Consultar inscripciones", "Consultar clasificaciones", "Cargar tiempos",
-						"Asignar dorsales", "Crear Competicion" }, // null
+						"Asignar dorsales", "Crear Competicion", "Ver listas de espera" }, // null
 				// para
 				// YES,
 				// NO y
@@ -131,21 +131,32 @@ public class VentanaInicial extends JFrame {
 			System.out.println("seleccionada opcion " + (seleccion + 1));
 		if (seleccion == 0) // organizador
 		{
-			mostrarVentanaInscripciones(); // tania
+			mostrarVentanaInscripciones();
 		} else if (seleccion == 1) {
 			mostrarVentanaClasificaciones();
 		} // moises
 		else if (seleccion == 2) {
 			if (actualizarClasificaciones())
-				JOptionPane.showMessageDialog(this, "Datos de " + cm.getCompeticionById(competicionId).get(0).getNombre() + " cargados. \n"
-						+ "Se han actualizado los tiempos de " + ndatos + " atletas");
+				JOptionPane.showMessageDialog(this,
+						"Datos de " + cm.getCompeticionById(competicionId).get(0).getNombre() + " cargados. \n"
+								+ "Se han actualizado los tiempos de " + ndatos + " atletas");
 			else
 				JOptionPane.showMessageDialog(this, "Los Tiempos no ha podido cargarse."); // moises
 		} else if (seleccion == 3) {
 			asignarDorsales();
 		} else if (seleccion == 4) {
 			mostrarVentanaCrearCompeticion();
+		} else if (seleccion == 5) {
+			mostrarVentanaListasDeEspera();
 		}
+	}
+
+	private void mostrarVentanaListasDeEspera() {
+		this.dispose();
+		VentanaMostrarCarrerasOrganizador vPal = new VentanaMostrarCarrerasOrganizador("l");
+		vPal.setLocationRelativeTo(this);
+		vPal.setVisible(true);
+
 	}
 
 	private void mostrarVentanaCrearCompeticion() {
@@ -259,7 +270,7 @@ public class VentanaInicial extends JFrame {
 
 	protected void elegirAsAtleta() {
 		int seleccion = JOptionPane.showOptionDialog(this,
-				"¿Desea inscribirse o conocer el estado de sus inscripciones?", "Inicio como atleta",
+				"ï¿½Desea inscribirse o conocer el estado de sus inscripciones?", "Inicio como atleta",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null para icono por defecto.
 				new Object[] { "Inscribirme", "Conocer mi estado" }, // null para YES, NO y CANCEL
 				"opcion 1");
@@ -289,6 +300,7 @@ public class VentanaInicial extends JFrame {
 		vPal.setVisible(true);
 
 	}
+
 	private JButton getBtnClub() {
 		if (btnClub == null) {
 			btnClub = new JButton("Club");
@@ -302,12 +314,15 @@ public class VentanaInicial extends JFrame {
 		}
 		return btnClub;
 	}
-	
+
 	protected void elegirSiNoClub() {
-		int seleccion = JOptionPane.showOptionDialog(this,
-				"¿Desea inscribir un lote de atletas?", "Inscripcion de lotes",
-				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null para icono por defecto.
-				new Object[] { "Si"}, // null para YES, NO y CANCEL
+		int seleccion = JOptionPane.showOptionDialog(this, "ï¿½Desea inscribir un lote de atletas?",
+				"Inscripcion de lotes", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null
+																												// para
+																												// icono
+																												// por
+																												// defecto.
+				new Object[] { "Si" }, // null para YES, NO y CANCEL
 				"opcion 1");
 
 		if (seleccion != -1)
@@ -317,7 +332,7 @@ public class VentanaInicial extends JFrame {
 			mostrarVentanaCarrerasClub();
 		}
 	}
-	
+
 	private void mostrarVentanaCarrerasClub() {
 		this.dispose();
 		// CompeticionDto competicion = crearCompeticion();

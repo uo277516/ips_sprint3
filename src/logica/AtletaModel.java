@@ -26,10 +26,13 @@ public class AtletaModel {
 	public static String sqlFindById = "select * from atleta where id=?";
 	// String dni, String nombre, String sexo, String fecha, String email
 	public static String sqlAdd = "insert into Atleta(dni, nombre, sexo, f_nac, email) values (?,?,?,?,?)";
-	
-	public static String findAtletaByDniId= "select * from atleta, inscripcion, competicion" + "		where "
+
+	public static String findAtletaByDniId = "select * from atleta, inscripcion, competicion" + "		where "
 			+ " 	atleta.dni = inscripcion.dni_a and " + "     inscripcion.id_c = competicion.id and "
 			+ "		inscripcion.dni_a=? and " + "     competicion.nombre=?";
+	public static String findAtletasByListaId = "select a.nombre, a.dni, a.sexo, a.f_nac, a.email "
+			+ "from atleta a, en_espera e, listaespera l "
+			+ "where l.id = ? and l.id = e.id_listaespera and e.dni_atleta = a.dni order by e.num_orden";
 
 	public List<AtletaDto> getAtletas() throws SQLException {
 		return getAllAtletas();
@@ -115,7 +118,7 @@ public class AtletaModel {
 			return false;
 		}
 	}
-	
+
 	public boolean findAtletaByDniId(String dni, String cmpe) {
 		boolean op = false;
 		try {
@@ -380,7 +383,6 @@ public class AtletaModel {
 		return a;
 	}
 
-
 	public void addAtleta(String dni, String nombre, String sexo, String fecha, String email) {
 		try {
 			addAtletaP(dni, nombre, sexo, fecha, email);
@@ -392,7 +394,7 @@ public class AtletaModel {
 
 	private void addAtletaP(String dni, String nombre, String sexo, String fecha, String email) throws SQLException {
 
-		// Conexión a la base de datos
+		// Conexiï¿½n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
 		// ResultSet rs = null;
@@ -451,5 +453,43 @@ public class AtletaModel {
 		}
 
 		return atletas;
+	}
+
+	public List<AtletaDto> getAtletasByListaId(String idLista) {
+		List<AtletaDto> lista = null;
+		try {
+			lista = getAtletasByListaIdP(idLista);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+
+	private List<AtletaDto> getAtletasByListaIdP(String idLista) throws SQLException {
+		List<AtletaDto> listaAtletas = new ArrayList<AtletaDto>();
+
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(findAtletasByListaId);
+			pst.setString(1, idLista);
+			rs = pst.executeQuery();
+
+			listaAtletas = DtoAssembler.toAtletaDtoList(rs);
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
+
+		for (AtletaDto atletaDto : listaAtletas) {
+			System.out.println(atletaDto);
+		}
+		return listaAtletas;
 	}
 }

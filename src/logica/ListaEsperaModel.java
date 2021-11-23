@@ -14,6 +14,7 @@ public class ListaEsperaModel {
 
 	public static String getAllListaEspera = "select * from listaespera";
 	public static String getListaByIdComp = "select * from listaespera where id_comp = ?";
+	public static String addLista = "insert into listaespera(id, id_comp) values(?, ?)";
 
 	public List<ListaEsperaDto> getListas() {
 		List<ListaEsperaDto> lista = null;
@@ -84,5 +85,30 @@ public class ListaEsperaModel {
 			c.close();
 		}
 		return lista;
+	}
+
+	public void addLista(String id, String idComp) {
+		try {
+			addListaP(id, idComp);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void addListaP(String id, String idComp) throws SQLException {
+		Connection c = null;
+		PreparedStatement pst = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(addLista);
+			pst.setString(1, id);
+			pst.setString(2, idComp);
+			pst.executeUpdate();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			pst.close();
+			c.close();
+		}
 	}
 }

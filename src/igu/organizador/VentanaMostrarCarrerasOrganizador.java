@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -19,6 +20,8 @@ import igu.VentanaInicial;
 import igu.atleta.VentanaAtletaInscripcion;
 import logica.CompeticionDto;
 import logica.CompeticionModel;
+import logica.ListaEsperaDto;
+import logica.ListaEsperaModel;
 
 public class VentanaMostrarCarrerasOrganizador extends JFrame {
 
@@ -29,6 +32,7 @@ public class VentanaMostrarCarrerasOrganizador extends JFrame {
 	private JPanel contentPane;
 	private JComboBox<CompeticionDto> cmboxCarreras;
 	private CompeticionModel comp;
+	private ListaEsperaModel lem;
 	private JButton btnAceptar;
 	private JLabel lblCompeticiones;
 	private JTextArea txtInfoCarrera;
@@ -45,6 +49,7 @@ public class VentanaMostrarCarrerasOrganizador extends JFrame {
 	public VentanaMostrarCarrerasOrganizador(String opcion) {
 		this.opcion = opcion;
 		comp = new CompeticionModel();
+		lem = new ListaEsperaModel();
 		setTitle("Selecci\u00F3n de Competici\u00F3n:");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 538, 348);
@@ -63,7 +68,19 @@ public class VentanaMostrarCarrerasOrganizador extends JFrame {
 		if (cmboxCarreras == null) {
 			cmboxCarreras = new JComboBox<CompeticionDto>();
 			cmboxCarreras.setBounds(24, 137, 471, 22);
-			cmboxCarreras.setModel(new DefaultComboBoxModel<CompeticionDto>(comp.getCompeticionesArray()));
+			if (this.opcion == "l") {
+				// Coger sólo las carreras que tengan lista de espera
+				List<ListaEsperaDto> listas = lem.getListas();
+				CompeticionDto[] comps = new CompeticionDto[listas.size()];
+				int i = 0;
+				for (ListaEsperaDto lista : listas) {
+					comps[i] = comp.getCompeticionById(lista.getId_comp()).get(0);
+					i++;
+				}
+				cmboxCarreras.setModel(new DefaultComboBoxModel<CompeticionDto>(comps));
+			} else {
+				cmboxCarreras.setModel(new DefaultComboBoxModel<CompeticionDto>(comp.getCompeticionesArray()));
+			}
 		}
 		return cmboxCarreras;
 	}
@@ -75,15 +92,17 @@ public class VentanaMostrarCarrerasOrganizador extends JFrame {
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						if (opcion == "i")
+						if (opcion == "i") {
 							mostrarVentanaAtletaInscripcion();
-						else if (opcion == "c")
+						} else if (opcion == "c") {
 							mostrarVentanaCompeticion();
+						} else if (opcion == "l") {
+							mostrarVentanaListaEspera();
+						}
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
 				}
-
 			});
 			btnAceptar.setBackground(Color.GREEN);
 			btnAceptar.setForeground(Color.BLACK);
@@ -106,6 +125,12 @@ public class VentanaMostrarCarrerasOrganizador extends JFrame {
 		this.dispose();
 		vai.setVisible(true);
 
+	}
+
+	private void mostrarVentanaListaEspera() throws SQLException {
+		VentanaListasEspera vle = new VentanaListasEspera((CompeticionDto) getCmboxCarreras().getSelectedItem());
+		this.dispose();
+		vle.setVisible(true);
 	}
 
 	private JLabel getLblCompeticiones() {
