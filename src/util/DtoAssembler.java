@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +12,7 @@ import logica.AtletaDto;
 import logica.CategoriaDto;
 import logica.CompeticionDto;
 import logica.InscripcionDto;
+import logica.ListaEsperaDto;
 
 @SuppressWarnings("unused")
 public class DtoAssembler {
@@ -40,9 +40,7 @@ public class DtoAssembler {
 		return a;
 	}
 
-
-	public static List<CompeticionDto> toCompeticionDtoList (ResultSet rs)
-	{
+	public static List<CompeticionDto> toCompeticionDtoList(ResultSet rs) {
 
 		List<CompeticionDto> lista = new ArrayList<CompeticionDto>();
 		try {
@@ -137,9 +135,9 @@ public class DtoAssembler {
 			i.setEstado(rs.getString("estado"));
 		if (rs.getString("dorsal") != null)
 			i.setDorsal(rs.getString("dorsal"));
-		if (rs.getString("dorsal")!=null)
+		if (rs.getString("dorsal") != null)
 			i.setDorsal(rs.getString("dorsal"));
-		if (rs.getString("club")!=null)
+		if (rs.getString("club") != null)
 			i.setClub(rs.getString("club"));
 		return i;
 	}
@@ -148,8 +146,7 @@ public class DtoAssembler {
 		return cogerDatosAtleta(rs);
 	}
 
-
-	public static List<CompeticionDto> toCompeticionDtoListPorFecha (ResultSet rs,String fecha) {
+	public static List<CompeticionDto> toCompeticionDtoListPorFecha(ResultSet rs, String fecha) {
 		List<CompeticionDto> lista = new ArrayList<CompeticionDto>();
 		try {
 			while (rs.next()) {
@@ -175,24 +172,20 @@ public class DtoAssembler {
 		return lista;
 	}
 
-
-	public static List<CompeticionDto> toCompeticionDtoListPorFechaPlazasMayor3 (ResultSet rs,String fecha) 
-	{
+	public static List<CompeticionDto> toCompeticionDtoListPorFechaPlazasMayor3(ResultSet rs, String fecha) {
 		List<CompeticionDto> lista = new ArrayList<CompeticionDto>();
 		try {
-			while(rs.next())
-			{
+			while (rs.next()) {
 				try {
 					if (Integer.parseInt(rs.getString("num_plazas")) >= 3) {
 						if (rs.getString("f_fin3") != null) {
-							if (compararFecha(rs.getString("f_fin3"),fecha,rs.getString("f_inicio3")))
+							if (compararFecha(rs.getString("f_fin3"), fecha, rs.getString("f_inicio3")))
 								lista.add(cogerDatosCompeticion(rs));
-						}else if(rs.getString("f_fin2") != null) {
-							if (compararFecha(rs.getString("f_fin2"),fecha,rs.getString("f_inicio2")))
+						} else if (rs.getString("f_fin2") != null) {
+							if (compararFecha(rs.getString("f_fin2"), fecha, rs.getString("f_inicio2")))
 								lista.add(cogerDatosCompeticion(rs));
-						}else
-							if (compararFecha(rs.getString("f_fin1"),fecha,rs.getString("f_inicio1")))
-								lista.add(cogerDatosCompeticion(rs));
+						} else if (compararFecha(rs.getString("f_fin1"), fecha, rs.getString("f_inicio1")))
+							lista.add(cogerDatosCompeticion(rs));
 					}
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
@@ -207,11 +200,11 @@ public class DtoAssembler {
 		return lista;
 	}
 
-	public static boolean compararFecha(String ffin, String fecha,String fechaInicio) throws ParseException{
-		//		String[] fechaFin = ffin.split("/");
-		//		String[] fechaAcomparar = fecha.split("/");
-		//		String[] fInicio = fechaInicio.split("/");
-		SimpleDateFormat formato =new SimpleDateFormat("dd/MM/yyyy");
+	public static boolean compararFecha(String ffin, String fecha, String fechaInicio) throws ParseException {
+		// String[] fechaFin = ffin.split("/");
+		// String[] fechaAcomparar = fecha.split("/");
+		// String[] fInicio = fechaInicio.split("/");
+		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
 		Date fechaFin2 = formato.parse(ffin);
 
@@ -243,7 +236,7 @@ public class DtoAssembler {
 		for (CompeticionDto c : lista) {
 			try {
 				if (formato.parse(fecha).before(formato.parse(c.getF_comp())) && c.getD_asig() == 0) {
-					// que la fecha de la comp no pasara y que no estén asignados ya
+					// que la fecha de la comp no pasara y que no estï¿½n asignados ya
 					if (c.getF_fin1() != null && c.getF_fin2() == null && c.getF_fin3() == null) {
 						// solo un plazo
 						try {
@@ -281,8 +274,7 @@ public class DtoAssembler {
 		return ret;
 	}
 
-	public static List<CategoriaDto> toCategoriaDtoList (ResultSet rs)
-	{
+	public static List<CategoriaDto> toCategoriaDtoList(ResultSet rs) {
 
 		List<CategoriaDto> lista = new ArrayList<CategoriaDto>();
 		try {
@@ -305,5 +297,24 @@ public class DtoAssembler {
 		a.setEdad_max(Integer.parseInt(rs.getString("edad_max")));
 		a.setSexo(rs.getString("sexo"));
 		return a;
+	}
+
+	public static List<ListaEsperaDto> toListaEsperaDtoList(ResultSet rs) {
+		List<ListaEsperaDto> lista = new ArrayList<ListaEsperaDto>();
+		try {
+			while (rs.next()) {
+				lista.add(cogerDatosLista(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+
+	private static ListaEsperaDto cogerDatosLista(ResultSet rs) throws SQLException {
+		ListaEsperaDto listaEspera = new ListaEsperaDto();
+		listaEspera.setId(rs.getString("id"));
+		listaEspera.setId_comp(rs.getString("id_comp"));
+		return listaEspera;
 	}
 }
