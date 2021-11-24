@@ -25,6 +25,7 @@ import logica.AtletaModel;
 import logica.CompeticionDto;
 import logica.CompeticionModel;
 import logica.InscripcionModel;
+import logica.ListaEsperaModel;
 
 public class VentanaInscripcion extends JFrame {
 
@@ -49,6 +50,7 @@ public class VentanaInscripcion extends JFrame {
 	private JButton btnSiguiente;
 	@SuppressWarnings("unused")
 	private VentanaRegistro vR;
+	private ListaEsperaModel lem;
 
 //	/**
 //	 * Launch the application.
@@ -76,6 +78,7 @@ public class VentanaInscripcion extends JFrame {
 		ins = new InscripcionModel();
 		atl = new AtletaModel();
 		comp = new CompeticionModel();
+		lem = new ListaEsperaModel();
 		this.vC = ventanaMostrarCarreras;
 		this.cSeleccionada = competicionDto;
 		setTitle("Inscripci\u00F3n de carreras");
@@ -120,17 +123,11 @@ public class VentanaInscripcion extends JFrame {
 		return lblEmail;
 	}
 
-	protected boolean comprobarCampos() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	private JButton getBtnValidar() {
 		if (btnValidar == null) {
 			btnValidar = new JButton("Validar");
 			btnValidar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-
 					if (txtEmail.getText().equals("")) { // si esta vacio
 						mostrarErrorVacio();
 					} else if (yaRegistradoEnlaCarrera()) { // si ya en la carrera
@@ -144,8 +141,12 @@ public class VentanaInscripcion extends JFrame {
 					} else if (!registradoAtletaEnBase()) { // si no en la base de datos
 						System.out.println("patata");
 						mostrarMensajeNoInscritoSiQuiere();
-					} else if (!haySuficientesPlazas()) { // si no plazos
-						mostrarErrorPlazas();
+					} else if (!haySuficientesPlazas()) { // si no plazas
+						if (tieneListaDeEspera()) {
+							inscripcionConListaDeEspera();
+						} else {
+							mostrarErrorPlazas();
+						}
 					} else if (esMenor()) { // si es menor
 						mostrarErrorMenor();
 					}
@@ -158,8 +159,17 @@ public class VentanaInscripcion extends JFrame {
 		return btnValidar;
 	}
 
+	public void inscripcionConListaDeEspera() {
+		// Cojo el id de la lista de la competición
+		// Cojo los datos del atleta
+	}
+
+	private boolean tieneListaDeEspera() {
+		return lem.tieneListaDeEspera(this.cSeleccionada.getId());
+	}
+
 	protected void mostrarMensajeNoInscritoSiQuiere() {
-		int reply = JOptionPane.showConfirmDialog(this, "No est�s registrado en la base �te gustar�a registrarte?",
+		int reply = JOptionPane.showConfirmDialog(this, "No est�s registrado en la base ¿te gustaría registrarte?",
 				"Ventana registro", JOptionPane.YES_NO_OPTION);
 		if (reply == JOptionPane.YES_OPTION) {
 			mostrarVentanaRegistro();
@@ -243,7 +253,7 @@ public class VentanaInscripcion extends JFrame {
 
 	protected void mostrarErrorVacio() {
 		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(this, "El campo email no puede estar vac�o");
+		JOptionPane.showMessageDialog(this, "El campo email no puede estar vacío");
 	}
 
 	/*
@@ -272,7 +282,7 @@ public class VentanaInscripcion extends JFrame {
 
 		try {
 			fechaActual = formato.parse(cambiarFormatoFecha());
-			if (cSeleccionada.getF_inicio1() != null) { 
+			if (cSeleccionada.getF_inicio1() != null) {
 				fechaInicio1 = formato.parse(cSeleccionada.getF_inicio1());
 				fechaFin1 = formato.parse(cSeleccionada.getF_fin1());
 			}
@@ -286,21 +296,23 @@ public class VentanaInscripcion extends JFrame {
 				fechaFin3 = formato.parse(cSeleccionada.getF_fin3());
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		if (cSeleccionada.getF_inicio1() != null) {
-			if (fechaActual.before(fechaFin1) && (  fechaActual.after(fechaInicio1) || fechaActual.equals(fechaInicio1) )) {
+			if (fechaActual.before(fechaFin1)
+					&& (fechaActual.after(fechaInicio1) || fechaActual.equals(fechaInicio1))) {
 				System.out.println(cSeleccionada.getCuota1());
 				return cSeleccionada.getCuota1();
 			}
 		} else if (cSeleccionada.getF_inicio2() != null) {
-			if (fechaActual.before(fechaFin2) && ( fechaActual.after(fechaInicio2) || fechaActual.equals(fechaInicio2))) {
+			if (fechaActual.before(fechaFin2)
+					&& (fechaActual.after(fechaInicio2) || fechaActual.equals(fechaInicio2))) {
 				return cSeleccionada.getCuota2();
 			}
 		} else if (cSeleccionada.getF_inicio3() != null) {
-			if (fechaActual.before(fechaFin3) && ( fechaActual.after(fechaInicio3) || fechaActual.equals(fechaInicio3))) {
+			if (fechaActual.before(fechaFin3)
+					&& (fechaActual.after(fechaInicio3) || fechaActual.equals(fechaInicio3))) {
 				return cSeleccionada.getCuota3();
 			}
 		}

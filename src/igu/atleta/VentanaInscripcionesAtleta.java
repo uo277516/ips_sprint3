@@ -62,7 +62,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 	private JTable table;
 	private JButton btnCancelar;
 	private JButton btnFinalizar;
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -83,8 +83,8 @@ public class VentanaInscripcionesAtleta extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaInscripcionesAtleta(VentanaInicial vi) {
-		this.vi=vi;
-		im= new InscripcionModel();
+		this.vi = vi;
+		im = new InscripcionModel();
 		cm = new CompeticionModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 664, 518);
@@ -105,7 +105,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		contentPane.add(getBtnCancelar());
 		contentPane.add(getBtnFinalizar());
 //		contentPane.add(getScrollPane());
-		//contentPane.add(getList());
+		// contentPane.add(getList());
 	}
 
 	private JLabel getLblPreguntar() {
@@ -116,6 +116,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		}
 		return lblPreguntar;
 	}
+
 	private JLabel getLblPreguntar2() {
 		if (lblPreguntar2 == null) {
 			lblPreguntar2 = new JLabel("que prefiere seleccionar y rellene el campo:\r\n");
@@ -124,12 +125,14 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		}
 		return lblPreguntar2;
 	}
+
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
 			panel.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			panel.setLayout(null);
-			panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Elija la opción", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+			panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Elija la opciÃ³n",
+					TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 			panel.setBackground(Color.WHITE);
 			panel.setBounds(21, 103, 307, 63);
 			panel.add(getRadioDni());
@@ -137,6 +140,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		}
 		return panel;
 	}
+
 	private JRadioButton getRadioDni() {
 		if (radioDni == null) {
 			radioDni = new JRadioButton("DNI");
@@ -146,6 +150,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		}
 		return radioDni;
 	}
+
 	private JRadioButton getRadioEmail() {
 		if (radioEmail == null) {
 			radioEmail = new JRadioButton("Email");
@@ -155,6 +160,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		}
 		return radioEmail;
 	}
+
 	private JButton getBtnSig() {
 		if (btnSig == null) {
 			btnSig = new JButton("Siguiente");
@@ -169,24 +175,22 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		}
 		return btnSig;
 	}
-	
+
 	protected void mostrarParaIntroducir() {
-		if (!radioDni.isSelected() && !radioEmail.isSelected())
-		{
-			JOptionPane.showMessageDialog(this, "Tienes que seleccionar una opción");
+		if (!radioDni.isSelected() && !radioEmail.isSelected()) {
+			JOptionPane.showMessageDialog(this, "Tienes que seleccionar una opciï¿½n");
 		} else {
 			radioDni.setEnabled(false);
 			radioEmail.setEnabled(false);
 			if (radioDni.isSelected()) {
 				lblDni.setVisible(true);
-			}
-			else {
+			} else {
 				lblEmail.setVisible(true);
 			}
-		txtDNI.setEnabled(true);
-		btnMostrar.setEnabled(true);
+			txtDNI.setEnabled(true);
+			btnMostrar.setEnabled(true);
 		}
-		
+
 	}
 
 	private JLabel getLblDni() {
@@ -198,6 +202,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		}
 		return lblDni;
 	}
+
 	private JTextField getTxtDNI() {
 		if (txtDNI == null) {
 			txtDNI = new JTextField();
@@ -207,6 +212,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		}
 		return txtDNI;
 	}
+
 	private JLabel getLblEmail() {
 		if (lblEmail == null) {
 			lblEmail = new JLabel("Email:");
@@ -216,6 +222,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		}
 		return lblEmail;
 	}
+
 	private JButton getBtnMostrar() {
 		if (btnMostrar == null) {
 			btnMostrar = new JButton("Mostrar inscripciones");
@@ -235,8 +242,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 	}
 
 	protected void mostrarInscripciones() {
-		if (txtDNI.getText().equals(""))
-		{
+		if (txtDNI.getText().equals("")) {
 			JOptionPane.showMessageDialog(this, "Debes rellenar el campo");
 		} else {
 			buscarInscripciones();
@@ -245,20 +251,18 @@ public class VentanaInscripcionesAtleta extends JFrame {
 
 	private void buscarInscripciones() {
 		if (radioDni.isSelected()) {
-			//buscardni
+			// buscardni
 			System.out.println("dni");
-			insAtleta=im.buscarInsByDni(txtDNI.getText());
-		}
-		else if (radioEmail.isSelected())
-		{
-			//buscaremail
+			insAtleta = im.buscarInsByDni(txtDNI.getText());
+		} else if (radioEmail.isSelected()) {
+			// buscaremail
 			System.out.println("email");
-			insAtleta=im.buscarInsByEmail(txtDNI.getText());
+			insAtleta = im.buscarInsByEmail(txtDNI.getText());
 		}
 //		rellenarElTexto();
 		contentPane.add(getScrollPane());
 		mostrarInfo();
-		
+
 	}
 
 //	private void rellenarElTexto() {
@@ -274,6 +278,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 	private void mostrarInfo() {
 		scrollPane.setEnabled(true);
 	}
+
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -283,6 +288,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		}
 		return scrollPane;
 	}
+
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
@@ -296,19 +302,20 @@ public class VentanaInscripcionesAtleta extends JFrame {
 			modelo.addColumn("ID comp");
 			modelo.addColumn("Nombre");
 			modelo.addColumn("Estado");
-			modelo.addColumn("Fecha último cambio");
+			modelo.addColumn("Fecha ï¿½ltimo cambio");
 			String[][] info = new String[insAtleta.size()][4];
-			for(int i = 0; i < insAtleta.size(); i++) {
+			for (int i = 0; i < insAtleta.size(); i++) {
 				info[i][0] = insAtleta.get(i).getId_c();
 				info[i][1] = String.valueOf(cm.getCompeticionById(insAtleta.get(i).getId_c()).get(0).getNombre());
 				info[i][2] = insAtleta.get(i).getEstado();
 				info[i][3] = insAtleta.get(i).getFecha();
 				modelo.addRow(info[i]);
 			}
-		
+
 		}
 		return table;
 	}
+
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton("Cancelar inscripci\u00F3n");
@@ -325,67 +332,60 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		}
 		return btnCancelar;
 	}
-	
+
 	protected void cancelarInscripcion() {
 		if (table.getSelectedRow() != -1) {
 			CompeticionDto compe = cm.getCompeticionById(insAtleta.get(table.getSelectedRow()).getId_c()).get(0);
 			InscripcionDto ins = insAtleta.get(table.getSelectedRow());
-			
-			if (compe.getHay_politica()==1 && compararFecha(compe.getF_canc()) ) { //si tiene política y no se pasó la fecha de cancelación 
-				double dinero = (compe.getP_cuota_canc()/100)*ins.getCantidad_pagada();
-				
-				if ( ins.getEstado().toUpperCase().equals("INSCRITO") )
-				{
-					
-					System.out.println("entra");
-		            im.cancelarInscripcionPagada(ins.getDni_a(), ins.getId_c());
-		            cm.reducirPlazas(ins.getId_c());
-		    		JOptionPane.showMessageDialog(this, "Se ha desinscrito de la competición. A continuación, se imprimirá un justificante con la siguiente información:"
-		    				+ "\n    Competición: "  + compe
-		    				+ "\n    Dinero a devolver: " + dinero);
-	
-				}
-				else if (ins.getEstado().toUpperCase().equals("CANCELADO") || 
-						ins.getEstado().toUpperCase().equals("CANCELADO-PENDIENTE DE DEVOLUCION"))
-				{
-		    		JOptionPane.showMessageDialog(this, "Usted ya se ha desinscrito de esta competición");
 
+			if (compe.getHay_politica() == 1 && compararFecha(compe.getF_canc())) { // si tiene polï¿½tica y no se pasï¿½ la
+																					// fecha de cancelaciï¿½n
+				double dinero = (compe.getP_cuota_canc() / 100) * ins.getCantidad_pagada();
+
+				if (ins.getEstado().toUpperCase().equals("INSCRITO")) {
+
+					System.out.println("entra");
+					im.cancelarInscripcionPagada(ins.getDni_a(), ins.getId_c());
+					cm.reducirPlazas(ins.getId_c());
+					JOptionPane.showMessageDialog(this,
+							"Se ha desinscrito de la competiciï¿½n. A continuaciï¿½n, se imprimirï¿½ un justificante con la siguiente informaciï¿½n:"
+									+ "\n    Competiciï¿½n: " + compe + "\n    Dinero a devolver: " + dinero);
+
+				} else if (ins.getEstado().toUpperCase().equals("CANCELADO")
+						|| ins.getEstado().toUpperCase().equals("CANCELADO-PENDIENTE DE DEVOLUCION")) {
+					JOptionPane.showMessageDialog(this, "Usted ya se ha desinscrito de esta competiciï¿½n");
+
+				} else {
+					im.cancelarInscripcion(ins.getDni_a(), ins.getId_c());
+					cm.reducirPlazas(ins.getId_c());
+					JOptionPane.showMessageDialog(this,
+							"Se ha desinscrito de la competiciï¿½n. A continuaciï¿½n, se imprimirï¿½ un justificante con la siguiente informaciï¿½n:"
+									+ "\n     Competiciï¿½n: " + compe + "\n     Dinero a devolver " + dinero);
 				}
-				else {
-		            im.cancelarInscripcion(ins.getDni_a(), ins.getId_c());
-		            cm.reducirPlazas(ins.getId_c());
-		    		JOptionPane.showMessageDialog(this, "Se ha desinscrito de la competición. A continuación, se imprimirá un justificante con la siguiente información:"
-		    				+ "\n     Competición: "  + compe
-		    				+ "\n     Dinero a devolver " + dinero );
-				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Error: No se puede cancelar su inscripciï¿½n.");
 			}
-			else {
-				 JOptionPane.showMessageDialog(this, "Error: No se puede cancelar su inscripción.");
-			}
-		}else {
-            errorNoCarreraSeleccionada();
-        }
-		
+		} else {
+			errorNoCarreraSeleccionada();
+		}
+
 	}
-	
+
 	private boolean compararFecha(String fecha) {
 		// TODO Auto-generated method stub
-		
-		
+
 		String[] cosas = fecha.split("/");
 		cosas[0] = String.valueOf(Integer.parseInt(cosas[0]) + 1);
 		String f = cosas[0] + "/" + cosas[1] + "/" + cosas[2];
-		
-		SimpleDateFormat formato =new SimpleDateFormat("dd/MM/yyyy");
+
+		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 		Date fechaFinCancelacion = null;
 		Date fechaHoy = null;
-		
-		
+
 		try {
 			fechaFinCancelacion = formato.parse(f);
 			fechaHoy = formato.parse(cambiarFormatoFecha());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (fechaHoy.before(fechaFinCancelacion))
@@ -393,20 +393,20 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		else
 			return false;
 	}
-	
+
 	private String cambiarFormatoFecha() {
 		String fechaString = String.valueOf(LocalDate.now());
 		String[] fechaPartida = fechaString.split("-");
-		String result ="";
+		String result = "";
 		for (int i = 0; i < fechaPartida.length; i++) {
-			result="/"+fechaPartida[i]+result;
+			result = "/" + fechaPartida[i] + result;
 		}
 		return result.substring(1);
-		
+
 	}
 
 	protected void errorNoCarreraSeleccionada() {
-		 JOptionPane.showMessageDialog(this, "Error: Seleccione una carrera para registrarse");
+		JOptionPane.showMessageDialog(this, "Error: Seleccione una carrera para registrarse");
 	}
 
 	private JButton getBtnFinalizar() {

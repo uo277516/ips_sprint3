@@ -111,4 +111,44 @@ public class ListaEsperaModel {
 			c.close();
 		}
 	}
+
+	public boolean tieneListaDeEspera(String idComp) {
+		boolean op = false;
+		try {
+			op = tieneListaDeEsperaP(idComp);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return op;
+	}
+
+	private boolean tieneListaDeEsperaP(String idComp) throws SQLException {
+		List<ListaEsperaDto> listas = new ArrayList<ListaEsperaDto>();
+
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(getListaByIdComp);
+			pst.setString(1, idComp);
+			rs = pst.executeQuery();
+
+			listas = DtoAssembler.toListaEsperaDtoList(rs);
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
+		if (listas.size() > 0) {
+			System.out.println("Tiene lista de espera");
+			return true;
+		} else {
+			System.out.println("No tiene lista de espera");
+			return false;
+		}
+	}
 }

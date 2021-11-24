@@ -64,14 +64,15 @@ public class VentanaMostrarCarreras extends JFrame {
 //			}
 //		});
 //	}
-	
+
 	/**
 	 * Create the frame.
-	 * @param vI 
-	 * @throws ParseException 
+	 * 
+	 * @param vI
+	 * @throws ParseException
 	 */
 	public VentanaMostrarCarreras(VentanaInicial vI) {
-		this.vi=vI;
+		this.vi = vI;
 		ins = new InscripcionModel();
 		atl = new AtletaModel();
 		comp = new CompeticionModel();
@@ -89,9 +90,10 @@ public class VentanaMostrarCarreras extends JFrame {
 		contentPane.add(getLblCompeticiones());
 		contentPane.add(getScrollPane());
 	}
-	
+
 	/**
 	 * Comprueba si la cadena esta formada por numeros
+	 * 
 	 * @param dni
 	 * @return
 	 */
@@ -119,16 +121,18 @@ public class VentanaMostrarCarreras extends JFrame {
 //				
 //		
 //	}
-	
+
 	private JTextArea getTxtInfo() {
 		if (txtInfo == null) {
 			txtInfo = new JTextArea();
-			txtInfo.setText("Se muestra: \r\nNombre---fecha competici\u00F3n---tipo---distancia---cuota---fecha fin inscripci\u00F3n---numero de plazas disponibles");
+			txtInfo.setText(
+					"Se muestra: \r\nNombre---fecha competici\u00F3n---tipo---distancia---cuota---fecha fin inscripci\u00F3n---numero de plazas disponibles");
 			txtInfo.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			txtInfo.setBounds(24, 83, 642, 54);
 		}
 		return txtInfo;
 	}
+
 	private JTextField getTextFecha() {
 		if (textFecha == null) {
 			textFecha = new JTextField();
@@ -137,7 +141,7 @@ public class VentanaMostrarCarreras extends JFrame {
 			textFecha.setBounds(276, 26, 86, 20);
 			textFecha.setColumns(10);
 			textFecha.setText(cambiarFormatoFecha());
-			//cambiarFormatoFecha();
+			// cambiarFormatoFecha();
 		}
 		return textFecha;
 	}
@@ -145,39 +149,41 @@ public class VentanaMostrarCarreras extends JFrame {
 	private String cambiarFormatoFecha() {
 		String fechaString = String.valueOf(LocalDate.now());
 		String[] fechaPartida = fechaString.split("-");
-		String result ="";
+		String result = "";
 		for (int i = 0; i < fechaPartida.length; i++) {
-			result="/"+fechaPartida[i]+result;
+			result = "/" + fechaPartida[i] + result;
 		}
 		return result.substring(1);
-		
+
 	}
+
 	private JButton getBtnAceptar() {
-        if (btnAceptar == null) {
-            btnAceptar = new JButton("Siguiente");
-            btnAceptar.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        if (table.getSelectedRow() != -1) {
-                            pasarAInscripcion();
-                        }else {
-                            errorNoCarreraSeleccionada();
-                        }
-                    } catch (SQLException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                }
-            });
-            btnAceptar.setBackground(Color.GREEN);
-            btnAceptar.setForeground(Color.WHITE);
-            btnAceptar.setFont(new Font("Tahoma", Font.PLAIN, 13));
-            btnAceptar.setBounds(547, 430, 119, 23);
-        }
-        return btnAceptar;
-    }
+		if (btnAceptar == null) {
+			btnAceptar = new JButton("Siguiente");
+			btnAceptar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						if (table.getSelectedRow() != -1) {
+							pasarAInscripcion();
+						} else {
+							errorNoCarreraSeleccionada();
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+			btnAceptar.setBackground(Color.GREEN);
+			btnAceptar.setForeground(Color.WHITE);
+			btnAceptar.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			btnAceptar.setBounds(547, 430, 119, 23);
+		}
+		return btnAceptar;
+	}
+
 	protected void errorNoCarreraSeleccionada() {
-		 JOptionPane.showMessageDialog(this, "Error: Seleccione una carrera para registrarse");
+		JOptionPane.showMessageDialog(this, "Error: Seleccione una carrera para registrarse");
 	}
 
 	protected void pasarAInscripcion() throws SQLException {
@@ -190,7 +196,7 @@ public class VentanaMostrarCarreras extends JFrame {
 
 	private CompeticionDto crearCompeticion() throws SQLException {
 		int fila = table.getSelectedRow();
-		String identificador = (String) table.getValueAt(fila,0);
+		String identificador = (String) table.getValueAt(fila, 0);
 		System.out.println(identificador);
 		List<CompeticionDto> compe = comp.getCompeticionById(identificador);
 		// TODO Auto-generated method stub
@@ -205,7 +211,8 @@ public class VentanaMostrarCarreras extends JFrame {
 		}
 		return lblCompeticiones;
 	}
-	private JScrollPane getScrollPane(){
+
+	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setBounds(10, 148, 656, 271);
@@ -213,6 +220,7 @@ public class VentanaMostrarCarreras extends JFrame {
 		}
 		return scrollPane;
 	}
+
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
@@ -230,25 +238,35 @@ public class VentanaMostrarCarreras extends JFrame {
 				}
 			};
 			table.setModel(modelo);
-			modelo.addColumn("Iden");modelo.addColumn("Nombre");modelo.addColumn("Fecha Comp");modelo.addColumn("Tipo");modelo.addColumn("Distancia");modelo.addColumn("Cuota");modelo.addColumn("Fecha Fin Insc");modelo.addColumn("Plazas");
+			modelo.addColumn("Iden");
+			modelo.addColumn("Nombre");
+			modelo.addColumn("Fecha Comp");
+			modelo.addColumn("Tipo");
+			modelo.addColumn("Distancia");
+			modelo.addColumn("Cuota");
+			modelo.addColumn("Fecha Fin Insc");
+			modelo.addColumn("Plazas");
 			List<CompeticionDto> competiciones = comp.getCompetcionesFechaLista(textFecha.getText());
 			String[][] info = new String[competiciones.size()][8];
-			//List<AtletaDto> atletas = getAtletas();
-			//List<InscripcionDto> inscripciones = getInscripciones();
-			float cuota=0;
-			String fecha ="";
-			for(int i = 0; i < competiciones.size(); i++) {
+			// List<AtletaDto> atletas = getAtletas();
+			// List<InscripcionDto> inscripciones = getInscripciones();
+			float cuota = 0;
+			String fecha = "";
+			for (int i = 0; i < competiciones.size(); i++) {
 				info[i][0] = String.valueOf(competiciones.get(i).getId());
-				info[i][1] = competiciones.get(i).getNombre();info[i][2] = competiciones.get(i).getF_comp();
-				info[i][3] = competiciones.get(i).getTipo();info[i][4] = competiciones.get(i).getDistancia()+"km";
+				info[i][1] = competiciones.get(i).getNombre();
+				info[i][2] = competiciones.get(i).getF_comp();
+				info[i][3] = competiciones.get(i).getTipo();
+				info[i][4] = competiciones.get(i).getDistancia() + "km";
 				cuota = sacarCuota(competiciones.get(i));
 				fecha = sacarFechaFin(competiciones.get(i));
-				info[i][5] = String.valueOf(cuota)+"\u20AC";info[i][6] = fecha;
+				info[i][5] = String.valueOf(cuota) + "\u20AC";
+				info[i][6] = fecha;
 				info[i][7] = String.valueOf(competiciones.get(i).getNum_plazas());
 				modelo.addRow(info[i]);
 			}
 		}
-		
+
 		return table;
 	}
 
@@ -257,18 +275,17 @@ public class VentanaMostrarCarreras extends JFrame {
 			return competicionDto.getF_fin3();
 		else if (competicionDto.getF_fin2() != null)
 			return competicionDto.getF_fin2();
-		
+
 		return competicionDto.getF_fin1();
 	}
 
 	private float sacarCuota(CompeticionDto competicionDto) {
-		if (competicionDto.getCuota3()>0)
+		if (competicionDto.getCuota3() > 0)
 			return competicionDto.getCuota3();
-		else if (competicionDto.getCuota2()>0)
+		else if (competicionDto.getCuota2() > 0)
 			return competicionDto.getCuota2();
-		
+
 		return competicionDto.getCuota1();
 	}
-	
-	
+
 }
