@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -174,6 +175,14 @@ public class VentanaAtletaInscripcion extends JFrame {
 			columna = table.getColumn("Estado");
 			columna.setMinWidth(150);
 
+			DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+			tcr.setHorizontalAlignment(SwingConstants.CENTER);
+			table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+			table.getColumnModel().getColumn(1).setCellRenderer(tcr);
+			table.getColumnModel().getColumn(2).setCellRenderer(tcr);
+			table.getColumnModel().getColumn(3).setCellRenderer(tcr);
+			table.getColumnModel().getColumn(4).setCellRenderer(tcr);
+
 			String[][] info = new String[getInscripciones().size()][5];
 			List<InscripcionDto> inscripciones = getInscripciones();
 			AtletaDto a;
@@ -214,22 +223,22 @@ public class VentanaAtletaInscripcion extends JFrame {
 		}
 		return lblEstado;
 	}
-	
+
 	private List<InscripcionDto> getInscripciones() throws SQLException {
 		InscripcionModel im = new InscripcionModel();
-		//Actualizar las del banco
+		// Actualizar las del banco
 		updateEstadoInsBanco();
-		//Actualizar las anuladas
+		// Actualizar las anuladas
 		updateEstadoIns();
 		return im.getInscripcionesDeUnaCompeticion(this.competition.getId());
 	}
 
 	private void updateEstadoIns() {
-		//Coger las inscripciones con estado Pre-inscrito
+		// Coger las inscripciones con estado Pre-inscrito
 		List<InscripcionDto> ins = im.getInscripcionesMetodoPagoEstado("transferencia", "Pre-inscrito");
 		LocalDate hoy = LocalDate.now();
 		String[] fecha;
-		for(InscripcionDto i : ins) {
+		for (InscripcionDto i : ins) {
 			fecha = i.getFecha().split("/");
 			LocalDate fechaIns = LocalDate.of(Integer.valueOf(fecha[2]), Integer.valueOf(fecha[1]),
 					Integer.valueOf(fecha[0]));
@@ -263,11 +272,11 @@ public class VentanaAtletaInscripcion extends JFrame {
 			while ((linea = br.readLine()) != null) {
 				transferenciasBanco.add(linea.split("@"));
 			}
-			
-			for(String[] i : transferenciasBanco) {
-				//Comprobar si existe
+
+			for (String[] i : transferenciasBanco) {
+				// Comprobar si existe
 				ins = im.findInsByDniId(i[0], this.competition.getId());
-				if(ins!=null) {
+				if (ins != null) {
 					updateEstadoInsTransBanco(i, ins.getFecha());
 				}
 			}
@@ -283,7 +292,7 @@ public class VentanaAtletaInscripcion extends JFrame {
 			}
 		}
 	}
-	
+
 	private void updateEstadoInsTransBanco(String[] line, String insFecha) {
 		// DNI @ dia-mes-año @ cantidad ingresada
 //		// Obtenemos los datos;

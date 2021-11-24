@@ -175,11 +175,14 @@ public class ListaEsperaModel {
 			pst.setString(1, id);
 
 			rs = pst.executeQuery();
-			result = rs.getInt("maximo");
+			result = rs.getInt(0);
+
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
-			rs.close();
+			if (rs != null) {
+				rs.close();
+			}
 			pst.close();
 			c.close();
 		}

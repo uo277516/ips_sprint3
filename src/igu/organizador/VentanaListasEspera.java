@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import logica.AtletaDto;
@@ -37,7 +38,6 @@ public class VentanaListasEspera extends JFrame {
 	private JLabel lblNumOrden;
 	private JLabel lblDni;
 	private JLabel lblNombre;
-	private JLabel lblCategoria;
 	private JLabel lblSexo;
 
 	/**
@@ -83,11 +83,10 @@ public class VentanaListasEspera extends JFrame {
 	private JPanel getPanelTabla() {
 		if (panelTabla == null) {
 			panelTabla = new JPanel();
-			panelTabla.setLayout(new GridLayout(0, 5, 0, 0));
+			panelTabla.setLayout(new GridLayout(0, 4, 0, 0));
 			panelTabla.add(getLblNumOrden());
 			panelTabla.add(getLblDni());
 			panelTabla.add(getLblNombre());
-			panelTabla.add(getLblCategoria());
 			panelTabla.add(getLblSexo());
 		}
 		return panelTabla;
@@ -98,6 +97,7 @@ public class VentanaListasEspera extends JFrame {
 			table = new JTable();
 			table.setToolTipText("Lista de espera");
 			table.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+
 			table.setSelectionBackground(new Color(106, 31, 109));
 			table.setBackground(Color.WHITE);
 			DefaultTableModel modelo = new DefaultTableModel();
@@ -106,23 +106,28 @@ public class VentanaListasEspera extends JFrame {
 			modelo.addColumn("Nº orden");
 			modelo.addColumn("DNI");
 			modelo.addColumn("Nombre");
-			modelo.addColumn("Categoría");
 			modelo.addColumn("Sexo");
+
+			DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+			tcr.setHorizontalAlignment(SwingConstants.CENTER);
+			table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+			table.getColumnModel().getColumn(1).setCellRenderer(tcr);
+			table.getColumnModel().getColumn(2).setCellRenderer(tcr);
+			table.getColumnModel().getColumn(3).setCellRenderer(tcr);
 
 			ListaEsperaDto lista = lem.getListaByIdComp(this.comp.getId());
 			List<AtletaDto> atletas = am.getAtletasByListaId(lista.getId());
 			InscripcionDto ins;
 			AtletaDto a;
 
-			String[][] info = new String[atletas.size()][5];
+			String[][] info = new String[atletas.size()][4];
 			for (int i = 0; i < atletas.size(); i++) {
 				a = atletas.get(i);
 				ins = im.findInsByDniId(a.getDni(), this.comp.getId());
-				info[i][0] = String.valueOf(i);
+				info[i][0] = String.valueOf(i + 1);
 				info[i][1] = a.getDni();
 				info[i][2] = a.getNombre();
-				info[i][3] = ins.getCategoria();
-				info[i][4] = a.getSexo();
+				info[i][3] = a.getSexo();
 				modelo.addRow(info[i]);
 			}
 		}
@@ -154,15 +159,6 @@ public class VentanaListasEspera extends JFrame {
 			lblNombre.setFont(new Font("Lucida Grande", Font.BOLD, 15));
 		}
 		return lblNombre;
-	}
-
-	private JLabel getLblCategoria() {
-		if (lblCategoria == null) {
-			lblCategoria = new JLabel("Categoría");
-			lblCategoria.setHorizontalAlignment(SwingConstants.CENTER);
-			lblCategoria.setFont(new Font("Lucida Grande", Font.BOLD, 15));
-		}
-		return lblCategoria;
 	}
 
 	private JLabel getLblSexo() {

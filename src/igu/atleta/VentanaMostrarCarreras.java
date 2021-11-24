@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -126,7 +127,7 @@ public class VentanaMostrarCarreras extends JFrame {
 		if (txtInfo == null) {
 			txtInfo = new JTextArea();
 			txtInfo.setText(
-					"Se muestra: \r\nNombre---fecha competici\u00F3n---tipo---distancia---cuota---fecha fin inscripci\u00F3n---numero de plazas disponibles");
+					"Se muestra: \r\nNombre---fecha competición---tipo---distancia---cuota---fecha fin inscripción---numero de plazas disponibles");
 			txtInfo.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			txtInfo.setBounds(24, 83, 642, 54);
 		}
@@ -199,7 +200,6 @@ public class VentanaMostrarCarreras extends JFrame {
 		String identificador = (String) table.getValueAt(fila, 0);
 		System.out.println(identificador);
 		List<CompeticionDto> compe = comp.getCompeticionById(identificador);
-		// TODO Auto-generated method stub
 		return compe.get(0);
 	}
 
@@ -246,10 +246,20 @@ public class VentanaMostrarCarreras extends JFrame {
 			modelo.addColumn("Cuota");
 			modelo.addColumn("Fecha Fin Insc");
 			modelo.addColumn("Plazas");
-			List<CompeticionDto> competiciones = comp.getCompetcionesFechaLista(textFecha.getText());
+			List<CompeticionDto> competiciones1 = comp.getCompetcionesFechaListaPlazasMayor3(textFecha.getText());
+			List<CompeticionDto> competiciones2 = comp.getCompetcionesFechaLista(textFecha.getText());
+			List<CompeticionDto> competiciones = new LinkedList<>();
+
+			for (CompeticionDto c : competiciones1) {
+				competiciones.add(c);
+			}
+			for (CompeticionDto c : competiciones2) {
+				if (!competiciones1.contains(c)) {
+					competiciones.add(c);
+				}
+			}
+
 			String[][] info = new String[competiciones.size()][8];
-			// List<AtletaDto> atletas = getAtletas();
-			// List<InscripcionDto> inscripciones = getInscripciones();
 			float cuota = 0;
 			String fecha = "";
 			for (int i = 0; i < competiciones.size(); i++) {

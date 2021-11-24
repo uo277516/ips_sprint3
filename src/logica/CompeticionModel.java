@@ -29,6 +29,7 @@ public class CompeticionModel {
 	public static String findCompByIdListaEspera = "select * from competicion where id_listaespera = ?";
 
 	public static String actualizarIdListaEspera = "update competicion set id_listaespera = ? where id = ?";
+	public static String getCompsByFechaYListaEspera = "select * from competicion c, listaespera l where l.id_comp = c.id";
 
 	private InscripcionModel im = new InscripcionModel();
 	private AtletaModel am = new AtletaModel();
@@ -153,18 +154,16 @@ public class CompeticionModel {
 		cosas[0] = String.valueOf(Integer.parseInt(cosas[0]) + 1);
 		String f = cosas[0] + "/" + cosas[1] + "/" + cosas[2];
 		System.out.println(f);
-		// Conexi�n a la base de datos
+
 		Connection c = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
 			c = BaseDatos.getConnection();
-			pst = c.prepareStatement(sql1);
+			pst = c.prepareStatement(getCompsByFechaYListaEspera);
 			rs = pst.executeQuery();
 
-			// A�adimos los pedidos a la lista
 			listaCompeticiones = DtoAssembler.toCompeticionDtoListPorFecha(rs, f);
-
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
@@ -172,11 +171,6 @@ public class CompeticionModel {
 			pst.close();
 			c.close();
 		}
-
-		// for (AtletaDto atletaDto : listaPedidos) {
-		// System.out.println(atletaDto.getDni() + " " + atletaDto.getF_nac()
-		// );
-		// }
 		return listaCompeticiones;
 	}
 
@@ -211,6 +205,45 @@ public class CompeticionModel {
 		// System.out.println(atletaDto.getDni() + " " + atletaDto.getF_nac()
 		// );
 		// }
+		return listaCompeticiones;
+	}
+
+	public List<CompeticionDto> getCompeticionesEnFechaYConListaDeEspera(String fecha) {
+		List<CompeticionDto> competiciones = null;
+		try {
+			competiciones = filtrarPorFechaYLista(fecha);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return competiciones;
+	}
+
+	private List<CompeticionDto> filtrarPorFechaYLista(String fecha) throws SQLException {
+		List<CompeticionDto> listaCompeticiones = new ArrayList<CompeticionDto>();
+
+		String[] cosas = fecha.split("/");
+		cosas[0] = String.valueOf(Integer.parseInt(cosas[0]) + 1);
+		String f = cosas[0] + "/" + cosas[1] + "/" + cosas[2];
+		System.out.println(f);
+		// Conexi�n a la base de datos
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(sql1);
+			rs = pst.executeQuery();
+
+			// A�adimos los pedidos a la lista
+			listaCompeticiones = DtoAssembler.toCompeticionDtoListPorFecha(rs, f);
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
 		return listaCompeticiones;
 	}
 

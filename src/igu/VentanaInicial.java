@@ -270,7 +270,7 @@ public class VentanaInicial extends JFrame {
 
 	protected void elegirAsAtleta() {
 		int seleccion = JOptionPane.showOptionDialog(this,
-				"�Desea inscribirse o conocer el estado de sus inscripciones?", "Inicio como atleta",
+				"¿Desea inscribirse o conocer el estado de sus inscripciones?", "Inicio como atleta",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null para icono por defecto.
 				new Object[] { "Inscribirme", "Conocer mi estado" }, // null para YES, NO y CANCEL
 				"opcion 1");
@@ -294,7 +294,6 @@ public class VentanaInicial extends JFrame {
 
 	private void mostrarVentanaCarreras() {
 		this.dispose();
-		// CompeticionDto competicion = crearCompeticion();
 		VentanaMostrarCarreras vPal = new VentanaMostrarCarreras(this);
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);

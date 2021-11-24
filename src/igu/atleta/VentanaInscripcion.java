@@ -168,7 +168,12 @@ public class VentanaInscripcion extends JFrame {
 			// Cojo el id de la lista de la competición
 			ListaEsperaDto lista = lem.getListaByIdComp(this.cSeleccionada.getId());
 			// Cojo el número de orden que le toca al atleta
-			int orden = lem.getNextNumOrden(lista.getId());
+			int orden;
+			if (atl.hayGenteEnLista(lista.getId())) {
+				orden = lem.getNextNumOrden(lista.getId());
+			} else {
+				orden = 1;
+			}
 			// Cojo el id del atleta
 			String email = txtEmail.getText();
 			AtletaDto a = atl.findAtletaByEmail(email);
@@ -176,6 +181,7 @@ public class VentanaInscripcion extends JFrame {
 			atl.addAtletaAListaEspera(dnia, lista.getId(), orden);
 			JOptionPane.showMessageDialog(this, "Ya está añadido a la lista de espera de "
 					+ this.cSeleccionada.getNombre() + ", su posición en la lista es " + orden);
+			System.exit(0);
 		} else {
 			JOptionPane.showMessageDialog(this, "¡Hasta la próxima!");
 		}

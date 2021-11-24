@@ -1,5 +1,7 @@
 package logica;
 
+import java.util.Objects;
+
 public class CompeticionDto {
 
 	private String id;
@@ -203,6 +205,23 @@ public class CompeticionDto {
 
 	public void setId_listaEspera(String id_listaEspera) {
 		this.id_listaEspera = id_listaEspera;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CompeticionDto other = (CompeticionDto) obj;
+		return Objects.equals(id, other.id);
 	}
 
 }
