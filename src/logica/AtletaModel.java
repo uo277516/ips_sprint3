@@ -34,6 +34,8 @@ public class AtletaModel {
 			+ "from atleta a, en_espera e, listaespera l "
 			+ "where l.id = ? and l.id = e.id_listaespera and e.dni_atleta = a.dni order by e.num_orden";
 
+	public static String addAtletaAListaEspera = "insert into en_espera(id_listaespera, dni_atleta, num_orden) values(?,?,?)";
+
 	public List<AtletaDto> getAtletas() throws SQLException {
 		return getAllAtletas();
 	}
@@ -333,7 +335,17 @@ public class AtletaModel {
 		return a;
 	}
 
-	public AtletaDto findAtletaByEmail(String email) throws SQLException {
+	public AtletaDto findAtletaByEmail(String email) {
+		AtletaDto a = null;
+		try {
+			a = findAtletaByEmailP(email);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return a;
+	}
+
+	private AtletaDto findAtletaByEmailP(String email) throws SQLException {
 		AtletaDto a;
 
 		// Conexi�n a la base de datos
@@ -491,5 +503,32 @@ public class AtletaModel {
 			System.out.println(atletaDto);
 		}
 		return listaAtletas;
+	}
+
+	public void addAtletaAListaEspera(String dniA, String idL, int orden) {
+		try {
+			addAtletaAListaEsperaP(dniA, idL, orden);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void addAtletaAListaEsperaP(String dniA, String idL, int orden) throws SQLException {
+		Connection c = null;
+		PreparedStatement pst = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(addAtletaAListaEspera);
+			pst.setString(1, idL);
+			pst.setString(2, dniA);
+			pst.setInt(3, orden);
+			pst.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			pst.close();
+			c.close();
+		}
 	}
 }

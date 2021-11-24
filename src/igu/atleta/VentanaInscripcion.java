@@ -25,6 +25,7 @@ import logica.AtletaModel;
 import logica.CompeticionDto;
 import logica.CompeticionModel;
 import logica.InscripcionModel;
+import logica.ListaEsperaDto;
 import logica.ListaEsperaModel;
 
 public class VentanaInscripcion extends JFrame {
@@ -132,6 +133,14 @@ public class VentanaInscripcion extends JFrame {
 						mostrarErrorVacio();
 					} else if (yaRegistradoEnlaCarrera()) { // si ya en la carrera
 						mostrarErrorYaRegistrado();
+					} else if (!haySuficientesPlazas()) { // si no plazas
+						if (tieneListaDeEspera()) {
+							inscripcionConListaDeEspera();
+						} else {
+							mostrarErrorPlazas();
+						}
+					} else if (esMenor()) { // si es menor
+						mostrarErrorMenor();
 					} else if (registradoAtletaEnBase()) { // si ya en la base de datos
 						textArea.setEnabled(true);
 						lblInfoJus.setVisible(true);
@@ -141,14 +150,6 @@ public class VentanaInscripcion extends JFrame {
 					} else if (!registradoAtletaEnBase()) { // si no en la base de datos
 						System.out.println("patata");
 						mostrarMensajeNoInscritoSiQuiere();
-					} else if (!haySuficientesPlazas()) { // si no plazas
-						if (tieneListaDeEspera()) {
-							inscripcionConListaDeEspera();
-						} else {
-							mostrarErrorPlazas();
-						}
-					} else if (esMenor()) { // si es menor
-						mostrarErrorMenor();
 					}
 				}
 			});
@@ -160,8 +161,25 @@ public class VentanaInscripcion extends JFrame {
 	}
 
 	public void inscripcionConListaDeEspera() {
-		// Cojo el id de la lista de la competición
-		// Cojo los datos del atleta
+		int reply = JOptionPane.showConfirmDialog(this,
+				"No hay plazas disponibles, ¿desea apuntarse en la lista de espera?", "Ventana registro",
+				JOptionPane.YES_NO_OPTION);
+		if (reply == JOptionPane.YES_OPTION) {
+			// Cojo el id de la lista de la competición
+			ListaEsperaDto lista = lem.getListaByIdComp(this.cSeleccionada.getId());
+			// Cojo el número de orden que le toca al atleta
+			int orden = lem.getNextNumOrden(lista.getId());
+			// Cojo el id del atleta
+			String email = txtEmail.getText();
+			AtletaDto a = atl.findAtletaByEmail(email);
+			String dnia = a.getDni();
+			atl.addAtletaAListaEspera(dnia, lista.getId(), orden);
+			JOptionPane.showMessageDialog(this, "Ya está añadido a la lista de espera de "
+					+ this.cSeleccionada.getNombre() + ", su posición en la lista es " + orden);
+		} else {
+			JOptionPane.showMessageDialog(this, "¡Hasta la próxima!");
+		}
+
 	}
 
 	private boolean tieneListaDeEspera() {

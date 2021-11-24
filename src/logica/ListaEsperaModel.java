@@ -15,6 +15,8 @@ public class ListaEsperaModel {
 	public static String getAllListaEspera = "select * from listaespera";
 	public static String getListaByIdComp = "select * from listaespera where id_comp = ?";
 	public static String addLista = "insert into listaespera(id, id_comp) values(?, ?)";
+	public static String findNextNumOrden = "select max(e.num_orden) from en_espera e, listaespera l "
+			+ "where l.id = ? and l.id = e.id_listaespera";
 
 	public List<ListaEsperaDto> getListas() {
 		List<ListaEsperaDto> lista = null;
@@ -150,5 +152,37 @@ public class ListaEsperaModel {
 			System.out.println("No tiene lista de espera");
 			return false;
 		}
+	}
+
+	public int getNextNumOrden(String id) {
+		int orden = 0;
+		try {
+			orden = getNextNumOrdenP(id) + 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return orden;
+	}
+
+	private int getNextNumOrdenP(String id) throws SQLException {
+		int result = 0;
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(findNextNumOrden);
+			pst.setString(1, id);
+
+			rs = pst.executeQuery();
+			result = rs.getInt("maximo");
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
+		return result;
 	}
 }
