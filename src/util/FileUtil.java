@@ -26,17 +26,19 @@ public abstract class FileUtil{
 					contador++;
 				}else {
 					datosArticulo = linea.split("#");
-					AtletaDto a = new AtletaDto();
-					a.setNombre(datosArticulo[0]);
-					a.setDni(datosArticulo[1]);
-					a.setF_nac(datosArticulo[2]);
-					a.setSexo(datosArticulo[3]);
-					a.setEmail(datosArticulo[4]);
-					listaCatalogo.add(a);
+					if (datosArticulo.length ==5) {
+						AtletaDto a = new AtletaDto();
+						a.setNombre(datosArticulo[0]);
+						a.setDni(datosArticulo[1]);
+						a.setF_nac(datosArticulo[2]);
+						a.setSexo(datosArticulo[3]);
+						a.setEmail(datosArticulo[4]);
+						listaCatalogo.add(a);
+					}
 				}
 			}
 			fichero.close();
-			
+
 		}
 		catch (FileNotFoundException fnfe) {
 			System.out.println("El archivo no se ha encontrado.");

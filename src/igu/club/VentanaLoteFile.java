@@ -61,7 +61,7 @@ public class VentanaLoteFile extends JFrame {
 	private JLabel lblNewLabel;
 	private JButton btnValidar;
 
-	
+
 
 	/**
 	 * Create the frame.
@@ -114,6 +114,7 @@ public class VentanaLoteFile extends JFrame {
 	private JTextField getTxtNombreClub() {
 		if (txtNombreClub == null) {
 			txtNombreClub = new JTextField();
+			txtNombreClub.setEditable(false);
 			txtNombreClub.setBounds(143, 165, 335, 20);
 			txtNombreClub.setColumns(10);
 		}
@@ -137,7 +138,7 @@ public class VentanaLoteFile extends JFrame {
 	}
 
 
-	
+
 
 	private void actualizarTabla() {
 		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
@@ -150,14 +151,14 @@ public class VentanaLoteFile extends JFrame {
 			info[i][4] = list.get(i).getEmail();
 			modelo.addRow(info[i]);
 		}
-		
+
 
 		scrollPane.setViewportView(table);
 	}
 
 
 
-	
+
 
 	private String cambiarFormatoFecha() {
 		String fechaString = String.valueOf(LocalDate.now());
@@ -234,11 +235,18 @@ public class VentanaLoteFile extends JFrame {
 	private void mesnajeAtletasInsertados(int num) {
 		String cadena = "Se ha rellenado la solicitud de forma correcta.\n";
 		String cadenaExtra="Los siguientes atletas no tienen plaza: \n";
+		int contador=0;
 		if (num != list.size()) {
-			for (int i = num; i < list.size(); i++) {
-				cadenaExtra+=list.get(i).getDni()+"\n";
+			for (int i = 0; i < list.size(); i++) {
+				List<InscripcionDto> l = inmodel.findInscripcionByDniId(list.get(i).getDni(),comp.getId());
+				if (l.isEmpty()) {
+					contador++;
+					cadenaExtra+=list.get(i).getDni()+"\n";
+				}
 			}
-			cadena +=cadenaExtra;
+			if (contador!=0) {
+				cadena +=cadenaExtra;
+			}
 			JOptionPane.showMessageDialog(this,cadena );
 		}else {
 			JOptionPane.showMessageDialog(this,cadena );
@@ -256,16 +264,24 @@ public class VentanaLoteFile extends JFrame {
 			if (plazas1 >0) {
 				categoria = calcularCategoria(list.get(i).getF_nac(), comp.getId(), list.get(i).getSexo());
 				//insertar atleta
-				List<AtletaDto> at = amodel.atletaYaEnBaseDatosDni(list.get(i).getDni());
-				if (at.isEmpty()) {
+				List<AtletaDto> atDni = amodel.atletaYaEnBaseDatosDni(list.get(i).getDni());
+				//List<AtletaDto> atEmail = amodel.atletaYaRegistradoEnLaBase(list.get(i).getEmail());
+				if (atDni.isEmpty()) {
 					amodel.addAtleta(list.get(i).getDni(), list.get(i).getNombre(),list.get(i).getSexo(), list.get(i).getF_nac(),list.get(i).getEmail());
 				}
 				//insertar inscripcion
-				inmodel.insertarInscripcionClub(list.get(i).getDni(),comp.getId(),categoria,list.get(i).getEmail(),cambiarForFecha(),"por_club",
-						cuota,"CLUB",getTxtNombreClub().getText());
-				//restarPlazas
-				cmodel.actualizarPlazas(comp.getId());
-				contador++;
+				List<InscripcionDto> auxDni = inmodel.findInscripcionByDniId(list.get(i).getDni(), comp.getId());
+				List<InscripcionDto> auxEmail = inmodel.findInscripcionByEmailId(list.get(i).getEmail(), comp.getId());
+				if (auxDni.isEmpty() && auxEmail.isEmpty()) {
+					inmodel.insertarInscripcionClub(list.get(i).getDni(),comp.getId(),categoria,list.get(i).getEmail(),cambiarForFecha(),"por_club",
+							cuota,"CLUB",getTxtNombreClub().getText());
+					cmodel.actualizarPlazas(comp.getId());
+					contador++;
+				}else {
+					JOptionPane.showMessageDialog(this, "DNI "+list.get(i).getDni()+" ya insertado en la competicion.");
+				}
+
+
 			}else {
 				break;
 			}
@@ -392,18 +408,23 @@ public class VentanaLoteFile extends JFrame {
 			btnValidar = new JButton("Validar");
 			btnValidar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String nombreEquipo=FileUtil.loadFileTicket(getTxtFichero().getText(), list);
-					
+					String nombreEquipo="";
+					nombreEquipo=FileUtil.loadFileTicket(getTxtFichero().getText(), list);
+
 					txtNombreClub.setText(nombreEquipo);
 					txtNombreClub.setEditable(false);
-					btnValidar.setEnabled(false);
+					if (!nombreEquipo.equals("")) {
+						btnValidar.setEnabled(false);
+					}
 					comprobarAtletasYaEnCarrera();
 					actualizarTabla();
+
 					btnAnadirLote.setEnabled(true);
+
 
 				}
 
-				
+
 			});
 			btnValidar.setForeground(Color.WHITE);
 			btnValidar.setBackground(Color.GREEN);
@@ -412,7 +433,7 @@ public class VentanaLoteFile extends JFrame {
 		}
 		return btnValidar;
 	}
-	
+
 	private void comprobarAtletasYaEnCarrera() {
 		for (int i = 0; i < list.size(); i++) {
 			if (atletaYaEnCarrera(list.get(i).getDni())) {
@@ -420,16 +441,16 @@ public class VentanaLoteFile extends JFrame {
 				list.remove(i);
 			}
 		}
-		
+
 	}
-	
+
 	private boolean atletaYaEnCarrera(String dni) {
 		List<InscripcionDto> aux = inmodel.findInscripcionByDniId(dni, comp.getId());
 		if (aux.isEmpty())
 			return false;
 		return true;
 	}
-	
+
 	private void mostrarAtletaYaEnCarrera(String dni) {
 		JOptionPane.showMessageDialog(this, "Atleta con DNI "+dni+" ya registrado en la competicion.");
 	}

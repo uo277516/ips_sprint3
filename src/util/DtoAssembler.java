@@ -184,7 +184,7 @@ public class DtoAssembler {
 			while(rs.next())
 			{
 				try {
-					if (Integer.parseInt(rs.getString("num_plazas")) >= 3) {
+					if (Integer.parseInt(rs.getString("num_plazas")) >= 1) {
 						if (rs.getString("f_fin3") != null) {
 							if (compararFecha(rs.getString("f_fin3"),fecha,rs.getString("f_inicio3")))
 								lista.add(cogerDatosCompeticion(rs));
