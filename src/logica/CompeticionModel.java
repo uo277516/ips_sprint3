@@ -212,7 +212,7 @@ public class CompeticionModel {
 	public List<CompeticionDto> getCompeticionByIdP(String identificador) throws SQLException {
 		List<CompeticionDto> listaCompeticiones = new ArrayList<CompeticionDto>();
 
-		// Conexiï¿½n a la base de datos
+		// Conexión a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -222,7 +222,7 @@ public class CompeticionModel {
 			pst.setString(1, identificador);
 			rs = pst.executeQuery();
 
-			// Aï¿½adimos los pedidos a la lista
+			// Añadimos los pedidos a la lista
 			listaCompeticiones = DtoAssembler.toCompeticionDtoList(rs);
 
 		} catch (SQLException e) {
@@ -381,11 +381,19 @@ public class CompeticionModel {
 			mt.setSexo(a.getSexo());
 			mt.setHoras(i.getHoras());
 			mt.setDorsal(i.getDorsal());
-			mt.setEdad(a.getF_nac());
+			mt.setEdad(am.calcularEdad(a.getF_nac()));
 			mt.setMinutos(i.getMinutos());
 			mt.setCategoria(i.getCategoria());
+			mt.setClub(i.getClub());
+			mt.setMinutosKm(calcularMinutosKm(i));
+			List<Integer> tiemposPaso = new ArrayList<Integer>();
+			tiemposPaso.add(i.getTiempoPaso1());
+			tiemposPaso.add(i.getTiempoPaso2());
+			tiemposPaso.add(i.getTiempoPaso3());
+			tiemposPaso.add(i.getTiempoPaso4());
+			mt.setTiemposPaso(tiemposPaso);
+			mt.setDiferencia(calcularDiferencia(inscripciones.get(0), i));
 			clasificacion.add(mt);
-
 		}
 		return clasificacion;
 	}
@@ -434,7 +442,7 @@ public class CompeticionModel {
 				mt.setMinutos(i.getMinutos());
 				mt.setPosicion(String.valueOf(posicion++));
 				mt.setDorsal(i.getDorsal());
-				mt.setEdad(a.getF_nac());
+				mt.setEdad(am.calcularEdad(a.getF_nac()));
 				clasificacion.add(mt);
 			}
 			return clasificacion;
@@ -508,6 +516,16 @@ public class CompeticionModel {
 			im.actualizarTiempoDorsal(competicionId, t.getDorsal(), t.getHoras(), t.getMinutos());
 		}
 		System.out.println("Tiempos actualizados");
+	}
+
+	private int calcularDiferencia(InscripcionDto a1, InscripcionDto a2) {
+		int minutos = (a2.getHoras() * 60) - (a1.getHoras() * 60) + (a2.getMinutos() - a1.getMinutos());
+		return minutos;
+	}
+
+	private double calcularMinutosKm(InscripcionDto i) {
+		return Integer.parseInt(getCompeticionById(i.getId_c()).get(0).getDistancia())
+				/ (i.getHoras() * 60 + i.getMinutos());
 	}
 
 }

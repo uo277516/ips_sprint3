@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -134,8 +135,9 @@ public class VentanaInicial extends JFrame {
 		} // moises
 		else if (seleccion == 2) {
 			if (actualizarClasificaciones())
-				JOptionPane.showMessageDialog(this, "Datos de " + cm.getCompeticionById(competicionId).get(0).getNombre() + " cargados. \n"
-						+ "Se han actualizado los tiempos de " + ndatos + " atletas");
+				JOptionPane.showMessageDialog(this,
+						"Datos de " + cm.getCompeticionById(competicionId).get(0).getNombre() + " cargados. \n"
+								+ "Se han actualizado los tiempos de " + ndatos + " atletas");
 			else
 				JOptionPane.showMessageDialog(this, "Los Tiempos no ha podido cargarse."); // moises
 		} else if (seleccion == 3) {
@@ -189,11 +191,15 @@ public class VentanaInicial extends JFrame {
 				String[] trozos = strLine.split(" ");
 				if (trozos.length == 1)
 					competicionId = trozos[0];
-				else if (trozos.length == 3) {
+				else if (trozos.length >= 3) {
 					ndatos++;
 					mt = new MarcaTiempo();
 					mt.setDorsal(trozos[0]);
 					mt.setTiempoInicial(trozos[1]);
+					List<Integer> tiemposPaso = new ArrayList<Integer>();
+					for (int i = 2; i < trozos.length - 1; i++)
+						tiemposPaso.add(Integer.valueOf(trozos[i]));
+					mt.setTiemposPaso(tiemposPaso);
 					mt.setTiempoFinal(trozos[2]);
 					tiempos.add(mt);
 				} else {

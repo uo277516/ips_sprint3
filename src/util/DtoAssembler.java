@@ -128,6 +128,16 @@ public class DtoAssembler {
 			i.setEstado(rs.getString("estado"));
 		if (rs.getString("dorsal") != null)
 			i.setDorsal(rs.getString("dorsal"));
+		if (rs.getString("tp1") != null)
+			i.setTiempoPaso1(rs.getInt("tp1"));
+		if (rs.getString("tp2") != null)
+			i.setTiempoPaso2(rs.getInt("tp2"));
+		if (rs.getString("tp3") != null)
+			i.setTiempoPaso3(rs.getInt("tp3"));
+		if (rs.getString("tp4") != null)
+			i.setTiempoPaso4(rs.getInt("tp4"));
+		if (rs.getString("club") != null)
+			i.setClub(rs.getString("club"));
 		return i;
 	}
 

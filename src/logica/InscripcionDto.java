@@ -6,8 +6,8 @@ public class InscripcionDto {
 	public static String INSCRITO = "Inscrito";
 	public static String PRE_INSCRITO = "Pre-inscrito";
 	public static String ANULADA = "Anulada";
-	public static String ANULADA_DEVOLUCION = "Anulada - pendiente de devoluciÃ³n";
-	public static String INSCRITO_DEVOLUCION = "Inscrito - pendiente de devoluciÃ³n";
+	public static String ANULADA_DEVOLUCION = "Anulada - pendiente de devolución";
+	public static String INSCRITO_DEVOLUCION = "Inscrito - pendiente de devolución";
 	public static String PENDIENTE = "Pendiente";
 
 	private String dni_a;
@@ -20,6 +20,54 @@ public class InscripcionDto {
 	private int horas;
 	private int minutos;
 	private String estado;
+
+	private String club;
+	private int tiempoPaso1;
+	private int tiempoPaso2;
+	private int tiempoPaso3;
+	private int tiempoPaso4;
+
+
+	public String getClub() {
+		return club;
+	}
+
+	public void setClub(String club) {
+		this.club = club;
+	}
+
+
+	public int getTiempoPaso1() {
+		return tiempoPaso1;
+	}
+
+	public void setTiempoPaso1(int tiempoPaso1) {
+		this.tiempoPaso1 = tiempoPaso1;
+	}
+
+	public int getTiempoPaso2() {
+		return tiempoPaso2;
+	}
+
+	public void setTiempoPaso2(int tiempoPaso2) {
+		this.tiempoPaso2 = tiempoPaso2;
+	}
+
+	public int getTiempoPaso3() {
+		return tiempoPaso3;
+	}
+
+	public void setTiempoPaso3(int tiempoPaso3) {
+		this.tiempoPaso3 = tiempoPaso3;
+	}
+
+	public int getTiempoPaso4() {
+		return tiempoPaso4;
+	}
+
+	public void setTiempoPaso4(int tiempoPaso4) {
+		this.tiempoPaso4 = tiempoPaso4;
+	}
 
 	public String getDni_a() {
 		return dni_a;
@@ -132,5 +180,8 @@ public class InscripcionDto {
 				+ ", fecha=" + fecha + ", metodo_pago=" + metodo_pago + ", cantidad_pagada=" + cantidad_pagada
 				+ ", horas=" + horas + ", minutos=" + minutos + ", estado=" + estado + ", dorsal=" + dorsal + "]";
 	}
+	
+
+	
 
 }

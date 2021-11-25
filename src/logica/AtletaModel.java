@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -324,7 +325,6 @@ public class AtletaModel {
 		return a;
 	}
 
-
 	public void addAtleta(String dni, String nombre, String sexo, String fecha, String email) {
 		try {
 			addAtletaP(dni, nombre, sexo, fecha, email);
@@ -359,5 +359,14 @@ public class AtletaModel {
 			pst.close();
 			c.close();
 		}
+	}
+
+	public int calcularEdad(String fechaNac) {
+		if (fechaNac != null) {
+			String[] trozos = fechaNac.split("/");
+			Integer añoNac = Integer.parseInt(trozos[2]);
+			return LocalDateTime.now().getYear() - añoNac;
+		}
+		return 0;
 	}
 }
