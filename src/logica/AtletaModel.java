@@ -303,8 +303,20 @@ public class AtletaModel {
 		}
 		return years;
 	}
+	
+	public AtletaDto findAtletaByDni(String dni) {
+		AtletaDto a = null;
+		try {
+			a = findAtletaByDniP(dni);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return a;
+	}
+	
 
-	public AtletaDto findAtletaByDni(String dni) throws SQLException {
+	private AtletaDto findAtletaByDniP(String dni) throws SQLException {
 		AtletaDto a;
 
 		// Conexi�n a la base de datos
@@ -329,8 +341,20 @@ public class AtletaModel {
 		}
 		return a;
 	}
+	
+	public AtletaDto  findAtletaByEmail(String email) {
+		AtletaDto a = null;
+		try {
+			a = findAtletaByEmailP(email);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return a;
+		
+	}
 
-	public AtletaDto findAtletaByEmail(String email) throws SQLException {
+	private AtletaDto findAtletaByEmailP(String email) throws SQLException {
 		AtletaDto a;
 
 		// Conexi�n a la base de datos
@@ -438,6 +462,45 @@ public class AtletaModel {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(sqlFindByDni);
 			pst.setString(1, dni);
+			rs = pst.executeQuery();
+
+			atletas = DtoAssembler.toAtletaDtoList(rs);
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
+
+		return atletas;
+	}
+	
+	
+
+	public List<AtletaDto> atletaYaRegistradoEnLaBaseDni(String dni) {
+		List<AtletaDto> atletas = new ArrayList<AtletaDto>();
+		try {
+			atletas = atletaYaRegistradoEnLaBaseDniP(dni);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("algo mal ventana atleta model");
+		}
+		return atletas;
+	}
+
+	private List<AtletaDto> atletaYaRegistradoEnLaBaseDniP(String email) throws SQLException {
+		List<AtletaDto> atletas = new ArrayList<AtletaDto>();
+
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement("select * from atleta where atleta.dni=?");
+			pst.setString(1, email);
 			rs = pst.executeQuery();
 
 			atletas = DtoAssembler.toAtletaDtoList(rs);

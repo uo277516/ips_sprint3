@@ -32,21 +32,21 @@ public class VentanaRegistro extends JFrame {
 	private JTextField txtSExo;
 	private AtletaModel at;
 
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					VentanaRegistro frame = new VentanaRegistro();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	//	/**
+	//	 * Launch the application.
+	//	 */
+	//	public static void main(String[] args) {
+	//		EventQueue.invokeLater(new Runnable() {
+	//			public void run() {
+	//				try {
+	//					VentanaRegistro frame = new VentanaRegistro();
+	//					frame.setVisible(true);
+	//				} catch (Exception e) {
+	//					e.printStackTrace();
+	//				}
+	//			}
+	//		});
+	//	}
 
 	/**
 	 * Create the frame.
@@ -128,7 +128,8 @@ public class VentanaRegistro extends JFrame {
 		JButton btnNewButton = new JButton("Finalizar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (checkCamposNoVacios() && checkFechaFormato() && checkSexo()) {
+				if (checkCamposNoVacios() && checkFechaFormato() && checkSexo() && !registradoAtletaEnBase()
+						&& !registradoAtletaEnBaseDni()) {
 					System.out.println("todo ok");
 					addAtleta();
 
@@ -148,9 +149,28 @@ public class VentanaRegistro extends JFrame {
 		contentPane.add(lblNewLabel);
 	}
 
+	protected boolean registradoAtletaEnBaseDni() {
+		if (at.atletaYaRegistradoEnLaBaseDni(txtDni.getText()).isEmpty()) {
+			// si no hay ninguno
+			return false;
+		} else
+			JOptionPane.showMessageDialog(this, "Este dni ya está registrado en la base. ");
+		return true;
+	}
+
+	private boolean registradoAtletaEnBase() {
+		if (at.atletaYaRegistradoEnLaBase(txtEmail.getText()).isEmpty()) {
+			// si no hay ninguno
+			return false;
+		} else
+			JOptionPane.showMessageDialog(this, "Este email ya está registrado en la base. ");
+		return true;
+	}
+
 	protected void mostrarVentanaInscripcionAgain() {
 		// TODO Auto-generated method stubthis.dispose();
 		JOptionPane.showMessageDialog(this, "Te has registrado correctamente. ");
+		this.vI.setEmail(txtEmail.getText());
 		this.dispose();
 
 	}
@@ -162,20 +182,31 @@ public class VentanaRegistro extends JFrame {
 	}
 
 	protected boolean checkFechaFormato() {
-//		Date date = null;
-//		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//	    try {
-//			date = sdf.parse(txtFecha.getText());
-//			
-//		} catch (ParseException e1) {
-//			JOptionPane.showMessageDialog(this, "La fecha debe estar en el formato indicado.");
-//			
-//		}
-//	    if (!txtFecha.getText().equals(sdf.format(date))) {
-//	        return true;
-//	    } 
-//	    else return false;
-		return true;
+		String fecha = txtFecha.getText();
+		String numero="";
+		int contador =0;
+		String minumero="";
+		String[] posiciones = new String[fecha.length()];
+		String[] numeros= {"0","1","2","3","4","5","6","7","8","9"};
+		for (int i=0;i<fecha.length();i++) {
+			numero=fecha.substring(i,i+1);
+			for (int j=0;j<numeros.length;j++) {
+				if (numero.equals(numeros[j])) {
+					minumero=minumero+numeros[j];
+				}
+			}
+			if (numero.equals("/")) {
+				posiciones[i] = "/";
+				contador++;
+			}
+		}
+		if (contador==2 && minumero.length()==8) {
+			if (posiciones[2] != null && posiciones[5]!=null) {
+				return true;
+			}else
+				return false;
+		}else
+			return false;
 
 	}
 
@@ -186,7 +217,7 @@ public class VentanaRegistro extends JFrame {
 			return true;
 		else
 			return false;
-//		return true;
+		//		return true;
 	}
 
 	protected boolean checkCamposNoVacios() {

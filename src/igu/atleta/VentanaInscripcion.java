@@ -112,6 +112,12 @@ public class VentanaInscripcion extends JFrame {
 		return txtEmail;
 	}
 
+	public void setEmail(String e)
+	{
+		txtEmail.setText(e);
+	}
+	
+	
 	private Label getLblEmail() {
 		if (lblEmail == null) {
 			lblEmail = new Label("E-mail:");
