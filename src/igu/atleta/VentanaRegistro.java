@@ -13,7 +13,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import logica.AtletaDto;
 import logica.AtletaModel;
+import logica.ListaEsperaDto;
+import logica.ListaEsperaModel;
 
 public class VentanaRegistro extends JFrame {
 
@@ -24,13 +27,14 @@ public class VentanaRegistro extends JFrame {
 	private JPanel contentPane;
 	@SuppressWarnings("unused")
 	private VentanaInscripcion vI;
+	private VentanaAtletaListaEspera vale;
 	private JTextField txtDni;
 	private JTextField txtNombre;
 	private JTextField txtFecha;
 	private JTextField txtEmail;
-
 	private JTextField txtSExo;
 	private AtletaModel at;
+	private ListaEsperaModel lem;
 
 //	/**
 //	 * Launch the application.
@@ -53,9 +57,15 @@ public class VentanaRegistro extends JFrame {
 	 * 
 	 * @param ventanaInscripcion
 	 */
-	public VentanaRegistro(VentanaInscripcion ventanaInscripcion) {
-		this.vI = ventanaInscripcion;
+	public VentanaRegistro(VentanaInscripcion ventanaInscripcion, VentanaAtletaListaEspera ventanaAtletaListaEspera) {
+		if (ventanaInscripcion != null) {
+			this.vI = ventanaInscripcion;
+		}
+		if (ventanaAtletaListaEspera != null) {
+			this.vale = ventanaAtletaListaEspera;
+		}
 		at = new AtletaModel();
+		this.lem = new ListaEsperaModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 589, 382);
 		contentPane = new JPanel();
@@ -131,8 +141,13 @@ public class VentanaRegistro extends JFrame {
 				if (checkCamposNoVacios() && checkFechaFormato() && checkSexo()) {
 					System.out.println("todo ok");
 					addAtleta();
+					if (vI != null) {
+						mostrarVentanaInscripcionAgain();
+					} else if (vale != null) {
+						// A lista de espera
+						aListaDeEspera();
+					}
 
-					mostrarVentanaInscripcionAgain();
 				}
 			}
 		});
@@ -148,6 +163,25 @@ public class VentanaRegistro extends JFrame {
 		contentPane.add(lblNewLabel);
 	}
 
+	private void aListaDeEspera() {
+		ListaEsperaDto lista = lem.getListaByIdComp(this.vale.getCompeticion().getId());
+		// Cojo el número de orden que le toca al atleta
+		int orden;
+		if (at.hayGenteEnLista(lista.getId())) {
+			orden = lem.getNextNumOrden(lista.getId());
+		} else {
+			orden = 1;
+		}
+		// Cojo el id del atleta
+		String email = txtEmail.getText();
+		AtletaDto a = at.findAtletaByEmail(email);
+		String dnia = a.getDni();
+		at.addAtletaAListaEspera(dnia, lista.getId(), orden);
+		JOptionPane.showMessageDialog(this, "Ya está añadido a la lista de espera de "
+				+ this.vale.getCompeticion().getNombre() + ", su posición en la lista es " + orden);
+		System.exit(0);
+	}
+
 	protected void mostrarVentanaInscripcionAgain() {
 		// TODO Auto-generated method stubthis.dispose();
 		JOptionPane.showMessageDialog(this, "Te has registrado correctamente. ");
@@ -158,23 +192,23 @@ public class VentanaRegistro extends JFrame {
 	protected void addAtleta() {
 		// String dni, String nombre, String sexo, String fecha, String email
 		at.addAtleta(txtDni.getText(), txtNombre.getText(), txtSExo.getText(), txtFecha.getText(), txtEmail.getText());
-		System.out.println("a�adido se�ores");
+		System.out.println("añadido señores");
 	}
 
 	protected boolean checkFechaFormato() {
 //		Date date = null;
 //		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//	    try {
+//		try {
 //			date = sdf.parse(txtFecha.getText());
-//			
+//
 //		} catch (ParseException e1) {
 //			JOptionPane.showMessageDialog(this, "La fecha debe estar en el formato indicado.");
-//			
+//
 //		}
-//	    if (!txtFecha.getText().equals(sdf.format(date))) {
-//	        return true;
-//	    } 
-//	    else return false;
+//		if (!txtFecha.getText().equals(sdf.format(date))) {
+//			return true;
+//		} else
+//			return false;
 		return true;
 
 	}

@@ -164,7 +164,9 @@ public class VentanaMostrarCarreras extends JFrame {
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						if (table.getSelectedRow() != -1) {
+						if (table.getSelectedRow() != -1 && crearCompeticion().getNum_plazas() == 0) {
+							pasarAListaDeEspera();
+						} else if (table.getSelectedRow() != -1) {
 							pasarAInscripcion();
 						} else {
 							errorNoCarreraSeleccionada();
@@ -187,6 +189,14 @@ public class VentanaMostrarCarreras extends JFrame {
 		JOptionPane.showMessageDialog(this, "Error: Seleccione una carrera para registrarse");
 	}
 
+	protected void pasarAListaDeEspera() throws SQLException {
+		this.dispose();
+		CompeticionDto competicion = crearCompeticion();
+		VentanaAtletaListaEspera vale = new VentanaAtletaListaEspera(this, competicion);
+		vale.setLocationRelativeTo(this);
+		vale.setVisible(true);
+	}
+
 	protected void pasarAInscripcion() throws SQLException {
 		this.dispose();
 		CompeticionDto competicion = crearCompeticion();
@@ -205,7 +215,7 @@ public class VentanaMostrarCarreras extends JFrame {
 
 	private JLabel getLblCompeticiones() {
 		if (lblCompeticiones == null) {
-			lblCompeticiones = new JLabel("Competiciones abiertas actualmente a d\u00EDa:");
+			lblCompeticiones = new JLabel("Competiciones abiertas actualmente a día:");
 			lblCompeticiones.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			lblCompeticiones.setBounds(24, 28, 242, 13);
 		}

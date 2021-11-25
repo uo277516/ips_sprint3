@@ -25,7 +25,6 @@ import logica.AtletaModel;
 import logica.CompeticionDto;
 import logica.CompeticionModel;
 import logica.InscripcionModel;
-import logica.ListaEsperaDto;
 import logica.ListaEsperaModel;
 
 public class VentanaInscripcion extends JFrame {
@@ -133,12 +132,12 @@ public class VentanaInscripcion extends JFrame {
 						mostrarErrorVacio();
 					} else if (yaRegistradoEnlaCarrera()) { // si ya en la carrera
 						mostrarErrorYaRegistrado();
-					} else if (!haySuficientesPlazas()) { // si no plazas
-						if (tieneListaDeEspera()) {
-							inscripcionConListaDeEspera();
-						} else {
-							mostrarErrorPlazas();
-						}
+//					} else if (!haySuficientesPlazas()) { // si no plazas
+//						if (tieneListaDeEspera()) {
+//							mostrarParaLista();
+//						} else {
+//							mostrarErrorPlazas();
+//						}
 					} else if (esMenor()) { // si es menor
 						mostrarErrorMenor();
 					} else if (registradoAtletaEnBase()) { // si ya en la base de datos
@@ -160,40 +159,27 @@ public class VentanaInscripcion extends JFrame {
 		return btnValidar;
 	}
 
-	public void inscripcionConListaDeEspera() {
-		int reply = JOptionPane.showConfirmDialog(this,
-				"No hay plazas disponibles, ¿desea apuntarse en la lista de espera?", "Ventana registro",
-				JOptionPane.YES_NO_OPTION);
-		if (reply == JOptionPane.YES_OPTION) {
-			// Cojo el id de la lista de la competición
-			ListaEsperaDto lista = lem.getListaByIdComp(this.cSeleccionada.getId());
-			// Cojo el número de orden que le toca al atleta
-			int orden;
-			if (atl.hayGenteEnLista(lista.getId())) {
-				orden = lem.getNextNumOrden(lista.getId());
-			} else {
-				orden = 1;
-			}
-			// Cojo el id del atleta
-			String email = txtEmail.getText();
-			AtletaDto a = atl.findAtletaByEmail(email);
-			String dnia = a.getDni();
-			atl.addAtletaAListaEspera(dnia, lista.getId(), orden);
-			JOptionPane.showMessageDialog(this, "Ya está añadido a la lista de espera de "
-					+ this.cSeleccionada.getNombre() + ", su posición en la lista es " + orden);
-			System.exit(0);
-		} else {
-			JOptionPane.showMessageDialog(this, "¡Hasta la próxima!");
-		}
+//	private void mostrarParaLista() {
+//		int reply = JOptionPane.showConfirmDialog(this,
+//				"No hay plazas disponibles, ¿desea apuntarse en la lista de espera?", "Ventana registro",
+//				JOptionPane.YES_NO_OPTION);
+//		if (reply == JOptionPane.YES_OPTION) {
+//			// TODO mostrar ventana atleta lista de espera
+//			VentanaAtletaListaEspera vPal = new VentanaRegistro(this);
+//			vPal.setLocationRelativeTo(this);
+//			vPal.setVisible(true);
+//		} else {
+//			JOptionPane.showMessageDialog(this, "¡Hasta la próxima!");
+//			System.exit(0);
+//		}
+//	}
 
-	}
-
-	private boolean tieneListaDeEspera() {
-		return lem.tieneListaDeEspera(this.cSeleccionada.getId());
-	}
+//	private boolean tieneListaDeEspera() {
+//		return lem.tieneListaDeEspera(this.cSeleccionada.getId());
+//	}
 
 	protected void mostrarMensajeNoInscritoSiQuiere() {
-		int reply = JOptionPane.showConfirmDialog(this, "No est�s registrado en la base ¿te gustaría registrarte?",
+		int reply = JOptionPane.showConfirmDialog(this, "No estás registrado en la base ¿te gustaría registrarte?",
 				"Ventana registro", JOptionPane.YES_NO_OPTION);
 		if (reply == JOptionPane.YES_OPTION) {
 			mostrarVentanaRegistro();
@@ -207,7 +193,7 @@ public class VentanaInscripcion extends JFrame {
 	private void mostrarVentanaRegistro() {
 		// this.dispose();
 		// CompeticionDto competicion = crearCompeticion();
-		VentanaRegistro vPal = new VentanaRegistro(this);
+		VentanaRegistro vPal = new VentanaRegistro(this, null);
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
 	}

@@ -15,8 +15,7 @@ public class ListaEsperaModel {
 	public static String getAllListaEspera = "select * from listaespera";
 	public static String getListaByIdComp = "select * from listaespera where id_comp = ?";
 	public static String addLista = "insert into listaespera(id, id_comp) values(?, ?)";
-	public static String findNextNumOrden = "select max(e.num_orden) from en_espera e, listaespera l "
-			+ "where l.id = ? and l.id = e.id_listaespera";
+	public static String findNextNumOrden = "select max(num_orden) as orden from en_espera where id_listaespera = ?";
 
 	public List<ListaEsperaDto> getListas() {
 		List<ListaEsperaDto> lista = null;
@@ -175,7 +174,8 @@ public class ListaEsperaModel {
 			pst.setString(1, id);
 
 			rs = pst.executeQuery();
-			result = rs.getInt(0);
+			rs.next();
+			result = rs.getInt("orden");
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
