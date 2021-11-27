@@ -30,7 +30,10 @@ public class AtletaModel {
 	public static String findAtletaByDniId= "select * from atleta, inscripcion, competicion" + "		where "
 			+ " 	atleta.dni = inscripcion.dni_a and " + "     inscripcion.id_c = competicion.id and "
 			+ "		inscripcion.dni_a=? and " + "     competicion.nombre=?";
-
+	public static String addAtletaAListaEspera = "insert into en_espera(id_listaespera, dni_atleta, num_orden) values(?,?,?)";
+	public static String hayGenteEnLista = "select * from atleta a, en_espera e where e.id_listaespera = ? and e.dni_atleta = a.dni";
+	
+	
 	public List<AtletaDto> getAtletas() throws SQLException {
 		return getAllAtletas();
 	}
@@ -514,5 +517,74 @@ public class AtletaModel {
 		}
 
 		return atletas;
+	}
+	
+	public void addAtletaAListaEspera(String dniA, String idL, int orden) {
+		try {
+			addAtletaAListaEsperaP(dniA, idL, orden);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void addAtletaAListaEsperaP(String dniA, String idL, int orden) throws SQLException {
+		Connection c = null;
+		PreparedStatement pst = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(addAtletaAListaEspera);
+			pst.setString(1, idL);
+			pst.setString(2, dniA);
+			pst.setInt(3, orden);
+			pst.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			pst.close();
+			c.close();
+		}
+	}
+
+	public boolean hayGenteEnLista(String idLista) {
+		boolean ret = false;
+		try {
+			ret = hayGenteEnListaP(idLista);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	private boolean hayGenteEnListaP(String idLista) throws SQLException {
+		List<AtletaDto> listaAtletas = new ArrayList<AtletaDto>();
+
+		// Conexi�n a la base de datos
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(hayGenteEnLista);
+			pst.setString(1, idLista);
+			rs = pst.executeQuery();
+
+			// A�adimos los pedidos a la lista
+			listaAtletas = DtoAssembler.toAtletaDtoList(rs);
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
+		if (listaAtletas.size() > 0) { // si ya esta registrado en esa carrera
+			System.out.println("Ya se ha registrado en esta competicion");
+			return true;
+		} else {
+			System.out.println("no registrado, puede registrarse");
+			return false;
+		}
 	}
 }

@@ -2,6 +2,7 @@ package igu.organizador;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -21,6 +22,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import igu.VentanaInicial;
+import igu.atleta.VentanaAtletaListaEspera;
 import logica.AtletaModel;
 import logica.CompeticionDto;
 import logica.CompeticionModel;
@@ -69,6 +71,8 @@ public class VentanaAsignarDorsales extends JFrame {
 	 * @throws ParseException 
 	 */
 	public VentanaAsignarDorsales(VentanaInicial vI) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+
 		this.vi=vI;
 		ins = new InscripcionModel();
 		atl = new AtletaModel();
@@ -207,7 +211,7 @@ public class VentanaAsignarDorsales extends JFrame {
 			table.setBackground(Color.LIGHT_GRAY);
 			DefaultTableModel modelo = new DefaultTableModel();
 			table.setModel(modelo);
-			modelo.addColumn("ID");modelo.addColumn("Nombre");modelo.addColumn("Fecha Competición");modelo.addColumn("Tipo");modelo.addColumn("Distancia");modelo.addColumn("Dorsales vip");
+			modelo.addColumn("ID");modelo.addColumn("Nombre");modelo.addColumn("Fecha CompeticiÃ³n");modelo.addColumn("Tipo");modelo.addColumn("Distancia");modelo.addColumn("Dorsales vip");
 
 			List<CompeticionDto> competiciones = comp.getListaCompCerradas(cambiarFormatoFecha());
 			String[][] info = new String[competiciones.size()][6];

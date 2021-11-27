@@ -13,6 +13,7 @@ import logica.AtletaDto;
 import logica.CategoriaDto;
 import logica.CompeticionDto;
 import logica.InscripcionDto;
+import logica.ListaEsperaDto;
 
 @SuppressWarnings("unused")
 public class DtoAssembler {
@@ -305,5 +306,28 @@ public class DtoAssembler {
 		a.setEdad_max(Integer.parseInt(rs.getString("edad_max")));
 		a.setSexo(rs.getString("sexo"));
 		return a;
+	}
+	
+	public static List<ListaEsperaDto> toListaEsperaDtoList(ResultSet rs) {
+		List<ListaEsperaDto> lista = new ArrayList<ListaEsperaDto>();
+		try {
+			while (rs.next()) {
+				lista.add(cogerDatosLista(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+
+	public static ListaEsperaDto toListaDto(ResultSet rs) throws SQLException {
+		return cogerDatosLista(rs);
+	}
+
+	private static ListaEsperaDto cogerDatosLista(ResultSet rs) throws SQLException {
+		ListaEsperaDto listaEspera = new ListaEsperaDto();
+		listaEspera.setId(rs.getString("id"));
+		listaEspera.setId_comp(rs.getString("id_comp"));
+		return listaEspera;
 	}
 }

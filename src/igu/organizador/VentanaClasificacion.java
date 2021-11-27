@@ -3,6 +3,7 @@ package igu.organizador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import igu.atleta.VentanaAtletaListaEspera;
 import logica.CompeticionModel;
 import logica.MarcaTiempo;
 
@@ -55,8 +57,10 @@ public class VentanaClasificacion extends JFrame {
 	 * @throws SQLException
 	 */
 	public VentanaClasificacion(String id) throws SQLException {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+
 		this.id = id;
-		setTitle("Clasificación:");
+		setTitle("Clasificaciï¿½n:");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 825, 488);
 		contentPane = new JPanel();
@@ -71,7 +75,7 @@ public class VentanaClasificacion extends JFrame {
 
 	private JLabel getLblCompeticiones() {
 		if (label == null) {
-			label = new JLabel("A continuación se muestra la clasificacion de "
+			label = new JLabel("A continuaciÃ³n se muestra la clasificacion de "
 					+ (cm.getCompeticionById(String.valueOf(id)).get(0).getNombre()));
 			label.setFont(new Font("Lucida Grande", Font.BOLD, 14));
 		}
@@ -108,7 +112,7 @@ public class VentanaClasificacion extends JFrame {
 			modelo.addColumn("Edad");
 			modelo.addColumn("Horas");
 			modelo.addColumn("Minutos");
-			modelo.addColumn("Categoría");
+			modelo.addColumn("CategorÃ­a");
 			List<MarcaTiempo> tiempos = cm.getClasificacion(id);
 			String[][] info = new String[tiempos.size()][8];
 			tiempos = cm.ordenarPorCategoria(tiempos);

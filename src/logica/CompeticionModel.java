@@ -27,6 +27,12 @@ public class CompeticionModel {
 	public static String sqlActualizarCompeticion3 = "update competicion set f_inicio3=?, f_fin3=?, cuota3=? where id=?";
 	public static String findCategoriasByCompeticion = "select * from categoria c, pertenece p, competicion co where co.id = p.id_comp and c.id = p.id_cat and co.id = ?";
 
+	public static String actualizarIdListaEspera = "update competicion set id_listaespera = ? where id = ?";
+	public static String getCompsByFechaYListaEspera = "select * from competicion c, listaespera l where l.id_comp = c.id";
+	
+	public static String sqlActualizarPlazas = "update competicion set num_plazas = num_plazas-1 where id =?";
+
+	
 	private InscripcionModel im = new InscripcionModel();
 	private AtletaModel am = new AtletaModel();
 
@@ -156,7 +162,7 @@ public class CompeticionModel {
 		ResultSet rs = null;
 		try {
 			c = BaseDatos.getConnection();
-			pst = c.prepareStatement(sql1);
+			pst = c.prepareStatement(getCompsByFechaYListaEspera);
 			rs = pst.executeQuery();
 
 			// Aï¿½adimos los pedidos a la lista
@@ -524,10 +530,10 @@ public class CompeticionModel {
 				clasificacion.add(mt);
 //				if (i.getHoras() == 0 && i.getMinutos() == 0) {
 //					clasificacion.add(
-//							"Posición: " + posicion++ + " - Dorsal: " + i.getDorsal() + " - Nombre: " + a.getNombre()
+//							"Posiciï¿½n: " + posicion++ + " - Dorsal: " + i.getDorsal() + " - Nombre: " + a.getNombre()
 //							+ " - Sexo: " + a.getSexo() + " - Edad: " + a.getF_nac() + " - Tiempo: --- ");
 //				}else {
-//					clasificacion.add("Posición: " + posicion++ + " - Dorsal: " + i.getDorsal() + " - Nombre: "
+//					clasificacion.add("Posiciï¿½n: " + posicion++ + " - Dorsal: " + i.getDorsal() + " - Nombre: "
 //							+ a.getNombre() + " - Sexo: " + a.getSexo() + " - Edad: " + a.getF_nac() + " - Tiempo: "
 //							+ i.getHoras() + "h " + i.getMinutos() + " minutos");
 //				}
@@ -709,6 +715,62 @@ public class CompeticionModel {
 		}
 
 		return competicion.get(0).getNum_plazas();
+	}
+	
+	public void actualizarCompeticionIdLista(String idLista, String idComp) {
+		try {
+			actualizarCompeticionIdListaP(idLista, idComp);
+		} catch (SQLException e) {
+			System.out.println("no se pudo actualizar");
+			e.printStackTrace();
+		}
+	}
+
+	private void actualizarCompeticionIdListaP(String idLista, String idComp) throws SQLException {
+		Connection c = null;
+		PreparedStatement pst = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(actualizarIdListaEspera);
+			pst.setString(1, idLista);
+			pst.setString(2, idComp);
+			pst.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			pst.close();
+			c.close();
+		}
+	}
+	
+	public void actualizarPlazas(String id) {
+		try {
+			actualizarPlazasP(id);
+		} catch (SQLException e) {
+			System.out.println("no se pudo actuliazar");
+			e.printStackTrace();
+		}
+	}
+
+	private void actualizarPlazasP(String id) throws SQLException {
+		// ConexiÃ¯Â¿Â½n a la base de datos
+		Connection c = null;
+		PreparedStatement pst = null;
+		// ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(sqlActualizarPlazas);
+			pst.setString(1, id);
+			pst.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			pst.close();
+			c.close();
+		}
+
 	}
 
 }

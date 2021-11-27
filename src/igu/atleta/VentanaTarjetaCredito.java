@@ -2,6 +2,7 @@ package igu.atleta;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -64,6 +65,8 @@ public class VentanaTarjetaCredito extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaTarjetaCredito(VentanaInscripcion vi, CompeticionDto cDto, AtletaDto aDto) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+
 		this.vi=vi;
 		this.competicion=cDto;
 		this.atleta=aDto;
@@ -281,7 +284,7 @@ public class VentanaTarjetaCredito extends JFrame {
 		return btnValidar;
 	}
 	private void pagarInscripcion() throws ParseException {
-		JOptionPane.showMessageDialog(this, "Pago realizado correctamente, se generará un justificante de la operación.");
+		JOptionPane.showMessageDialog(this, "Pago realizado correctamente, se generarÃ¡ un justificante de la operaciÃ³n.");
 		String fechaString = cambiarFormatoFecha();
 		inscripcion = ins.findInsByDniId(atleta.getDni(), competicion.getId());
 		float cuota = sacarCuota(fechaString);
@@ -291,7 +294,7 @@ public class VentanaTarjetaCredito extends JFrame {
 				"\tNombre: "+atleta.getNombre() +"\n" +
 				"\tSexo: "+atleta.getSexo()+"\n"
 				+"\tDNI: "+atleta.getDni() + "\n"+
-		"Competeción:"+ "\n" 
+		"Competeciï¿½n:"+ "\n" 
 				+"\tNombre: "+ competicion.getNombre()+"\n"+
 				"\tFecha: "+competicion.getF_comp()+"\n"+
 				"\tDistancia: "+ competicion.getDistancia()+"km" + "\n"+
@@ -352,7 +355,7 @@ public class VentanaTarjetaCredito extends JFrame {
 	}
 
 	private void mostrarErrorNumero() {
-		JOptionPane.showMessageDialog(this, "Error: Formato introducido incorrecto: Solo nï¿½meros porfavor");
+		JOptionPane.showMessageDialog(this, "Error: Formato introducido incorrecto: Solo nÃºmeros porfavor");
 		
 	}
 

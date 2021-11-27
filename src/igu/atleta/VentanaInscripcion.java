@@ -3,7 +3,6 @@ package igu.atleta;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Label;
-import java.awt.SystemColor;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -121,6 +120,7 @@ public class VentanaInscripcion extends JFrame {
 	private Label getLblEmail() {
 		if (lblEmail == null) {
 			lblEmail = new Label("E-mail:");
+			lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			lblEmail.setBounds(36, 72, 59, 21);
 		}
 		return lblEmail;
@@ -148,7 +148,6 @@ public class VentanaInscripcion extends JFrame {
 						inscribirParticipante();
 						textArea.setText(getInformacion());
 					} else if (!registradoAtletaEnBase()) { // si no en la base de datos
-						System.out.println("patata");
 						mostrarMensajeNoInscritoSiQuiere();
 					} else if (!haySuficientesPlazas()) { // si no plazos
 						mostrarErrorPlazas();
@@ -157,15 +156,15 @@ public class VentanaInscripcion extends JFrame {
 					}
 				}
 			});
-			btnValidar.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			btnValidar.setBackground(SystemColor.activeCaption);
+			btnValidar.setFont(new Font("Tahoma", Font.BOLD, 13));
+			btnValidar.setBackground(new Color(255, 255, 0));
 			btnValidar.setBounds(20, 131, 106, 21);
 		}
 		return btnValidar;
 	}
 
 	protected void mostrarMensajeNoInscritoSiQuiere() {
-		int reply = JOptionPane.showConfirmDialog(this, "No est�s registrado en la base �te gustar�a registrarte?",
+		int reply = JOptionPane.showConfirmDialog(this, "No estás registrado en la base te gustaría registrarte?",
 				"Ventana registro", JOptionPane.YES_NO_OPTION);
 		if (reply == JOptionPane.YES_OPTION) {
 			mostrarVentanaRegistro();
@@ -179,7 +178,7 @@ public class VentanaInscripcion extends JFrame {
 	private void mostrarVentanaRegistro() {
 		// this.dispose();
 		// CompeticionDto competicion = crearCompeticion();
-		VentanaRegistro vPal = new VentanaRegistro(this);
+		VentanaRegistro vPal = new VentanaRegistro(this,null);
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
 	}
@@ -249,7 +248,7 @@ public class VentanaInscripcion extends JFrame {
 
 	protected void mostrarErrorVacio() {
 		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(this, "El campo email no puede estar vac�o");
+		JOptionPane.showMessageDialog(this, "El campo email no puede estar vacío");
 	}
 
 	/*
@@ -263,7 +262,7 @@ public class VentanaInscripcion extends JFrame {
 		atleta = ins.findAtletaEmail(txtEmail.getText());
 		return s += "Nombre del atleta: " + atleta.getNombre() + "\n" + "Competición: " + cSeleccionada.getNombre()
 				+ "\n" + "Categoría: " + ins.getCategoriaByDniId(atleta.getDni(), cSeleccionada.getId()) + "\n"
-				+ "Fecha de inscripción: " + cambiarFormatoFecha() + "\n" + "Cantidad a abonar: " + n;
+				+ "Fecha de inscripción: " + cambiarFormatoFecha() + "\n" + "Cantidad a abonar: " + n + " euros.";
 	}
 
 	private float cogerCuotaSegunFecha() {
@@ -327,7 +326,7 @@ public class VentanaInscripcion extends JFrame {
 
 	private JLabel getLblInfoJus() {
 		if (lblInfoJus == null) {
-			lblInfoJus = new JLabel("A continuaci\u00F3n, se imprimir\u00E1 el siguiente justificante informante:");
+			lblInfoJus = new JLabel("A continuación, se imprimirá el siguiente justificante informante:");
 			lblInfoJus.setVisible(false);
 			lblInfoJus.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			lblInfoJus.setBounds(20, 172, 374, 21);

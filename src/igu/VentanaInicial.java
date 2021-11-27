@@ -30,6 +30,8 @@ import igu.organizador.VentanaCrearCompeticion;
 import igu.organizador.VentanaMostrarCarrerasOrganizador;
 import logica.CompeticionModel;
 import logica.MarcaTiempo;
+import javax.swing.ImageIcon;
+import java.awt.Toolkit;
 
 public class VentanaInicial extends JFrame {
 
@@ -44,6 +46,7 @@ public class VentanaInicial extends JFrame {
 	private int ndatos;
 	private String competicionId;
 	private CompeticionModel cm;
+	private JLabel lblNewLabel;
 
 	/**
 	 * Launch the application.
@@ -65,11 +68,12 @@ public class VentanaInicial extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaInicial() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaInicial.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
 		ndatos = 0;
 		cm = new CompeticionModel();
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 541, 363);
+		setBounds(100, 100, 541, 413);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -78,7 +82,7 @@ public class VentanaInicial extends JFrame {
 
 		JLabel lblPregunat = new JLabel("\u00BFDesea entrar como atleta o como organizador?");
 		lblPregunat.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPregunat.setBounds(109, 89, 302, 70);
+		lblPregunat.setBounds(119, 220, 302, 52);
 		contentPane.add(lblPregunat);
 
 		JButton btnAtleta = new JButton("Atleta");
@@ -88,7 +92,7 @@ public class VentanaInicial extends JFrame {
 			}
 		});
 		btnAtleta.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnAtleta.setBounds(39, 210, 131, 35);
+		btnAtleta.setBounds(26, 294, 131, 35);
 		contentPane.add(btnAtleta);
 
 		JButton btnOrganizador = new JButton("Organizador");
@@ -102,18 +106,19 @@ public class VentanaInicial extends JFrame {
 			}
 		});
 		btnOrganizador.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnOrganizador.setBounds(370, 210, 122, 35);
+		btnOrganizador.setBounds(368, 294, 122, 35);
 		contentPane.add(btnOrganizador);
 
 		JLabel llblBienvenido = new JLabel("\u00A1Bienvenido!");
-		llblBienvenido.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		llblBienvenido.setBounds(218, 50, 131, 29);
+		llblBienvenido.setFont(new Font("Tahoma", Font.BOLD, 23));
+		llblBienvenido.setBounds(182, 35, 196, 35);
 		contentPane.add(llblBienvenido);
 		contentPane.add(getBtnClub());
+		contentPane.add(getLblNewLabel());
 	}
 
 	protected void elegirAsOrganizador() throws FileNotFoundException {
-		int seleccion = JOptionPane.showOptionDialog(this, "Seleccione la opción que quiere realizar",
+		int seleccion = JOptionPane.showOptionDialog(this, "Seleccione la opciÃ³n que quiere realizar",
 				"Inicio como organizador", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null
 																													// para
 																													// icono
@@ -259,7 +264,7 @@ public class VentanaInicial extends JFrame {
 
 	protected void elegirAsAtleta() {
 		int seleccion = JOptionPane.showOptionDialog(this,
-				"¿Desea inscribirse o conocer el estado de sus inscripciones?", "Inicio como atleta",
+				"Â¿Desea inscribirse o conocer el estado de sus inscripciones?", "Inicio como atleta",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null para icono por defecto.
 				new Object[] { "Inscribirme", "Conocer mi estado" }, // null para YES, NO y CANCEL
 				"opcion 1");
@@ -298,14 +303,14 @@ public class VentanaInicial extends JFrame {
 				}
 			});
 			btnClub.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			btnClub.setBounds(205, 210, 131, 35);
+			btnClub.setBounds(196, 294, 131, 35);
 		}
 		return btnClub;
 	}
 	
 	protected void elegirSiNoClub() {
 		int seleccion = JOptionPane.showOptionDialog(this,
-				"¿Desea inscribir un lote de atletas?", "Inscripcion de lotes",
+				"Â¿Desea inscribir un lote de atletas?", "Inscripcion de lotes",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null para icono por defecto.
 				new Object[] { "Si"}, // null para YES, NO y CANCEL
 				"opcion 1");
@@ -325,5 +330,13 @@ public class VentanaInicial extends JFrame {
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
 
+	}
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("");
+			lblNewLabel.setIcon(new ImageIcon(VentanaInicial.class.getResource("/img/image1.png")));
+			lblNewLabel.setBounds(72, 68, 445, 155);
+		}
+		return lblNewLabel;
 	}
 }

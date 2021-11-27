@@ -2,6 +2,7 @@ package igu.organizador;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import igu.atleta.VentanaAtletaListaEspera;
 import logica.CategoriaDto;
 import logica.CategoriaModel;
 
@@ -41,6 +43,8 @@ public class VentanaCreacionActualizaCate extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaCreacionActualizaCate() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+
 		cat = new CategoriaModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 493, 298);
@@ -64,6 +68,8 @@ public class VentanaCreacionActualizaCate extends JFrame {
 	}
 	
 	public VentanaCreacionActualizaCate(VentanaCategorias ventanaCategorias, CategoriaDto cate, String id_comp2) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+
 		this.vcc=ventanaCategorias;
 		this.c=cate;
 		this.id_comp=id_comp2;
@@ -90,6 +96,8 @@ public class VentanaCreacionActualizaCate extends JFrame {
 
 	public VentanaCreacionActualizaCate(VentanaCategorias ventanaCategorias, CategoriaDto cate, String id_comp2,
 			int edad) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+
 		this.vcc=ventanaCategorias;
 		this.c=cate;
 		this.id_comp=id_comp2;
@@ -122,6 +130,8 @@ public class VentanaCreacionActualizaCate extends JFrame {
 	}
 
 	public VentanaCreacionActualizaCate(VentanaCategorias ventanaCategorias, String id_comp2, int edad,String genero) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+
 		this.vcc=ventanaCategorias;
 		this.id_comp=id_comp2;
 		cat = new CategoriaModel();
@@ -151,6 +161,8 @@ public class VentanaCreacionActualizaCate extends JFrame {
 	}
 
 	public VentanaCreacionActualizaCate(VentanaCategorias ventanaCategorias, String id_comp2) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+
 		this.vcc=ventanaCategorias;
 		this.id_comp=id_comp2;
 		cat = new CategoriaModel();

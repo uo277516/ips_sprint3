@@ -2,6 +2,7 @@ package igu.atleta;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,7 +14,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import logica.AtletaDto;
 import logica.AtletaModel;
+import logica.ListaEsperaDto;
+import logica.ListaEsperaModel;
 
 public class VentanaRegistro extends JFrame {
 
@@ -22,7 +26,6 @@ public class VentanaRegistro extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	@SuppressWarnings("unused")
 	private VentanaInscripcion vI;
 	private JTextField txtDni;
 	private JTextField txtNombre;
@@ -31,6 +34,8 @@ public class VentanaRegistro extends JFrame {
 
 	private JTextField txtSExo;
 	private AtletaModel at;
+	private VentanaAtletaListaEspera vale;
+	private ListaEsperaModel lem;
 
 	//	/**
 	//	 * Launch the application.
@@ -53,11 +58,21 @@ public class VentanaRegistro extends JFrame {
 	 * 
 	 * @param ventanaInscripcion
 	 */
-	public VentanaRegistro(VentanaInscripcion ventanaInscripcion) {
-		this.vI = ventanaInscripcion;
+	public VentanaRegistro(VentanaInscripcion ventanaInscripcion, VentanaAtletaListaEspera ventanaAtletaListaEspera) {
+		setTitle("Registro");
+		
+		if (ventanaInscripcion != null) {
+			this.vI = ventanaInscripcion;
+		}
+		if (ventanaAtletaListaEspera != null) {
+			this.vale = ventanaAtletaListaEspera;
+		}
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+
 		at = new AtletaModel();
+		this.lem = new ListaEsperaModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 589, 382);
+		setBounds(100, 100, 589, 347);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -121,6 +136,7 @@ public class VentanaRegistro extends JFrame {
 		txtSExo.setColumns(10);
 
 		JLabel lblSexoDes = new JLabel("femenino/masculino");
+		lblSexoDes.setForeground(new Color(128, 128, 128));
 		lblSexoDes.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblSexoDes.setBounds(264, 236, 129, 13);
 		contentPane.add(lblSexoDes);
@@ -132,21 +148,46 @@ public class VentanaRegistro extends JFrame {
 						&& !registradoAtletaEnBaseDni()) {
 					System.out.println("todo ok");
 					addAtleta();
+					if (vI != null) {
+						mostrarVentanaInscripcionAgain();
+					} else if (vale != null) {
+						// A lista de espera
+						aListaDeEspera();
+					}
 
-					mostrarVentanaInscripcionAgain();
 				}
 			}
 		});
 		btnNewButton.setForeground(Color.WHITE);
 		btnNewButton.setBackground(Color.GREEN);
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		btnNewButton.setBounds(427, 289, 85, 21);
+		btnNewButton.setBounds(449, 276, 85, 21);
 		contentPane.add(btnNewButton);
 
 		JLabel lblNewLabel = new JLabel("dd/mm/yyyy");
+		lblNewLabel.setForeground(new Color(128, 128, 128));
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblNewLabel.setBounds(348, 158, 103, 13);
 		contentPane.add(lblNewLabel);
+	}
+	
+	private void aListaDeEspera() {
+		ListaEsperaDto lista = lem.getListaByIdComp(this.vale.getCompeticion().getId());
+		// Cojo el número de orden que le toca al atleta
+		int orden;
+		if (at.hayGenteEnLista(lista.getId())) {
+			orden = lem.getNextNumOrden(lista.getId());
+		} else {
+			orden = 1;
+		}
+		// Cojo el id del atleta
+		String email = txtEmail.getText();
+		AtletaDto a = at.findAtletaByEmail(email);
+		String dnia = a.getDni();
+		at.addAtletaAListaEspera(dnia, lista.getId(), orden);
+		JOptionPane.showMessageDialog(this, "Ya está añadido a la lista de espera de "
+				+ this.vale.getCompeticion().getNombre() + ", su posición en la lista es " + orden);
+		System.exit(0);
 	}
 
 	protected boolean registradoAtletaEnBaseDni() {
@@ -154,7 +195,7 @@ public class VentanaRegistro extends JFrame {
 			// si no hay ninguno
 			return false;
 		} else
-			JOptionPane.showMessageDialog(this, "Este dni ya est� registrado en la base. ");
+			JOptionPane.showMessageDialog(this, "Este dni ya está registrado en la base. ");
 		return true;
 	}
 
@@ -163,7 +204,7 @@ public class VentanaRegistro extends JFrame {
 			// si no hay ninguno
 			return false;
 		} else
-			JOptionPane.showMessageDialog(this, "Este email ya est� registrado en la base. ");
+			JOptionPane.showMessageDialog(this, "Este email ya está registrado en la base. ");
 		return true;
 	}
 
@@ -178,7 +219,6 @@ public class VentanaRegistro extends JFrame {
 	protected void addAtleta() {
 		// String dni, String nombre, String sexo, String fecha, String email
 		at.addAtleta(txtDni.getText(), txtNombre.getText(), txtSExo.getText(), txtFecha.getText(), txtEmail.getText());
-		System.out.println("a�adido se�ores");
 	}
 
 	protected boolean checkFechaFormato() {
@@ -223,7 +263,7 @@ public class VentanaRegistro extends JFrame {
 	protected boolean checkCamposNoVacios() {
 		if (txtDni.getText().isEmpty() || txtEmail.getText().isEmpty() || txtFecha.getText().isEmpty()
 				|| txtNombre.getText().isEmpty() || txtSExo.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Ning�n campo puede ser vac�o.");
+			JOptionPane.showMessageDialog(this, "Ningún campo puede ser vacío.");
 			return false;
 		}
 		return true;

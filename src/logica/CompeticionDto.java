@@ -128,6 +128,13 @@ public class CompeticionDto {
 		return this.nombre + " - " + this.f_comp + " - " +this.tipo+" - "+ this.distancia +" - "+ 
 					this.num_plazas + " plazas disponibles ";
 	}
+	
+	public String toStringE() {
+		String s = this.nombre + "\n\t Tipo: " + this.tipo + "\n\t Fecha: " + this.f_comp +
+				"\n\t Distancia: " + this.distancia; 
+		return s;
+	}
+	
 	public int getDorsales_vip() {
 		return dorsales_vip;
 	}

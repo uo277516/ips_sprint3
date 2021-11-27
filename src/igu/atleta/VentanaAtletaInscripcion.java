@@ -29,6 +29,7 @@ import logica.AtletaModel;
 import logica.CompeticionDto;
 import logica.InscripcionDto;
 import logica.InscripcionModel;
+import java.awt.Toolkit;
 
 public class VentanaAtletaInscripcion extends JFrame {
 
@@ -75,6 +76,7 @@ public class VentanaAtletaInscripcion extends JFrame {
 	 * @throws SQLException
 	 */
 	public VentanaAtletaInscripcion(CompeticionDto comp) throws SQLException {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaInscripcion.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
 		setMinimumSize(new Dimension(550, 200));
 		this.competition = comp;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -164,12 +166,12 @@ public class VentanaAtletaInscripcion extends JFrame {
 			table.setModel(modelo);
 			modelo.addColumn("DNI");
 			modelo.addColumn("Nombre");
-			modelo.addColumn("Categoría");
+			modelo.addColumn("Categor�a");
 			modelo.addColumn("Fecha");
 			modelo.addColumn("Estado");
 
 			TableColumn columna;
-			columna = table.getColumn("Categoría");
+			columna = table.getColumn("Categor�a");
 			columna.setMinWidth(100);
 			columna = table.getColumn("Estado");
 			columna.setMinWidth(150);
@@ -315,7 +317,7 @@ public class VentanaAtletaInscripcion extends JFrame {
 	private void updateFueraDelPlazo(String[] line, String dnia) {
 		if (Float.valueOf(line[2]) > 0) {
 			// Pagó y hay que devolvérselo
-			im.actualizarInscripcionEstado("Anulada - pendiente de devolución", dnia, this.competition.getId());
+			im.actualizarInscripcionEstado("Anulada - pendiente de devoluci�n", dnia, this.competition.getId());
 		} else {
 			// No pagó
 			im.actualizarInscripcionEstado("Anulada", dnia, this.competition.getId());
@@ -331,14 +333,14 @@ public class VentanaAtletaInscripcion extends JFrame {
 			im.actualizarInscripcionCantPagada(pago, dnia, this.competition.getId());
 		} else if (cuotaAPagar < pago) {
 			// Paga de más
-			im.actualizarInscripcionEstado("Inscrito - pendiente de devolución", dnia, this.competition.getId());
+			im.actualizarInscripcionEstado("Inscrito - pendiente de devoluci�n", dnia, this.competition.getId());
 			im.actualizarInscripcionCantPagada(pago, dnia, this.competition.getId());
 		} else {
 			// Paga de menos
 			if (pago == 0) {
 				im.actualizarInscripcionEstado("Anulada", dnia, this.competition.getId());
 			} else {
-				im.actualizarInscripcionEstado("Anulada - pendiente de devolución", dnia, this.competition.getId());
+				im.actualizarInscripcionEstado("Anulada - pendiente de devoluci�n", dnia, this.competition.getId());
 			}
 
 		}

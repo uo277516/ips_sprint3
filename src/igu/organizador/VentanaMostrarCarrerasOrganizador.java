@@ -2,6 +2,7 @@ package igu.organizador;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -17,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 
 import igu.VentanaInicial;
 import igu.atleta.VentanaAtletaInscripcion;
+import igu.atleta.VentanaAtletaListaEspera;
 import logica.CompeticionDto;
 import logica.CompeticionModel;
 
@@ -43,6 +45,8 @@ public class VentanaMostrarCarrerasOrganizador extends JFrame {
 	 * @param ventanaInicial
 	 */
 	public VentanaMostrarCarrerasOrganizador(String opcion) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+
 		this.opcion = opcion;
 		comp = new CompeticionModel();
 		setTitle("Selecci\u00F3n de Competici\u00F3n:");

@@ -43,10 +43,12 @@ public class InscripcionModel {
 	public static String updateTimes = "update inscripcion set horas = ? , minutos = ? where dorsal = ? and id_c = ?";
 
 	public static String findInscripcionByDniId = "select * from inscripcion where dni_a=? and id_c=?";
-	
+
 	public static String sqlInsertarClub = "insert into inscripcion (dni_a,id_c,categoria,email,fecha,metodo_pago,cantidad_pagada,estado,club) values (?,?,?,?,?,?,?,?,?)";
-	
-	
+
+	public static String findInscripcionByEmailId = "select * from inscripcion where email=? and id_c=?";
+
+
 	public List<InscripcionDto> findInscripcionByDniId(String dni,String id_c){
 		List<InscripcionDto> a = new ArrayList<>();
 		try {
@@ -281,7 +283,7 @@ public class InscripcionModel {
 		int year = Integer.valueOf(fechaArray[2]);
 		int yearActual = LocalDate.now().getYear();
 		int cat = yearActual - year;
-		
+
 		String retorno="";
 
 		for (CategoriaDto c : categorias) {
@@ -598,7 +600,7 @@ public class InscripcionModel {
 
 		return listaInscripciones;
 	}
-	
+
 	public List<InscripcionDto> getInscripcionesPorTiempo(String carreraId) throws SQLException {
 		List<InscripcionDto> listaInscripciones = new ArrayList<InscripcionDto>();
 
@@ -897,7 +899,7 @@ public class InscripcionModel {
 			System.out.println("no se pudo a�adir -- inscripcion model");
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void insertarInscripcionClubP(String dni, String id, String categoria, String email, String fecha,String metodo,
@@ -925,10 +927,10 @@ public class InscripcionModel {
 			pst.close();
 			c.close();
 		}
-		
+
 	}
-	
-	
+
+
 	public void cancelarInscripcion(String dni_a, String id_c)  
 	{
 		try {
@@ -957,9 +959,9 @@ public class InscripcionModel {
 			c.close();
 		}
 	}
-	
-	
-	
+
+
+
 	public void cancelarInscripcionPagada(String dni_a, String id_c)  
 	{
 		try {
@@ -988,5 +990,44 @@ public class InscripcionModel {
 		}
 	}
 
-	
+	public List<InscripcionDto> findInscripcionByEmailId(String email, String id) {
+		List<InscripcionDto> ins = new ArrayList<>();
+		try {
+			ins = findInsByEmailIdP(email, id);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ins;
+	}
+
+	private List<InscripcionDto> findInsByEmailIdP(String email, String id) throws SQLException {
+		List<InscripcionDto> listaInscrpcines = new ArrayList<InscripcionDto>();
+
+		// Conexiï¿½n a la base de datos
+		Connection c = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(findInscripcionByEmailId);
+			pst.setString(1,email);
+			pst.setString(2, id);
+			rs = pst.executeQuery();
+
+			// Aï¿½adimos los pedidos a la lista
+			listaInscrpcines = DtoAssembler.toInscripcionDtoList(rs);
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			rs.close();
+			pst.close();
+			c.close();
+		}
+		return listaInscrpcines;
+
+
+	}
 }
+

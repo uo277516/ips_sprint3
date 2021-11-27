@@ -42,12 +42,13 @@ public class VentanaMostrarCarrerasClub extends JFrame {
 	@SuppressWarnings("unused")
 	private AtletaModel atl;
 	private CompeticionModel comp;
-	private JButton btnAceptar;
+	private JButton btnFormulario;
 	private JLabel lblCompeticiones;
 	private JScrollPane scrollPane;
 	private JTable table;
 	@SuppressWarnings("unused")
 	private VentanaInicial vi;
+	private JButton btnLote;
 
 //	/**
 //	 * Launch the application.
@@ -85,9 +86,10 @@ public class VentanaMostrarCarrerasClub extends JFrame {
 		contentPane.setLayout(null);
 		contentPane.add(getTxtInfo());
 		contentPane.add(getTextFecha());
-		contentPane.add(getBtnAceptar());
+		contentPane.add(getBtnFormulario());
 		contentPane.add(getLblCompeticiones());
 		contentPane.add(getScrollPane());
+		contentPane.add(getBtnLote());
 	}
 	
 	/**
@@ -152,10 +154,10 @@ public class VentanaMostrarCarrerasClub extends JFrame {
 		return result.substring(1);
 		
 	}
-	private JButton getBtnAceptar() {
-        if (btnAceptar == null) {
-            btnAceptar = new JButton("Siguiente");
-            btnAceptar.addActionListener(new ActionListener() {
+	private JButton getBtnFormulario() {
+        if (btnFormulario == null) {
+            btnFormulario = new JButton("Formulario");
+            btnFormulario.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     try {
                         if (table.getSelectedRow() != -1) {
@@ -169,12 +171,12 @@ public class VentanaMostrarCarrerasClub extends JFrame {
                     }
                 }
             });
-            btnAceptar.setBackground(Color.GREEN);
-            btnAceptar.setForeground(Color.WHITE);
-            btnAceptar.setFont(new Font("Tahoma", Font.PLAIN, 13));
-            btnAceptar.setBounds(547, 430, 119, 23);
+            btnFormulario.setBackground(Color.GREEN);
+            btnFormulario.setForeground(Color.WHITE);
+            btnFormulario.setFont(new Font("Tahoma", Font.PLAIN, 15));
+            btnFormulario.setBounds(547, 430, 119, 23);
         }
-        return btnAceptar;
+        return btnFormulario;
     }
 	protected void errorNoCarreraSeleccionada() {
 		 JOptionPane.showMessageDialog(this, "Error: Seleccione una carrera para registrarse");
@@ -271,4 +273,38 @@ public class VentanaMostrarCarrerasClub extends JFrame {
 	}
 	
 	
+	private JButton getBtnLote() {
+		if (btnLote == null) {
+			btnLote = new JButton("Lote");
+			btnLote.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						mostrarVentanaLote();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+
+				
+			});
+			btnLote.setForeground(Color.WHITE);
+			btnLote.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			btnLote.setBackground(Color.GREEN);
+			btnLote.setBounds(413, 432, 119, 23);
+		}
+		return btnLote;
+	}
+	
+	private void mostrarVentanaLote() throws SQLException  {
+		this.dispose();
+		CompeticionDto competicion;
+
+		competicion = crearCompeticion();
+		
+		VentanaLoteFile vPal = new VentanaLoteFile(competicion);
+		vPal.setLocationRelativeTo(this);
+		vPal.setVisible(true);
+		
+	}
 }

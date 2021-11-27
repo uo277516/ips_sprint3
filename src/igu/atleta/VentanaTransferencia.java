@@ -2,6 +2,7 @@ package igu.atleta;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -39,6 +40,8 @@ public class VentanaTransferencia extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaTransferencia() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+
 		setTitle("Pago por transferencia:");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 488);
@@ -62,9 +65,9 @@ public class VentanaTransferencia extends JFrame {
 	}
 	
 	private String getJustificante(int precio) {
-		return "La cuenta para realizar la transferencia ser· X.\n"
-				+ "La cantidad a abonar ser· de " + precio + "Ä\n"
-						+ "Su inscripciÛn ha pasado a pendiente de pago, dispone de 48 horas para abonar la cantidad indicada.";
+		return "La cuenta para realizar la transferencia ser√° X.\n"
+				+ "La cantidad a abonar ser√° de " + precio + " euros\n"
+						+ "Su inscripci√≥n ha pasado a pendiente de pago, dispone de 48 horas para abonar la cantidad indicada.";
 	}
 	
 	

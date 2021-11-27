@@ -2,6 +2,7 @@ package igu.organizador;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import igu.atleta.VentanaAtletaListaEspera;
 import logica.CategoriaDto;
 import logica.CategoriaModel;
 
@@ -47,6 +49,8 @@ public class VentanaCategorias extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaCategorias(VentanaCrearCompeticion ventanaCrearCompeticion, String id) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+
 		this.vcc = ventanaCrearCompeticion;
 		this.id_comp = id;
 		cat = new CategoriaModel();
@@ -225,14 +229,14 @@ public class VentanaCategorias extends JFrame {
 
 	private int opcionActualizarOno() {
 
-		return JOptionPane.showOptionDialog(null, "¿Desea modificar esta categoría estandar?", "Seleccione una opción:",
+		return JOptionPane.showOptionDialog(null, "ï¿½Desea modificar esta categorï¿½a estandar?", "Seleccione una opciï¿½n:",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null para icono por defecto.
 				new Object[] { "Si", "No" }, // null para YES, NO y CANCEL
 				"opcion 1");
 	}
 
 	private void mostrarCategoriaInsertada() {
-		JOptionPane.showMessageDialog(this, "Categoría ya insertada");
+		JOptionPane.showMessageDialog(this, "Categorï¿½a ya insertada");
 	}
 
 	public void actualizarTablaCategorias(CategoriaDto catNueva) {
@@ -440,7 +444,7 @@ public class VentanaCategorias extends JFrame {
 	}
 
 	private int opcionSexo() {
-		return JOptionPane.showOptionDialog(null, "¿Para que genero es la categoria?", "Seleccione una opción:",
+		return JOptionPane.showOptionDialog(null, "ï¿½Para que genero es la categoria?", "Seleccione una opciï¿½n:",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null para icono por defecto.
 				new Object[] { "Masculino", "Femenino" }, // null para YES, NO y CANCEL
 				"opcion 1");

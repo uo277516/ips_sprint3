@@ -2,6 +2,7 @@ package igu.organizador;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -26,16 +29,17 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import igu.atleta.VentanaAtletaListaEspera;
 import logica.CompeticionDto;
 import logica.CompeticionModel;
-import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
+import logica.ListaEsperaModel;
 
 @SuppressWarnings("serial")
 public class VentanaCrearCompeticion extends JFrame {
 
 	private JPanel contentPane;
 	private CompeticionModel comp;
+	private ListaEsperaModel listam;
 	private JTextArea txtAreaInfo;
 	private JPanel pnDatosBasicos;
 	private JLabel lblNombre;
@@ -63,7 +67,7 @@ public class VentanaCrearCompeticion extends JFrame {
 	private JTextArea textArea;
 
 	private String id_comp;
-	private int plazos=0;
+	private int plazos = 0;
 	private JLabel lblDorsales;
 	private JTextField txtDorsales;
 	private JLabel lblGestionarCat;
@@ -81,21 +85,28 @@ public class VentanaCrearCompeticion extends JFrame {
 	private JLabel lblDdmmaaaa;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JLabel lblNewLabel_1;
+	private JPanel pnlListaEspera;
+	private JLabel lblListaEspera;
+	private JRadioButton rdbtnSiLista;
+	private JRadioButton rdbtnNoLista;
+	private final ButtonGroup buttonGroupListaEspera = new ButtonGroup();
 
 	/**
 	 * Create the frame.
 	 */
 	public VentanaCrearCompeticion() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+
 		comp = new CompeticionModel();
+		listam = new ListaEsperaModel();
 		setTitle("Creaci\u00F3n de competiciones:");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 
 //		setBounds(100, 100, 746, 655);
 //
 //		setBounds(100, 100, 598, 655);
 
-		setBounds(100,40000,1250,662);
+		setBounds(100, 40000, 1250, 662);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -114,24 +125,31 @@ public class VentanaCrearCompeticion extends JFrame {
 		contentPane.add(getLblGestionarCat());
 		contentPane.add(getBtnGestionar());
 		contentPane.add(getBtnFinalizar());
+		contentPane.add(getPnlListaEspera());
 		lblGestionarCat.setVisible(false);
 		btnGestionar.setVisible(false);
 		btnFinalizar.setVisible(false);
+		pnlListaEspera.setVisible(false);
 	}
+
 	private JTextArea getTxtAreaInfo() {
 		if (txtAreaInfo == null) {
 			txtAreaInfo = new JTextArea();
 			txtAreaInfo.setEditable(false);
 			txtAreaInfo.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			txtAreaInfo.setText("Para crear una nueva competici\u00F3n deber\u00E1 ingresar los siguientes datos b\u00E1sicos: \r\nnombre, fecha competici\u00F3n, tipo carrera, distancia y plazas.\r\nUna vez introducidos se deber\u00E1n planificar los plazos de isncripci\u00F3n. M\u00EDnimo uno y m\u00E1ximo 3.\r\nPor \u00FAltimo se han de especificar las distintas categor\u00EDas que tendr\u00E1 la competici\u00F3n.");
+			txtAreaInfo.setText(
+					"Para crear una nueva competici\u00F3n deber\u00E1 ingresar los siguientes datos b\u00E1sicos: \r\nnombre, fecha competici\u00F3n, tipo carrera, distancia y plazas.\r\nUna vez introducidos se deber\u00E1n planificar los plazos de isncripci\u00F3n. M\u00EDnimo uno y m\u00E1ximo 3.\r\nPor \u00FAltimo se han de especificar las distintas categor\u00EDas que tendr\u00E1 la competici\u00F3n.");
 			txtAreaInfo.setBounds(20, 11, 561, 68);
 		}
 		return txtAreaInfo;
 	}
+
 	private JPanel getPnDatosBasicos() {
 		if (pnDatosBasicos == null) {
 			pnDatosBasicos = new JPanel();
-			pnDatosBasicos.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Datos b\u00E1sicos", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+			pnDatosBasicos.setBorder(new TitledBorder(
+					new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+					"Datos b\u00E1sicos", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 			pnDatosBasicos.setBackground(Color.WHITE);
 			pnDatosBasicos.setBounds(30, 100, 551, 444);
 			pnDatosBasicos.setLayout(null);
@@ -158,6 +176,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return pnDatosBasicos;
 	}
+
 	private JLabel getLblNombre() {
 		if (lblNombre == null) {
 			lblNombre = new JLabel("Nombre:\r\n");
@@ -166,6 +185,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblNombre;
 	}
+
 	private JTextField getTxtNombre() {
 		if (txtNombre == null) {
 			txtNombre = new JTextField();
@@ -175,6 +195,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return txtNombre;
 	}
+
 	private JLabel getLblFechaComp() {
 		if (lblFechaComp == null) {
 			lblFechaComp = new JLabel("Fecha Comp:\r\n");
@@ -183,6 +204,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblFechaComp;
 	}
+
 	private JTextField getTxtFechaComp() {
 		if (txtFechaComp == null) {
 			txtFechaComp = new JTextField();
@@ -191,6 +213,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return txtFechaComp;
 	}
+
 	private JLabel getLblFormato() {
 		if (lblFormato == null) {
 			lblFormato = new JLabel("dd/MM/aaaa --- posterior a la actual");
@@ -199,6 +222,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblFormato;
 	}
+
 	private JLabel getLblTipo() {
 		if (lblTipo == null) {
 			lblTipo = new JLabel("Tipo:");
@@ -207,6 +231,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblTipo;
 	}
+
 	private JLabel getLblDistancia() {
 		if (lblDistancia == null) {
 			lblDistancia = new JLabel("Distancia:");
@@ -215,6 +240,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblDistancia;
 	}
+
 	private JTextField getTxtDistancia() {
 		if (txtDistancia == null) {
 			txtDistancia = new JTextField();
@@ -223,6 +249,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return txtDistancia;
 	}
+
 	private JLabel getLblPlazas() {
 		if (lblPlazas == null) {
 			lblPlazas = new JLabel("Plazas:");
@@ -231,6 +258,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblPlazas;
 	}
+
 	private JTextField getTxtPlazas() {
 		if (txtPlazas == null) {
 			txtPlazas = new JTextField();
@@ -245,26 +273,27 @@ public class VentanaCrearCompeticion extends JFrame {
 			btnValidar = new JButton("Validar");
 			btnValidar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (txtNombre.getText().equals("") || txtFechaComp.getText().equals("") || txtPlazas.getText().equals("")|| txtDistancia.getText().equals("")
-							|| (radioSiC.isSelected() && txtFMC.getText().equals("") || radioSiC.isSelected() && txtPCCanc.getText().equals(""))) {
+					if (txtNombre.getText().equals("") || txtFechaComp.getText().equals("")
+							|| txtPlazas.getText().equals("") || txtDistancia.getText().equals("")
+							|| (radioSiC.isSelected() && txtFMC.getText().equals("")
+									|| radioSiC.isSelected() && txtPCCanc.getText().equals(""))) {
 						System.out.println("Hola");
 						mostrarCamposVacios();
-					}else {
+					} else {
 						try {
-							if(!soloNumerosFecha(txtFechaComp.getText())) {
-								mostrarErrorFecha();
-								txtFechaComp.setText(""); 
-							}else if(!fechaValida(txtFechaComp.getText())) {
+							if (!soloNumerosFecha(txtFechaComp.getText())) {
 								mostrarErrorFecha();
 								txtFechaComp.setText("");
-							}else if (!compruebaSoloNumeros(getTxtDistancia().getText())) {
+							} else if (!fechaValida(txtFechaComp.getText())) {
+								mostrarErrorFecha();
+								txtFechaComp.setText("");
+							} else if (!compruebaSoloNumeros(getTxtDistancia().getText())) {
 								mostrarErrorDistancia();
 								txtDistancia.setText("");
-							}else if (!compruebaSoloNumeros(getTxtPlazas().getText())) {
+							} else if (!compruebaSoloNumeros(getTxtPlazas().getText())) {
 								mostrarErrorPlazas();
 								txtPlazas.setText("");
-							}
-							else if (!compruebaSoloNumeros(getTxtDorsales().getText())) {
+							} else if (!compruebaSoloNumeros(getTxtDorsales().getText())) {
 								mostrarErrorPlazas();
 								txtDorsales.setText("");
 							} else if (radioSiC.isSelected() && !fechaValida(txtFMC.getText())) {
@@ -275,17 +304,19 @@ public class VentanaCrearCompeticion extends JFrame {
 								mostrarDatosBasicosCorrectos();
 								btnValidar.setEnabled(false);
 								pnPlazos.setVisible(true);
+								pnlListaEspera.setVisible(true);
 								txtNombre.setEditable(false);
 								txtDistancia.setEditable(false);
 								txtFechaComp.setEditable(false);
 								txtPlazas.setEditable(false);
 								comboBox.setEditable(false);
 								txtDorsales.setEditable(false);
-							}else {
+							} else {
 								insertarDatosBasicos();
 								mostrarDatosBasicosCorrectos();
 								btnValidar.setEnabled(false);
 								pnPlazos.setVisible(true);
+								pnlListaEspera.setVisible(true);
 								txtNombre.setEditable(false);
 								txtDistancia.setEditable(false);
 								txtFechaComp.setEditable(false);
@@ -300,7 +331,7 @@ public class VentanaCrearCompeticion extends JFrame {
 
 					}
 
-				}						
+				}
 			});
 			btnValidar.setForeground(Color.WHITE);
 			btnValidar.setBackground(Color.GREEN);
@@ -312,33 +343,36 @@ public class VentanaCrearCompeticion extends JFrame {
 
 	protected void insertarDatosBasicosConCancelacion() {
 		String id = UUID.randomUUID().toString();
-		this.id_comp=id;
+		this.id_comp = id;
 		String tipo = getComboBox().getSelectedItem().toString();
-		comp.insertarDatosBasicosConCancelacion(id,getTxtNombre().getText(), getTxtFechaComp().getText(), 
-				tipo, Integer.parseInt(getTxtDistancia().getText()), Integer.parseInt(getTxtPlazas().getText()),
-				Integer.parseInt(getTxtDorsales().getText()), getTxtFMC().getText(), Double.parseDouble(getTxtPCCanc().getText()));
+		comp.insertarDatosBasicosConCancelacion(id, getTxtNombre().getText(), getTxtFechaComp().getText(), tipo,
+				Integer.parseInt(getTxtDistancia().getText()), Integer.parseInt(getTxtPlazas().getText()),
+				Integer.parseInt(getTxtDorsales().getText()), getTxtFMC().getText(),
+				Double.parseDouble(getTxtPCCanc().getText()));
 
 	}
+
 	private void insertarDatosBasicos() {
 		String id = UUID.randomUUID().toString();
-		this.id_comp=id;
+		this.id_comp = id;
 		String tipo = getComboBox().getSelectedItem().toString();
-		comp.insertarDatosBasicos(id,getTxtNombre().getText(), getTxtFechaComp().getText(), 
-				tipo, Integer.parseInt(getTxtDistancia().getText()), Integer.parseInt(getTxtPlazas().getText()),Integer.parseInt(getTxtDorsales().getText()));
+		comp.insertarDatosBasicos(id, getTxtNombre().getText(), getTxtFechaComp().getText(), tipo,
+				Integer.parseInt(getTxtDistancia().getText()), Integer.parseInt(getTxtPlazas().getText()),
+				Integer.parseInt(getTxtDorsales().getText()));
 
 	}
 
 	private void mostrarDatosBasicosCorrectos() {
-		JOptionPane.showMessageDialog(this, "Se han validado los datos básicos");
+		JOptionPane.showMessageDialog(this, "Se han validado los datos bï¿½sicos");
 	}
 
 	private void mostrarErrorPlazas() {
-		JOptionPane.showMessageDialog(this, "Error: Plazas incorrectas, introduzca solo números.");
+		JOptionPane.showMessageDialog(this, "Error: Plazas incorrectas, introduzca solo nï¿½meros.");
 
 	}
 
 	private void mostrarErrorDistancia() {
-		JOptionPane.showMessageDialog(this, "Error: Distancia incorrecta, introduzca solo números.");
+		JOptionPane.showMessageDialog(this, "Error: Distancia incorrecta, introduzca solo nï¿½meros.");
 
 	}
 
@@ -347,33 +381,32 @@ public class VentanaCrearCompeticion extends JFrame {
 
 	}
 
-
 	private void mostrarErrorFecha() {
 		JOptionPane.showMessageDialog(this, "Error: Fecha incorrecta.");
 
 	}
 
 	private boolean compruebaSoloNumeros(String text) {
-		String numero="";
-		String minumero="";
+		String numero = "";
+		String minumero = "";
 		int textsize = text.length();
-		String[] numeros= {"0","1","2","3","4","5","6","7","8","9"};
-		for (int i=0;i<text.length();i++) {
-			numero=text.substring(i,i+1);
-			for (int j=0;j<numeros.length;j++) {
+		String[] numeros = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+		for (int i = 0; i < text.length(); i++) {
+			numero = text.substring(i, i + 1);
+			for (int j = 0; j < numeros.length; j++) {
 				if (numero.equals(numeros[j])) {
-					minumero=minumero+numeros[j];
+					minumero = minumero + numeros[j];
 				}
 			}
 		}
-		if (minumero.length()==textsize) {
+		if (minumero.length() == textsize) {
 			return true;
-		}else
+		} else
 			return false;
 	}
 
 	private boolean fechaValida(String fecha) throws ParseException {
-		SimpleDateFormat formato =new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
 		Date fechaTarjeta = formato.parse(fecha);
 		Date fechaActual = formato.parse(cambiarFormatoFecha());
@@ -385,16 +418,16 @@ public class VentanaCrearCompeticion extends JFrame {
 	}
 
 	private boolean soloNumerosFecha(String fecha) throws ParseException {
-		String numero="";
-		int contador =0;
-		String minumero="";
+		String numero = "";
+		int contador = 0;
+		String minumero = "";
 		String[] posiciones = new String[fecha.length()];
-		String[] numeros= {"0","1","2","3","4","5","6","7","8","9"};
-		for (int i=0;i<fecha.length();i++) {
-			numero=fecha.substring(i,i+1);
-			for (int j=0;j<numeros.length;j++) {
+		String[] numeros = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+		for (int i = 0; i < fecha.length(); i++) {
+			numero = fecha.substring(i, i + 1);
+			for (int j = 0; j < numeros.length; j++) {
 				if (numero.equals(numeros[j])) {
-					minumero=minumero+numeros[j];
+					minumero = minumero + numeros[j];
 				}
 			}
 			if (numero.equals("/")) {
@@ -402,21 +435,21 @@ public class VentanaCrearCompeticion extends JFrame {
 				contador++;
 			}
 		}
-		if (contador==2 && minumero.length()==8) {
-			if (posiciones[2] != null && posiciones[5]!=null) {
+		if (contador == 2 && minumero.length() == 8) {
+			if (posiciones[2] != null && posiciones[5] != null) {
 				return true;
-			}else
+			} else
 				return false;
-		}else
+		} else
 			return false;
 	}
 
 	private String cambiarFormatoFecha() {
 		String fechaString = String.valueOf(LocalDate.now());
 		String[] fechaPartida = fechaString.split("-");
-		String result ="";
+		String result = "";
 		for (int i = 0; i < fechaPartida.length; i++) {
-			result="/"+fechaPartida[i]+result;
+			result = "/" + fechaPartida[i] + result;
 		}
 		return result.substring(1);
 
@@ -459,6 +492,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return pnPlazos;
 	}
+
 	private JLabel getLblFechaInicio() {
 		if (lblFechaInicio == null) {
 			lblFechaInicio = new JLabel("Fecha inicio:");
@@ -467,6 +501,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblFechaInicio;
 	}
+
 	private JTextField getTxtFechaIniico() {
 		if (txtFechaIniico == null) {
 			txtFechaIniico = new JTextField();
@@ -475,6 +510,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return txtFechaIniico;
 	}
+
 	private JLabel getLblFechaFin() {
 		if (lblFechaFin == null) {
 			lblFechaFin = new JLabel("Fecha fin:");
@@ -483,6 +519,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblFechaFin;
 	}
+
 	private JTextField getTxtFechaFin() {
 		if (txtFechaFin == null) {
 			txtFechaFin = new JTextField();
@@ -491,6 +528,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return txtFechaFin;
 	}
+
 	private JLabel getLblCuota() {
 		if (lblCuota == null) {
 			lblCuota = new JLabel("Cuota:");
@@ -499,6 +537,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblCuota;
 	}
+
 	private JTextField getTxtCuota() {
 		if (txtCuota == null) {
 			txtCuota = new JTextField();
@@ -507,6 +546,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return txtCuota;
 	}
+
 	private JButton getBtnInsertar() {
 		if (btnInsertar == null) {
 			btnInsertar = new JButton("Insertar\r\n");
@@ -515,28 +555,27 @@ public class VentanaCrearCompeticion extends JFrame {
 			btnInsertar.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			btnInsertar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (txtFechaIniico.getText().equals("") || txtFechaFin.getText().equals("") || txtCuota.getText().equals("")) {
+					if (txtFechaIniico.getText().equals("") || txtFechaFin.getText().equals("")
+							|| txtCuota.getText().equals("")) {
 						mostrarCamposVacios();
-					}else {
+					} else {
 						try {
-							if(!soloNumerosFechaInicioPlazos(txtFechaIniico.getText())) {
+							if (!soloNumerosFechaInicioPlazos(txtFechaIniico.getText())) {
 								mostrarFechaInicioNoBineFormada();
 								txtFechaIniico.setText("");
-							}else if (!fechaValidaInicio(txtFechaIniico.getText())) {
+							} else if (!fechaValidaInicio(txtFechaIniico.getText())) {
 								mostrarFechaInicioIncorrecta();
 								txtFechaIniico.setText("");
-							}
-							else if (!soloNumerosFechaFinPlazos(txtFechaFin.getText())) {
+							} else if (!soloNumerosFechaFinPlazos(txtFechaFin.getText())) {
 								mostrarFechaFinNoBineFormada();
 								txtFechaFin.setText("");
-							}else if (!fechaValidaFin(txtFechaFin.getText())) {
+							} else if (!fechaValidaFin(txtFechaFin.getText())) {
 								mostrarFechaFinIncorrecta();
 								txtFechaFin.setText("");
-							}
-							else if (!compruebaSoloNumeros(getTxtCuota().getText())) {
+							} else if (!compruebaSoloNumeros(getTxtCuota().getText())) {
 								mostrarErrorCuota();
 								txtCuota.setText("");
-							}else {
+							} else {
 								System.out.println("Todo correcto");
 								plazos++;
 								actualizarTextArea(plazos);
@@ -555,19 +594,16 @@ public class VentanaCrearCompeticion extends JFrame {
 									txtCuota.setText("");
 									txtCuota.setEditable(false);
 									mensajeMaximoPlazos();
-								} 
+								}
 							}
 						} catch (ParseException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 
-
 					}
 
 				}
-
-
 
 			});
 			btnInsertar.setBounds(440, 157, 101, 23);
@@ -576,16 +612,19 @@ public class VentanaCrearCompeticion extends JFrame {
 	}
 
 	private void actualizarCompeticion(int plazos) {
-		if (plazos==1) {
-			comp.actualizarCopeticion1(getTxtFechaIniico().getText(), getTxtFechaFin().getText(), Float.parseFloat(getTxtCuota().getText()), id_comp);
-		}else if (plazos == 2) {
-			comp.actualizarCopeticion2(getTxtFechaIniico().getText(), getTxtFechaFin().getText(), Float.parseFloat(getTxtCuota().getText()), id_comp);
-		}else
-			comp.actualizarCopeticion3(getTxtFechaIniico().getText(), getTxtFechaFin().getText(), Float.parseFloat(getTxtCuota().getText()), id_comp);
+		if (plazos == 1) {
+			comp.actualizarCopeticion1(getTxtFechaIniico().getText(), getTxtFechaFin().getText(),
+					Float.parseFloat(getTxtCuota().getText()), id_comp);
+		} else if (plazos == 2) {
+			comp.actualizarCopeticion2(getTxtFechaIniico().getText(), getTxtFechaFin().getText(),
+					Float.parseFloat(getTxtCuota().getText()), id_comp);
+		} else
+			comp.actualizarCopeticion3(getTxtFechaIniico().getText(), getTxtFechaFin().getText(),
+					Float.parseFloat(getTxtCuota().getText()), id_comp);
 	}
 
 	private void actualizarTxtInicio() throws ParseException {
-		SimpleDateFormat formato =new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
 		Date fechaIniico = formato.parse(getTxtFechaFin().getText());
 		Date nuevaFecha = sumarDiasAFecha(fechaIniico, 1);
@@ -595,48 +634,50 @@ public class VentanaCrearCompeticion extends JFrame {
 
 	}
 
-	public static Date sumarDiasAFecha(Date fecha, int dias){
-		if (dias==0) return fecha;
+	public static Date sumarDiasAFecha(Date fecha, int dias) {
+		if (dias == 0)
+			return fecha;
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(fecha); 
-		calendar.add(Calendar.DAY_OF_YEAR, dias);  
-		return calendar.getTime(); 
+		calendar.setTime(fecha);
+		calendar.add(Calendar.DAY_OF_YEAR, dias);
+		return calendar.getTime();
 	}
 
 	private void actualizarTextArea(int plazos) {
 		String cadena = textArea.getText();
 		if (plazos == 1) {
-			cadena += "Plazo "+ plazos+":\n"+
-					"    Fecha Inicio: "+getTxtFechaIniico().getText()+"----Fecha Fin: "+ getTxtFechaFin().getText()+"----Cuota: "+getTxtCuota().getText()+"\u20AC";
-		}else {
-			cadena += "\n\nPlazo "+ plazos+":\n"+
-					"    Fecha Inicio: "+getTxtFechaIniico().getText()+"----Fecha Fin: "+ getTxtFechaFin().getText()+"----Cuota: "+getTxtCuota().getText()+"\u20AC";
+			cadena += "Plazo " + plazos + ":\n" + "    Fecha Inicio: " + getTxtFechaIniico().getText()
+					+ "----Fecha Fin: " + getTxtFechaFin().getText() + "----Cuota: " + getTxtCuota().getText()
+					+ "\u20AC";
+		} else {
+			cadena += "\n\nPlazo " + plazos + ":\n" + "    Fecha Inicio: " + getTxtFechaIniico().getText()
+					+ "----Fecha Fin: " + getTxtFechaFin().getText() + "----Cuota: " + getTxtCuota().getText()
+					+ "\u20AC";
 		}
 		textArea.setText(cadena);
 
 	}
 
 	private void mensajeMaximoPlazos() {
-		JOptionPane.showMessageDialog(this, "Se han alcanzado el máximo de plazos.");
+		JOptionPane.showMessageDialog(this, "Se han alcanzado el mï¿½ximo de plazos.");
 
 	}
 
 	private void mostrarErrorCuota() {
-		JOptionPane.showMessageDialog(this, "Error: La cuota solo pueden ser números");
+		JOptionPane.showMessageDialog(this, "Error: La cuota solo pueden ser nï¿½meros");
 
 	}
 
 	private void mostrarFechaFinIncorrecta() {
-		JOptionPane.showMessageDialog(this, "Error: La fecha fin debe ser anterior a la de competeción y posterior a la de inicio");
+		JOptionPane.showMessageDialog(this,
+				"Error: La fecha fin debe ser anterior a la de competeciï¿½n y posterior a la de inicio");
 
 	}
-
 
 	private void mostrarFechaInicioNoBineFormada() {
 		JOptionPane.showMessageDialog(this, "Error: Fecha incorrecta.");
 
 	}
-
 
 	private void mostrarFechaFinNoBineFormada() {
 		JOptionPane.showMessageDialog(this, "Error: Fecha incorrecta.");
@@ -644,14 +685,14 @@ public class VentanaCrearCompeticion extends JFrame {
 	}
 
 	private void mostrarFechaInicioIncorrecta() {
-		JOptionPane.showMessageDialog(this, "Error: La fecha inicio debe ser anterior a la competición");
+		JOptionPane.showMessageDialog(this, "Error: La fecha inicio debe ser anterior a la competiciï¿½n");
 
 	}
 
 	private boolean fechaValidaFin(String fecha) throws ParseException {
 		List<CompeticionDto> competicion = comp.getCompeticionById(this.id_comp);
 		String fecha_comp = competicion.get(0).getF_comp();
-		SimpleDateFormat formato =new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
 		Date fechaFin = formato.parse(fecha);
 		Date fechaCompeticion = formato.parse(fecha_comp);
@@ -663,17 +704,17 @@ public class VentanaCrearCompeticion extends JFrame {
 		return true;
 	}
 
-	private boolean soloNumerosFechaFinPlazos(String fecha){
-		String numero="";
-		int contador =0;
-		String minumero="";
+	private boolean soloNumerosFechaFinPlazos(String fecha) {
+		String numero = "";
+		int contador = 0;
+		String minumero = "";
 		String[] posiciones = new String[fecha.length()];
-		String[] numeros= {"0","1","2","3","4","5","6","7","8","9"};
-		for (int i=0;i<fecha.length();i++) {
-			numero=fecha.substring(i,i+1);
-			for (int j=0;j<numeros.length;j++) {
+		String[] numeros = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+		for (int i = 0; i < fecha.length(); i++) {
+			numero = fecha.substring(i, i + 1);
+			for (int j = 0; j < numeros.length; j++) {
 				if (numero.equals(numeros[j])) {
-					minumero=minumero+numeros[j];
+					minumero = minumero + numeros[j];
 				}
 			}
 			if (numero.equals("/")) {
@@ -682,20 +723,19 @@ public class VentanaCrearCompeticion extends JFrame {
 			}
 		}
 
-
-		if (contador==2 && minumero.length()==8) {
-			if (posiciones[2] != null && posiciones[5]!=null) {
+		if (contador == 2 && minumero.length() == 8) {
+			if (posiciones[2] != null && posiciones[5] != null) {
 				return true;
-			}else
+			} else
 				return false;
-		}else
+		} else
 			return false;
 	}
 
 	private boolean fechaValidaInicio(String fecha) throws ParseException {
 		List<CompeticionDto> competicion = comp.getCompeticionById(this.id_comp);
 		String fecha_comp = competicion.get(0).getF_comp();
-		SimpleDateFormat formato =new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
 		Date fechaInicio = formato.parse(fecha);
 		Date fechaCompeticion = formato.parse(fecha_comp);
@@ -706,19 +746,18 @@ public class VentanaCrearCompeticion extends JFrame {
 		return true;
 	}
 
-	private boolean soloNumerosFechaInicioPlazos(String fecha){
+	private boolean soloNumerosFechaInicioPlazos(String fecha) {
 
-
-		String numero="";
-		int contador =0;
-		String minumero="";
+		String numero = "";
+		int contador = 0;
+		String minumero = "";
 		String[] posiciones = new String[fecha.length()];
-		String[] numeros= {"0","1","2","3","4","5","6","7","8","9"};
-		for (int i=0;i<fecha.length();i++) {
-			numero=fecha.substring(i,i+1);
-			for (int j=0;j<numeros.length;j++) {
+		String[] numeros = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+		for (int i = 0; i < fecha.length(); i++) {
+			numero = fecha.substring(i, i + 1);
+			for (int j = 0; j < numeros.length; j++) {
 				if (numero.equals(numeros[j])) {
-					minumero=minumero+numeros[j];
+					minumero = minumero + numeros[j];
 				}
 			}
 			if (numero.equals("/")) {
@@ -727,13 +766,12 @@ public class VentanaCrearCompeticion extends JFrame {
 			}
 		}
 
-
-		if (contador==2 && minumero.length()==8) {
-			if (posiciones[2] != null && posiciones[5]!=null) {
+		if (contador == 2 && minumero.length() == 8) {
+			if (posiciones[2] != null && posiciones[5] != null) {
 				return true;
-			}else
+			} else
 				return false;
-		}else
+		} else
 			return false;
 	}
 
@@ -745,12 +783,14 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return scrollPane;
 	}
+
 	private JTextArea getTextArea() {
 		if (textArea == null) {
 			textArea = new JTextArea();
 		}
 		return textArea;
 	}
+
 	private JLabel getLblDorsales() {
 		if (lblDorsales == null) {
 			lblDorsales = new JLabel("Dorsales vip:");
@@ -759,6 +799,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblDorsales;
 	}
+
 	private JTextField getTxtDorsales() {
 		if (txtDorsales == null) {
 			txtDorsales = new JTextField();
@@ -767,6 +808,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return txtDorsales;
 	}
+
 	private JLabel getLblGestionarCat() {
 		if (lblGestionarCat == null) {
 			lblGestionarCat = new JLabel("Gestionar las categorias de la competici\u00F3n:");
@@ -775,6 +817,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblGestionarCat;
 	}
+
 	private JButton getBtnGestionar() {
 		if (btnGestionar == null) {
 			btnGestionar = new JButton("Gestionar");
@@ -782,7 +825,6 @@ public class VentanaCrearCompeticion extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					mostratVentanaCrearCategorias();
 				}
-
 
 			});
 			btnGestionar.setBackground(Color.GREEN);
@@ -792,6 +834,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return btnGestionar;
 	}
+
 	public void prepararVuelta() {
 		this.setVisible(true);
 		btnFinalizar.setVisible(true);
@@ -801,19 +844,24 @@ public class VentanaCrearCompeticion extends JFrame {
 
 	private void mostratVentanaCrearCategorias() {
 
-		VentanaCategorias vc = new VentanaCategorias(this,id_comp);
+		VentanaCategorias vc = new VentanaCategorias(this, id_comp);
 		this.setVisible(false);
 		vc.setLocationRelativeTo(this);
 		vc.setVisible(true);
 
 	}
 
-
 	private JButton getBtnFinalizar() {
 		if (btnFinalizar == null) {
 			btnFinalizar = new JButton("Finalizar");
 			btnFinalizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					if (getRdbtnSiLista().isSelected()) {
+						// AÃ±adir lista de espera
+						String idLista = UUID.randomUUID().toString();
+						listam.addLista(idLista, id_comp);
+						comp.actualizarCompeticionIdLista(idLista, id_comp);
+					}
 					System.exit(0);
 				}
 			});
@@ -824,14 +872,16 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return btnFinalizar;
 	}
+
 	private JComboBox<String> getComboBox() {
 		if (comboBox == null) {
 			comboBox = new JComboBox<String>();
-			comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"monta\u00F1a", "asfalto"}));
+			comboBox.setModel(new DefaultComboBoxModel<String>(new String[] { "monta\u00F1a", "asfalto" }));
 			comboBox.setBounds(103, 98, 121, 22);
 		}
 		return comboBox;
 	}
+
 	private JLabel getLblCanc() {
 		if (lblCanc == null) {
 			lblCanc = new JLabel("\u00BFDeseas aplicar una pol\u00EDtica de cancelaci\u00F3n?");
@@ -840,6 +890,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblCanc;
 	}
+
 	private JRadioButton getRadioSiC() {
 		if (radioSiC == null) {
 			radioSiC = new JRadioButton("Si");
@@ -857,6 +908,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return radioSiC;
 	}
+
 	private JRadioButton getRadioNoC() {
 		if (radioNoC == null) {
 			radioNoC = new JRadioButton("No");
@@ -875,10 +927,12 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return radioNoC;
 	}
+
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
-			panel.setBorder(new TitledBorder(null, "Cancelaci\u00F3n", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panel.setBorder(
+					new TitledBorder(null, "Cancelaci\u00F3n", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			panel.setBackground(Color.WHITE);
 			panel.setBounds(10, 313, 516, 88);
 			panel.setLayout(null);
@@ -895,6 +949,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return panel;
 	}
+
 	private JLabel getLblFMC() {
 		if (lblFMC == null) {
 			lblFMC = new JLabel("Fecha m\u00E1xima cancelaci\u00F3n:");
@@ -903,6 +958,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblFMC;
 	}
+
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("Porcentaje cuota a devolver:");
@@ -911,6 +967,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblNewLabel;
 	}
+
 	private JTextField getTxtFMC() {
 		if (txtFMC == null) {
 			txtFMC = new JTextField();
@@ -919,6 +976,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return txtFMC;
 	}
+
 	private JTextField getTxtPCCanc() {
 		if (txtPCCanc == null) {
 			txtPCCanc = new JTextField();
@@ -927,6 +985,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return txtPCCanc;
 	}
+
 	private JLabel getLblDdmmaaaa() {
 		if (lblDdmmaaaa == null) {
 			lblDdmmaaaa = new JLabel("dd/MM/aaaa");
@@ -935,6 +994,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		}
 		return lblDdmmaaaa;
 	}
+
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("Formato: xx.yy");
@@ -942,5 +1002,49 @@ public class VentanaCrearCompeticion extends JFrame {
 			lblNewLabel_1.setBounds(335, 54, 100, 13);
 		}
 		return lblNewLabel_1;
+	}
+
+	private JPanel getPnlListaEspera() {
+		if (pnlListaEspera == null) {
+			pnlListaEspera = new JPanel();
+			pnlListaEspera.setBorder(new TitledBorder(
+					new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+					"Lista de espera", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+			pnlListaEspera.setBackground(Color.WHITE);
+			pnlListaEspera.setBounds(619, 301, 551, 97);
+			pnlListaEspera.setLayout(null);
+			pnlListaEspera.add(getLblListaEspera());
+			pnlListaEspera.add(getRdbtnSiLista());
+			pnlListaEspera.add(getRdbtnNoLista());
+			pnlListaEspera.setVisible(false);
+		}
+		return pnlListaEspera;
+	}
+
+	private JLabel getLblListaEspera() {
+		if (lblListaEspera == null) {
+			lblListaEspera = new JLabel("Â¿Desea que esta competiciÃ³n tenga lista de espera?");
+			lblListaEspera.setBounds(18, 29, 511, 16);
+		}
+		return lblListaEspera;
+	}
+
+	private JRadioButton getRdbtnSiLista() {
+		if (rdbtnSiLista == null) {
+			rdbtnSiLista = new JRadioButton("SÃ­");
+			buttonGroupListaEspera.add(rdbtnSiLista);
+			rdbtnSiLista.setBounds(18, 57, 70, 23);
+		}
+		return rdbtnSiLista;
+	}
+
+	private JRadioButton getRdbtnNoLista() {
+		if (rdbtnNoLista == null) {
+			rdbtnNoLista = new JRadioButton("No");
+			buttonGroupListaEspera.add(rdbtnNoLista);
+			rdbtnNoLista.setSelected(true);
+			rdbtnNoLista.setBounds(88, 57, 70, 23);
+		}
+		return rdbtnNoLista;
 	}
 }

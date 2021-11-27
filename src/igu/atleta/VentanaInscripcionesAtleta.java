@@ -3,6 +3,7 @@ package igu.atleta;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -83,6 +84,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaInscripcionesAtleta(VentanaInicial vi) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
 		this.vi=vi;
 		im= new InscripcionModel();
 		cm = new CompeticionModel();
@@ -129,7 +131,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 			panel = new JPanel();
 			panel.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			panel.setLayout(null);
-			panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Elija la opción", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+			panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Elija la opciÃ³n", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 			panel.setBackground(Color.WHITE);
 			panel.setBounds(21, 103, 307, 63);
 			panel.add(getRadioDni());
@@ -173,7 +175,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 	protected void mostrarParaIntroducir() {
 		if (!radioDni.isSelected() && !radioEmail.isSelected())
 		{
-			JOptionPane.showMessageDialog(this, "Tienes que seleccionar una opción");
+			JOptionPane.showMessageDialog(this, "Tienes que seleccionar una opciÃ³n");
 		} else {
 			radioDni.setEnabled(false);
 			radioEmail.setEnabled(false);
@@ -296,7 +298,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 			modelo.addColumn("ID comp");
 			modelo.addColumn("Nombre");
 			modelo.addColumn("Estado");
-			modelo.addColumn("Fecha último cambio");
+			modelo.addColumn("Fecha ï¿½ltimo cambio");
 			String[][] info = new String[insAtleta.size()][4];
 			for(int i = 0; i < insAtleta.size(); i++) {
 				info[i][0] = insAtleta.get(i).getId_c();
@@ -311,7 +313,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 	}
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
-			btnCancelar = new JButton("Cancelar inscripci\u00F3n");
+			btnCancelar = new JButton("Cancelar inscripciÃ³n");
 			btnCancelar.setEnabled(false);
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -331,7 +333,7 @@ public class VentanaInscripcionesAtleta extends JFrame {
 			CompeticionDto compe = cm.getCompeticionById(insAtleta.get(table.getSelectedRow()).getId_c()).get(0);
 			InscripcionDto ins = insAtleta.get(table.getSelectedRow());
 			
-			if (compe.getHay_politica()==1 && compararFecha(compe.getF_canc()) ) { //si tiene política y no se pasó la fecha de cancelación 
+			if (compe.getHay_politica()==1 && compararFecha(compe.getF_canc()) ) { //si tiene polï¿½tica y no se pasï¿½ la fecha de cancelaciï¿½n 
 				double dinero = (compe.getP_cuota_canc()/100)*ins.getCantidad_pagada();
 				
 				if ( ins.getEstado().toUpperCase().equals("INSCRITO") )
@@ -340,27 +342,27 @@ public class VentanaInscripcionesAtleta extends JFrame {
 					System.out.println("entra");
 		            im.cancelarInscripcionPagada(ins.getDni_a(), ins.getId_c());
 		            cm.reducirPlazas(ins.getId_c());
-		    		JOptionPane.showMessageDialog(this, "Se ha desinscrito de la competición. A continuación, se imprimirá un justificante con la siguiente información:"
-		    				+ "\n    Competición: "  + compe
-		    				+ "\n    Dinero a devolver: " + dinero);
+		    		JOptionPane.showMessageDialog(this, "Se ha desinscrito de la competiciÃ³n. A continuaciÃ³n, se imprimirÃ¡ un justificante con la siguiente informaciÃ³n:"
+		    				+ "\nCompeticiÃ³n: "  + compe.toStringE()
+		    				+ "\nDinero a devolver: " + dinero + "euros.");
 	
 				}
 				else if (ins.getEstado().toUpperCase().equals("CANCELADO") || 
 						ins.getEstado().toUpperCase().equals("CANCELADO-PENDIENTE DE DEVOLUCION"))
 				{
-		    		JOptionPane.showMessageDialog(this, "Usted ya se ha desinscrito de esta competición");
+		    		JOptionPane.showMessageDialog(this, "Usted ya se ha desinscrito de esta competiciï¿½n");
 
 				}
 				else {
 		            im.cancelarInscripcion(ins.getDni_a(), ins.getId_c());
 		            cm.reducirPlazas(ins.getId_c());
-		    		JOptionPane.showMessageDialog(this, "Se ha desinscrito de la competición. A continuación, se imprimirá un justificante con la siguiente información:"
-		    				+ "\n     Competición: "  + compe
-		    				+ "\n     Dinero a devolver " + dinero );
+		    		JOptionPane.showMessageDialog(this, "Se ha desinscrito de la competiciÃ³n. A continuaciÃ³n, se imprimirÃ¡ un justificante con la siguiente informaciÃ³n:"
+		    				+ "\nCompeticiÃ³n: "  + compe.toStringE()
+		    				+ "\nDinero a devolver " + dinero + " euros.");
 				}
 			}
 			else {
-				 JOptionPane.showMessageDialog(this, "Error: No se puede cancelar su inscripción.");
+				 JOptionPane.showMessageDialog(this, "Error: No se puede cancelar su inscripciÃ³n.");
 			}
 		}else {
             errorNoCarreraSeleccionada();
@@ -412,6 +414,11 @@ public class VentanaInscripcionesAtleta extends JFrame {
 	private JButton getBtnFinalizar() {
 		if (btnFinalizar == null) {
 			btnFinalizar = new JButton("Finalizar");
+			btnFinalizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.exit(0);
+				}
+			});
 			btnFinalizar.setForeground(Color.WHITE);
 			btnFinalizar.setEnabled(false);
 			btnFinalizar.setBackground(new Color(255, 0, 0));
