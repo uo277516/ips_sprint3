@@ -165,11 +165,9 @@ public class DtoAssembler {
 			while (rs.next()) {
 				try {
 
-					if (rs.getString("f_fin3") != null) {
-						if (compararFecha(rs.getString("f_fin3"), fecha, rs.getString("f_inicio3")))
+					if (rs.getString("f_fin3") != null && compararFecha(rs.getString("f_fin3"), fecha, rs.getString("f_inicio3"))) {
 							lista.add(cogerDatosCompeticion(rs));
-					} else if (rs.getString("f_fin2") != null) {
-						if (compararFecha(rs.getString("f_fin2"), fecha, rs.getString("f_inicio2")))
+					} else if (rs.getString("f_fin2") != null && compararFecha(rs.getString("f_fin2"), fecha, rs.getString("f_inicio2"))) {
 							lista.add(cogerDatosCompeticion(rs));
 					} else if (compararFecha(rs.getString("f_fin1"), fecha, rs.getString("f_inicio1")))
 						lista.add(cogerDatosCompeticion(rs));
@@ -194,15 +192,12 @@ public class DtoAssembler {
 			{
 				try {
 					//if (Integer.parseInt(rs.getString("num_plazas")) >= 3) {
-						if (rs.getString("f_fin3") != null) {
-							if (compararFecha(rs.getString("f_fin3"),fecha,rs.getString("f_inicio3")))
-								lista.add(cogerDatosCompeticion(rs));
-						}else if(rs.getString("f_fin2") != null) {
-							if (compararFecha(rs.getString("f_fin2"),fecha,rs.getString("f_inicio2")))
-								lista.add(cogerDatosCompeticion(rs));
-						}else
-							if (compararFecha(rs.getString("f_fin1"),fecha,rs.getString("f_inicio1")))
-								lista.add(cogerDatosCompeticion(rs));
+					if (rs.getString("f_fin3") != null && compararFecha(rs.getString("f_fin3"), fecha, rs.getString("f_inicio3"))) {
+						lista.add(cogerDatosCompeticion(rs));
+				} else if (rs.getString("f_fin2") != null && compararFecha(rs.getString("f_fin2"), fecha, rs.getString("f_inicio2"))) {
+						lista.add(cogerDatosCompeticion(rs));
+				} else if (compararFecha(rs.getString("f_fin1"), fecha, rs.getString("f_inicio1")))
+					lista.add(cogerDatosCompeticion(rs));
 					//}
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
