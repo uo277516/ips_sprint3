@@ -193,7 +193,7 @@ public class DtoAssembler {
 			while(rs.next())
 			{
 				try {
-					if (Integer.parseInt(rs.getString("num_plazas")) >= 3) {
+					//if (Integer.parseInt(rs.getString("num_plazas")) >= 3) {
 						if (rs.getString("f_fin3") != null) {
 							if (compararFecha(rs.getString("f_fin3"),fecha,rs.getString("f_inicio3")))
 								lista.add(cogerDatosCompeticion(rs));
@@ -203,7 +203,7 @@ public class DtoAssembler {
 						}else
 							if (compararFecha(rs.getString("f_fin1"),fecha,rs.getString("f_inicio1")))
 								lista.add(cogerDatosCompeticion(rs));
-					}
+					//}
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -253,7 +253,7 @@ public class DtoAssembler {
 		for (CompeticionDto c : lista) {
 			try {
 				if (formato.parse(fecha).before(formato.parse(c.getF_comp())) && c.getD_asig() == 0) {
-					// que la fecha de la comp no pasara y que no estén asignados ya
+					// que la fecha de la comp no pasara y que no estï¿½n asignados ya
 					if (c.getF_fin1() != null && c.getF_fin2() == null && c.getF_fin3() == null) {
 						// solo un plazo
 						try {
