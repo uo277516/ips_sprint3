@@ -366,16 +366,16 @@ public class VentanaCrearCompeticion extends JFrame {
 	}
 
 	private void mostrarDatosBasicosCorrectos() {
-		JOptionPane.showMessageDialog(this, "Se han validado los datos b�sicos");
+		JOptionPane.showMessageDialog(this, "Se han validado los datos básicos");
 	}
 
 	private void mostrarErrorPlazas() {
-		JOptionPane.showMessageDialog(this, "Error: Plazas incorrectas, introduzca solo n�meros.");
+		JOptionPane.showMessageDialog(this, "Error: Plazas incorrectas, introduzca solo números.");
 
 	}
 
 	private void mostrarErrorDistancia() {
-		JOptionPane.showMessageDialog(this, "Error: Distancia incorrecta, introduzca solo n�meros.");
+		JOptionPane.showMessageDialog(this, "Error: Distancia incorrecta, introduzca solo números.");
 
 	}
 
@@ -662,18 +662,18 @@ public class VentanaCrearCompeticion extends JFrame {
 	}
 
 	private void mensajeMaximoPlazos() {
-		JOptionPane.showMessageDialog(this, "Se han alcanzado el m�ximo de plazos.");
+		JOptionPane.showMessageDialog(this, "Se han alcanzado el máximo de plazos.");
 
 	}
 
 	private void mostrarErrorCuota() {
-		JOptionPane.showMessageDialog(this, "Error: La cuota solo pueden ser n�meros");
+		JOptionPane.showMessageDialog(this, "Error: La cuota solo pueden ser números");
 
 	}
 
 	private void mostrarFechaFinIncorrecta() {
 		JOptionPane.showMessageDialog(this,
-				"Error: La fecha fin debe ser anterior a la de competeci�n y posterior a la de inicio");
+				"Error: La fecha fin debe ser anterior a la de competeción y posterior a la de inicio");
 
 	}
 
@@ -688,7 +688,7 @@ public class VentanaCrearCompeticion extends JFrame {
 	}
 
 	private void mostrarFechaInicioIncorrecta() {
-		JOptionPane.showMessageDialog(this, "Error: La fecha inicio debe ser anterior a la competici�n");
+		JOptionPane.showMessageDialog(this, "Error: La fecha inicio debe ser anterior a la competición");
 
 	}
 

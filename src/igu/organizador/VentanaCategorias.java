@@ -229,14 +229,14 @@ public class VentanaCategorias extends JFrame {
 
 	private int opcionActualizarOno() {
 
-		return JOptionPane.showOptionDialog(null, "�Desea modificar esta categor�a estandar?", "Seleccione una opci�n:",
+		return JOptionPane.showOptionDialog(null, "¿Desea modificar esta categoría estándar?", "Seleccione una opción:",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null para icono por defecto.
 				new Object[] { "Si", "No" }, // null para YES, NO y CANCEL
 				"opcion 1");
 	}
 
 	private void mostrarCategoriaInsertada() {
-		JOptionPane.showMessageDialog(this, "Categor�a ya insertada");
+		JOptionPane.showMessageDialog(this, "Categoría ya insertada");
 	}
 
 	public void actualizarTablaCategorias(CategoriaDto catNueva) {
@@ -444,7 +444,7 @@ public class VentanaCategorias extends JFrame {
 	}
 
 	private int opcionSexo() {
-		return JOptionPane.showOptionDialog(null, "�Para que genero es la categoria?", "Seleccione una opci�n:",
+		return JOptionPane.showOptionDialog(null, "¿Para qué género es la categoría?", "Seleccione una opción:",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null para icono por defecto.
 				new Object[] { "Masculino", "Femenino" }, // null para YES, NO y CANCEL
 				"opcion 1");
