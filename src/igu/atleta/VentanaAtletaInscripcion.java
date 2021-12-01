@@ -55,7 +55,7 @@ public class VentanaAtletaInscripcion extends JFrame {
 
 //	/**
 //	 * Launch the application.
-//	 */
+//	 */re
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
 //			public void run() {
