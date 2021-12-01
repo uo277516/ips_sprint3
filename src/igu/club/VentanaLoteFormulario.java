@@ -262,7 +262,11 @@ public class VentanaLoteFormulario extends JFrame {
 					}else if(atletaYaEnCarrera()) {
 						mostrarAtletaYaEnCarrera(getTxtDni().getText());
 						borrarTodosTxt();
-					}else {
+					}else if(atletaYaEnLote()) {
+						mostrarAtletaYaEnCarrera(getTxtDni().getText());
+						borrarTodosTxt();
+					}
+					else {
 						mostrarAtletaInsertado(getTxtDni().getText());
 						actualizarTabla();
 						borrarTodosTxt();
@@ -271,6 +275,8 @@ public class VentanaLoteFormulario extends JFrame {
 						btnAnadirLote.setEnabled(true);
 					}
 				}
+
+				
 			});
 			btnValidar.setForeground(Color.WHITE);
 			btnValidar.setBackground(Color.GREEN);
@@ -279,10 +285,21 @@ public class VentanaLoteFormulario extends JFrame {
 		}
 		return btnValidar;
 	}
+	
+	private boolean atletaYaEnLote() {
+		for (AtletaDto atletaDto : list) {
+			if (atletaDto.getDni().equals(getTxtDni().getText()) || 
+					atletaDto.getEmail().equals(getTxtEmail().getText())) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	private boolean atletaYaEnCarrera() {
 		List<InscripcionDto> aux = inmodel.findInscripcionByDniId(getTxtDni().getText(), comp.getId());
-		if (aux.isEmpty())
+		List<InscripcionDto> auxEmail = inmodel.findInscripcionByEmailId(getTxtEmail().getText(), comp.getId());
+		if (aux.isEmpty() && auxEmail.isEmpty())
 			return false;
 		return true;
 	}
