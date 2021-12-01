@@ -286,7 +286,7 @@ public class VentanaTarjetaCredito extends JFrame {
 	private void pagarInscripcion() throws ParseException {
 		JOptionPane.showMessageDialog(this, "Pago realizado correctamente, se generará un justificante de la operación.");
 		String fechaString = cambiarFormatoFecha();
-		inscripcion = ins.findInsByDniId(atleta.getDni(), competicion.getId());
+		//inscripcion = ins.findInsByDniId(atleta.getDni(), competicion.getId());
 		float cuota = sacarCuota(fechaString);
 		String cadena ="";
 		cadena = 
