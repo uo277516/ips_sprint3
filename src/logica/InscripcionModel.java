@@ -941,7 +941,8 @@ public class InscripcionModel {
 			pst = c.prepareStatement(sqlInsertarClub);
 			pst.setString(1, dni);
 			pst.setString(2, id);
-			pst.setString(3, categoria);
+			if (categoria==null) pst.setString(3, "Absoluta");
+			else pst.setString(3, categoria);
 			pst.setString(4, email);
 			pst.setString(5, fecha);
 			pst.setString(6, metodo);

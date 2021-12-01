@@ -71,7 +71,6 @@ public class VentanaLoteFormulario extends JFrame {
 	private CompeticionDto comp;
 	private AtletaModel amodel = new AtletaModel();
 	private JButton btnFinalizar;
-	@SuppressWarnings("unused")
 	private VentanaMostrarCarrerasClub vc;
 
 	/**
@@ -479,7 +478,7 @@ public class VentanaLoteFormulario extends JFrame {
 		String cadenaExtra="Los siguientes atletas no tienen plaza: \n";
 		if (num != list.size()) {
 			for (int i = num; i < list.size(); i++) {
-				cadenaExtra+=list.get(i).getDni()+"\n";
+				cadenaExtra+=list.get(i).getNombre() + " DNI: " + list.get(i).getDni()+"\n";
 			}
 			cadena +=cadenaExtra;
 			JOptionPane.showMessageDialog(this,cadena );

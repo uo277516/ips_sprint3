@@ -91,7 +91,6 @@ public class VentanaCrearCompeticion extends JFrame {
 	private JRadioButton rdbtnSiLista;
 	private JRadioButton rdbtnNoLista;
 	private final ButtonGroup buttonGroupListaEspera = new ButtonGroup();
-	@SuppressWarnings("unused")
 	private VentanaInicial vi;
 
 	/**
@@ -120,7 +119,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		contentPane.add(getPnDatosBasicos());
 		contentPane.add(getPnPlazos());
 		btnValidar.setEnabled(true);
-		pnPlazos.setVisible(false);
+		pnPlazos.setEnabled(false);
 		txtNombre.setEditable(true);
 		txtDistancia.setEditable(true);
 		txtFechaComp.setEditable(true);
@@ -130,10 +129,17 @@ public class VentanaCrearCompeticion extends JFrame {
 		contentPane.add(getBtnGestionar());
 		contentPane.add(getBtnFinalizar());
 		contentPane.add(getPnlListaEspera());
-		lblGestionarCat.setVisible(false);
-		btnGestionar.setVisible(false);
-		btnFinalizar.setVisible(false);
-		pnlListaEspera.setVisible(false);
+		lblGestionarCat.setEnabled(false);
+		btnGestionar.setEnabled(false);
+		btnFinalizar.setEnabled(false);
+		pnlListaEspera.setEnabled(false);
+		txtFechaIniico.setEnabled(false);
+		txtFechaFin.setEnabled(false);
+		textArea.setEditable(false);
+		txtCuota.setEnabled(false);
+		btnInsertar.setEnabled(false);
+		rdbtnNoLista.setEnabled(false);
+		rdbtnSiLista.setEnabled(false);
 	}
 
 	private JTextArea getTxtAreaInfo() {
@@ -307,26 +313,49 @@ public class VentanaCrearCompeticion extends JFrame {
 								insertarDatosBasicosConCancelacion();
 								mostrarDatosBasicosCorrectos();
 								btnValidar.setEnabled(false);
-								pnPlazos.setVisible(true);
-								pnlListaEspera.setVisible(true);
+								pnPlazos.setEnabled(true);
+								pnlListaEspera.setEnabled(true);
 								txtNombre.setEditable(false);
 								txtDistancia.setEditable(false);
 								txtFechaComp.setEditable(false);
 								txtPlazas.setEditable(false);
 								comboBox.setEditable(false);
 								txtDorsales.setEditable(false);
+								lblGestionarCat.setEnabled(true);
+								btnGestionar.setEnabled(true);
+								btnFinalizar.setEnabled(true);
+								pnlListaEspera.setEnabled(true);
+								txtFechaIniico.setEnabled(true);
+								txtFechaFin.setEnabled(true);
+								textArea.setEditable(true);
+								txtCuota.setEnabled(true);
+								btnInsertar.setEnabled(true);
+								rdbtnNoLista.setEnabled(true);
+								rdbtnSiLista.setEnabled(true);
 							} else {
 								insertarDatosBasicos();
 								mostrarDatosBasicosCorrectos();
 								btnValidar.setEnabled(false);
-								pnPlazos.setVisible(true);
-								pnlListaEspera.setVisible(true);
+								pnPlazos.setEnabled(true);
+								pnlListaEspera.setEnabled(true);
 								txtNombre.setEditable(false);
 								txtDistancia.setEditable(false);
 								txtFechaComp.setEditable(false);
 								txtPlazas.setEditable(false);
 								comboBox.setEditable(false);
 								txtDorsales.setEditable(false);
+								
+								lblGestionarCat.setEnabled(true);
+								btnGestionar.setEnabled(true);
+								btnFinalizar.setEnabled(true);
+								pnlListaEspera.setEnabled(true);
+								txtFechaIniico.setEnabled(true);
+								txtFechaFin.setEnabled(true);
+								textArea.setEditable(true);
+								txtCuota.setEnabled(true);
+								btnInsertar.setEnabled(true);
+								rdbtnNoLista.setEnabled(true);
+								rdbtnSiLista.setEnabled(true);
 							}
 						} catch (ParseException e1) {
 							// TODO Auto-generated catch block
@@ -492,7 +521,7 @@ public class VentanaCrearCompeticion extends JFrame {
 			pnPlazos.add(getTxtCuota());
 			pnPlazos.add(getBtnInsertar());
 			pnPlazos.add(getScrollPane());
-			pnPlazos.setVisible(false);
+			pnPlazos.setEnabled(false);
 		}
 		return pnPlazos;
 	}
@@ -585,8 +614,8 @@ public class VentanaCrearCompeticion extends JFrame {
 								actualizarTextArea(plazos);
 								actualizarCompeticion(plazos);
 								actualizarTxtInicio();
-								getLblGestionarCat().setVisible(true);
-								btnGestionar.setVisible(true);
+								getLblGestionarCat().setEnabled(true);
+								btnGestionar.setEnabled(true);
 								txtFechaFin.setText("");
 								txtCuota.setText("");
 								if (plazos == 3) {
@@ -841,7 +870,7 @@ public class VentanaCrearCompeticion extends JFrame {
 
 	public void prepararVuelta() {
 		this.setVisible(true);
-		btnFinalizar.setVisible(true);
+		btnFinalizar.setEnabled(true);
 		btnGestionar.setEnabled(false);
 
 	}
@@ -1021,7 +1050,7 @@ public class VentanaCrearCompeticion extends JFrame {
 			pnlListaEspera.add(getLblListaEspera());
 			pnlListaEspera.add(getRdbtnSiLista());
 			pnlListaEspera.add(getRdbtnNoLista());
-			pnlListaEspera.setVisible(false);
+			pnlListaEspera.setEnabled(false);
 		}
 		return pnlListaEspera;
 	}

@@ -35,6 +35,7 @@ public class VentanaAtletaListaEspera extends JFrame {
 	private CompeticionDto competicion;
 	private AtletaModel atl;
 	private ListaEsperaModel lem;
+	private JLabel lblNewLabel;
 
 	/**
 	 * Create the frame.
@@ -59,12 +60,13 @@ public class VentanaAtletaListaEspera extends JFrame {
 		contentPane.add(getLblEmail());
 		contentPane.add(getTxtEmail());
 		contentPane.add(getBtnSiguiente());
+		contentPane.add(getLblNewLabel());
 	}
 
 	private JLabel getLblMeterEmail() {
 		if (lblMeterEmail == null) {
-			lblMeterEmail = new JLabel("Para inscribirte en la lista de espera de la competición, por favor introduzca su email:");
-			lblMeterEmail.setBounds(16, 33, 441, 33);
+			lblMeterEmail = new JLabel("Para inscribirte en la lista de espera de la competición, por favor ");
+			lblMeterEmail.setBounds(16, 10, 441, 33);
 		}
 		return lblMeterEmail;
 	}
@@ -148,5 +150,12 @@ public class VentanaAtletaListaEspera extends JFrame {
 
 	public CompeticionDto getCompeticion() {
 		return this.competicion;
+	}
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("introduzca su email:");
+			lblNewLabel.setBounds(16, 42, 132, 13);
+		}
+		return lblNewLabel;
 	}
 }
