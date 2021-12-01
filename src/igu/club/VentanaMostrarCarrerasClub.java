@@ -185,9 +185,13 @@ public class VentanaMostrarCarrerasClub extends JFrame {
 	protected void pasarALote() throws SQLException {
 		this.dispose();
 		CompeticionDto competicion = crearCompeticion();
-		VentanaLoteFormulario vPal = new VentanaLoteFormulario(competicion);
+		VentanaLoteFormulario vPal = new VentanaLoteFormulario(this,competicion);
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
+	}
+	
+	public VentanaInicial getVentanaInicial() {
+		return this.vi;
 	}
 
 	private CompeticionDto crearCompeticion() throws SQLException {

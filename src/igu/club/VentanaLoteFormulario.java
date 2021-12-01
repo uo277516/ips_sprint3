@@ -71,12 +71,14 @@ public class VentanaLoteFormulario extends JFrame {
 	private CompeticionDto comp;
 	private AtletaModel amodel = new AtletaModel();
 	private JButton btnFinalizar;
+	private VentanaMostrarCarrerasClub vc;
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaLoteFormulario(CompeticionDto com) {
+	public VentanaLoteFormulario(VentanaMostrarCarrerasClub vc, CompeticionDto com) {
 		this.comp=com;
+		this.vc=vc;
 		setTitle("Ventana Inscripcion Club");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 599, 666);
@@ -583,8 +585,10 @@ public class VentanaLoteFormulario extends JFrame {
 			btnFinalizar = new JButton("Finalizar");
 			btnFinalizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					dispose();
+					volverMenu();
 				}
+
+				
 			});
 			btnFinalizar.setForeground(Color.WHITE);
 			btnFinalizar.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -594,5 +598,11 @@ public class VentanaLoteFormulario extends JFrame {
 			btnFinalizar.setEnabled(false);
 		}
 		return btnFinalizar;
+	}
+	
+	private void volverMenu() {
+		vc.getVentanaInicial().setVisible(true);
+		this.dispose();
+		
 	}
 }
