@@ -241,7 +241,7 @@ public class VentanaLoteFile extends JFrame {
 				List<InscripcionDto> l = inmodel.findInscripcionByDniId(list.get(i).getDni(),comp.getId());
 				if (l.isEmpty()) {
 					contador++;
-					cadenaExtra+=list.get(i).getDni()+"\n";
+					cadenaExtra+=list.get(i).getNombre() + " DNI: "+ list.get(i).getDni()+"\n";
 				}
 			}
 			if (contador!=0) {
