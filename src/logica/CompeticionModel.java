@@ -29,10 +29,9 @@ public class CompeticionModel {
 
 	public static String actualizarIdListaEspera = "update competicion set id_listaespera = ? where id = ?";
 	public static String getCompsByFechaYListaEspera = "select * from competicion c, listaespera l where l.id_comp = c.id";
-	
+
 	public static String sqlActualizarPlazas = "update competicion set num_plazas = num_plazas-1 where id =?";
 
-	
 	private InscripcionModel im = new InscripcionModel();
 	private AtletaModel am = new AtletaModel();
 
@@ -101,7 +100,7 @@ public class CompeticionModel {
 		}
 		return articulos;
 	}
-	
+
 	public List<CompeticionDto> getCompetcionesFechaListaPlazasMayor3(String fecha) {
 		List<CompeticionDto> articulos = null;
 		try {
@@ -156,7 +155,7 @@ public class CompeticionModel {
 		cosas[0] = String.valueOf(Integer.parseInt(cosas[0]) + 1);
 		String f = cosas[0] + "/" + cosas[1] + "/" + cosas[2];
 		System.out.println(f);
-		// Conexiï¿½n a la base de datos
+		// Conexión a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -182,15 +181,15 @@ public class CompeticionModel {
 		// }
 		return listaCompeticiones;
 	}
-	
+
 	private List<CompeticionDto> filtrarPorFechaPlazasMayor3(String fecha) throws SQLException {
 		List<CompeticionDto> listaCompeticiones = new ArrayList<CompeticionDto>();
 
 		String[] cosas = fecha.split("/");
-		cosas[0] = String.valueOf(Integer.parseInt(cosas[0])+1);
-		String f = cosas[0]+"/"+cosas[1]+"/"+cosas[2];
+		cosas[0] = String.valueOf(Integer.parseInt(cosas[0]) + 1);
+		String f = cosas[0] + "/" + cosas[1] + "/" + cosas[2];
 		System.out.println(f);
-		// Conexiï¿½n a la base de datos
+		// Conexión a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -322,10 +321,7 @@ public class CompeticionModel {
 		}
 
 	}
-	
-	
-	
-	
+
 	public void aumentarPlazas(String id) {
 		try {
 			aumentarPlazasP(id);
@@ -473,11 +469,12 @@ public class CompeticionModel {
 			mt.setCategoria(i.getCategoria());
 			mt.setClub(i.getClub());
 			mt.setMinutosKm(calcularMinutosKm(i));
-			List<Integer> tiemposPaso = new ArrayList<Integer>();
-			tiemposPaso.add(i.getTiempoPaso1());
-			tiemposPaso.add(i.getTiempoPaso2());
-			tiemposPaso.add(i.getTiempoPaso3());
-			tiemposPaso.add(i.getTiempoPaso4());
+			Integer[] tiemposPaso = new Integer[4];
+			tiemposPaso[0] = i.getTiempoPaso1();
+			tiemposPaso[1] = i.getTiempoPaso2();
+			tiemposPaso[2] = i.getTiempoPaso3();
+			tiemposPaso[3] = i.getTiempoPaso4();
+
 			mt.setTiemposPaso(tiemposPaso);
 			mt.setDiferencia(calcularDiferencia(inscripciones.get(0), i));
 			clasificacion.add(mt);
@@ -601,7 +598,11 @@ public class CompeticionModel {
 
 	public void actualizarTiempos(String competicionId, ArrayList<MarcaTiempo> tiempos) throws SQLException {
 		for (MarcaTiempo t : tiempos) {
-			im.actualizarTiempoDorsal(competicionId, t.getDorsal(), t.getHoras(), t.getMinutos(), t.getTiemposPaso());
+			if (t.getTiemposPaso() != null)
+				im.actualizarTiemposPasoDorsal(competicionId, t.getDorsal(), t.getHoras(), t.getMinutos(),
+						t.getTiemposPaso());
+			else
+				im.actualizarTiempoDorsal(competicionId, t.getDorsal(), t.getHoras(), t.getMinutos());
 		}
 		System.out.println("Tiempos actualizados");
 	}
@@ -609,7 +610,8 @@ public class CompeticionModel {
 	public void insertarDatosBasicosConCancelacion(String id, String nombre, String fecha, String tipo, int distancia,
 			int plazas, int dorsales, String f_max_c, double p_cuota_canc) {
 		try {
-			insertarDatosBasicosConCancelacionPrivado(id, nombre, fecha, tipo, distancia, plazas, dorsales, f_max_c, p_cuota_canc);
+			insertarDatosBasicosConCancelacionPrivado(id, nombre, fecha, tipo, distancia, plazas, dorsales, f_max_c,
+					p_cuota_canc);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -643,11 +645,10 @@ public class CompeticionModel {
 			pst.close();
 			c.close();
 		}
-		
+
 	}
 
-	public void reducirNumPlazas(int num_plazas, String id)
-	{
+	public void reducirNumPlazas(int num_plazas, String id) {
 		try {
 			reducirNumPlazasP(num_plazas, id);
 		} catch (SQLException e) {
@@ -655,8 +656,7 @@ public class CompeticionModel {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	private void reducirNumPlazasP(int num_plazas, String id) throws SQLException {
 		Connection c = null;
 		PreparedStatement pst = null;
@@ -677,10 +677,11 @@ public class CompeticionModel {
 			c.close();
 		}
 	}
+
 	public int findNumPlazas(String id) {
-		int plazas =0;
+		int plazas = 0;
 		try {
-			plazas =findNumPlazasP(id);
+			plazas = findNumPlazasP(id);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -711,7 +712,7 @@ public class CompeticionModel {
 
 		return competicion.get(0).getNum_plazas();
 	}
-	
+
 	public void actualizarCompeticionIdLista(String idLista, String idComp) {
 		try {
 			actualizarCompeticionIdListaP(idLista, idComp);
@@ -738,7 +739,7 @@ public class CompeticionModel {
 			c.close();
 		}
 	}
-	
+
 	public void actualizarPlazas(String id) {
 		try {
 			actualizarPlazasP(id);

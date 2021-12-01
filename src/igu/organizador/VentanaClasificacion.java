@@ -161,10 +161,10 @@ public class VentanaClasificacion extends JFrame {
 		case "ctmd":
 			for (int i = 0; i < tiempos.size(); i++) {
 				modelo.setValueAt(tiempos.get(i).getClub(), i, 8);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(0), i, 9);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(1), i, 10);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(2), i, 11);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(3), i, 12);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[0], i, 9);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[1], i, 10);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[2], i, 11);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[3], i, 12);
 				modelo.setValueAt(tiempos.get(i).getMinutosKm(), i, 13);
 				modelo.setValueAt('+' + String.valueOf(tiempos.get(i).getDiferencia()), i, 14);
 			}
@@ -172,10 +172,10 @@ public class VentanaClasificacion extends JFrame {
 		case "ctm":
 			for (int i = 0; i < tiempos.size(); i++) {
 				modelo.setValueAt(tiempos.get(i).getClub(), i, 8);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(0), i, 9);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(1), i, 10);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(2), i, 11);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(3), i, 12);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[0], i, 9);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[1], i, 10);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[2], i, 11);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[3], i, 12);
 				modelo.setValueAt(tiempos.get(i).getMinutosKm(), i, 13);
 				modelo.setValueAt(null, i, 14);
 			}
@@ -183,10 +183,10 @@ public class VentanaClasificacion extends JFrame {
 		case "ctd":
 			for (int i = 0; i < tiempos.size(); i++) {
 				modelo.setValueAt(tiempos.get(i).getClub(), i, 8);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(0), i, 9);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(1), i, 10);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(2), i, 11);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(3), i, 12);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[0], i, 9);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[1], i, 10);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[2], i, 11);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[3], i, 12);
 				modelo.setValueAt(null, i, 13);
 				modelo.setValueAt('+' + String.valueOf(tiempos.get(i).getDiferencia()), i, 14);
 			}
@@ -205,10 +205,10 @@ public class VentanaClasificacion extends JFrame {
 		case "tmd":
 			for (int i = 0; i < tiempos.size(); i++) {
 				modelo.setValueAt(null, i, 8);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(0), i, 9);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(1), i, 10);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(2), i, 11);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(3), i, 12);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[0], i, 9);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[1], i, 10);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[2], i, 11);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[3], i, 12);
 				modelo.setValueAt(tiempos.get(i).getMinutosKm(), i, 13);
 				modelo.setValueAt('+' + String.valueOf(tiempos.get(i).getDiferencia()), i, 14);
 			}
@@ -217,10 +217,10 @@ public class VentanaClasificacion extends JFrame {
 		case "ct":
 			for (int i = 0; i < tiempos.size(); i++) {
 				modelo.setValueAt(tiempos.get(i).getClub(), i, 8);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(0), i, 9);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(1), i, 10);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(2), i, 11);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(3), i, 12);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[0], i, 9);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[1], i, 10);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[2], i, 11);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[3], i, 12);
 				modelo.setValueAt(null, i, 13);
 				modelo.setValueAt(null, i, 14);
 			}
@@ -252,10 +252,10 @@ public class VentanaClasificacion extends JFrame {
 		case "tm":
 			for (int i = 0; i < tiempos.size(); i++) {
 				modelo.setValueAt(null, i, 8);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(0), i, 9);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(1), i, 10);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(2), i, 11);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(3), i, 12);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[0], i, 9);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[1], i, 10);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[2], i, 11);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[3], i, 12);
 				modelo.setValueAt(tiempos.get(i).getMinutosKm(), i, 13);
 				modelo.setValueAt(null, i, 14);
 			}
@@ -263,10 +263,10 @@ public class VentanaClasificacion extends JFrame {
 		case "td":
 			for (int i = 0; i < tiempos.size(); i++) {
 				modelo.setValueAt(null, i, 8);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(0), i, 9);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(1), i, 10);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(2), i, 11);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(3), i, 12);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[0], i, 9);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[1], i, 10);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[2], i, 11);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[3], i, 12);
 				modelo.setValueAt(null, i, 13);
 				modelo.setValueAt('+' + String.valueOf(tiempos.get(i).getDiferencia()), i, 14);
 			}
@@ -298,10 +298,10 @@ public class VentanaClasificacion extends JFrame {
 		case "t":
 			for (int i = 0; i < tiempos.size(); i++) {
 				modelo.setValueAt(null, i, 8);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(0), i, 9);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(1), i, 10);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(2), i, 11);
-				modelo.setValueAt(tiempos.get(i).getTiemposPaso().get(3), i, 12);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[0], i, 9);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[1], i, 10);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[2], i, 11);
+				modelo.setValueAt(tiempos.get(i).getTiemposPaso()[3], i, 12);
 				modelo.setValueAt(null, i, 13);
 				modelo.setValueAt(null, i, 14);
 			}

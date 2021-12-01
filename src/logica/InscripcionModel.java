@@ -40,7 +40,8 @@ public class InscripcionModel {
 	public static String sqlActualizarDorsales = "update inscripcion set dorsal=? where id_c=? and dni_a=?";
 	public static String sqlActEnComp = "update competicion set d_asig=1 where id=?";
 
-	public static String updateTimes = "update inscripcion set horas = ? , minutos = ? , tp1 = ?, tp2 = ?, tp3 = ?, tp4 = ? where dorsal = ? and id_c = ?";
+	public static String updateTime = "update inscripcion set horas = ? , minutos = ?  where dorsal = ? and id_c = ?";
+	public static String updateTiempos = "update inscripcion set horas = ? , minutos = ? , tp1 = ?, tp2 = ?, tp3 = ?, tp4 = ? where dorsal = ? and id_c = ?";
 
 	public static String findInscripcionByDniId = "select * from inscripcion where dni_a=? and id_c=?";
 
@@ -788,22 +789,45 @@ public class InscripcionModel {
 
 	}
 
-	public void actualizarTiempoDorsal(String competicionId, String dorsal, int horas, int minutos,
-			List<Integer> tiemposPaso) throws SQLException {
+	public void actualizarTiemposPasoDorsal(String competicionId, String dorsal, int horas, int minutos,
+			Integer[] tiemposPaso) throws SQLException {
 		Connection c = null;
 		PreparedStatement pst = null;
 		try {
 			c = BaseDatos.getConnection();
-			pst = c.prepareStatement(updateTimes);
+			pst = c.prepareStatement(updateTiempos);
 
 			pst.setInt(1, horas);
 			pst.setInt(2, minutos);
-			Integer[] tiempos = new Integer[4];
-			tiempos = (Integer[]) tiemposPaso.toArray();
-			for (int i = 0; i < tiempos.length; i++)
-				pst.setInt(i + 3, tiempos[i]);
-			pst.setString(tiemposPaso.size(), dorsal);
-			pst.setString(tiemposPaso.size() + 1, competicionId);
+			for (int i = 0; i < tiemposPaso.length; i++) {
+				if (tiemposPaso[i] != null)
+					pst.setInt(i + 3, tiemposPaso[i]);
+				else
+					pst.setInt(i + 3, 0);
+			}
+			pst.setString(3 + tiemposPaso.length, dorsal);
+			pst.setString(3 + tiemposPaso.length + 1, competicionId);
+			pst.executeUpdate();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			pst.close();
+			c.close();
+		}
+	}
+
+	public void actualizarTiempoDorsal(String competicionId, String dorsal, int horas, int minutos)
+			throws SQLException {
+		Connection c = null;
+		PreparedStatement pst = null;
+		try {
+			c = BaseDatos.getConnection();
+			pst = c.prepareStatement(updateTime);
+
+			pst.setInt(1, horas);
+			pst.setInt(2, minutos);
+			pst.setString(3, dorsal);
+			pst.setString(4, competicionId);
 			pst.executeUpdate();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

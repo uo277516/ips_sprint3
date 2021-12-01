@@ -3,6 +3,7 @@ package igu;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -13,8 +14,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -31,8 +32,6 @@ import igu.organizador.VentanaCrearCompeticion;
 import igu.organizador.VentanaMostrarCarrerasOrganizador;
 import logica.CompeticionModel;
 import logica.MarcaTiempo;
-import javax.swing.ImageIcon;
-import java.awt.Toolkit;
 
 public class VentanaInicial extends JFrame {
 
@@ -199,21 +198,30 @@ public class VentanaInicial extends JFrame {
 				String[] trozos = strLine.split(" ");
 				if (trozos.length == 1)
 					competicionId = trozos[0];
-				else if (trozos.length >= 3) {
+				else if (trozos.length == 3) {
 					ndatos++;
 					mt = new MarcaTiempo();
 					mt.setDorsal(trozos[0]);
 					mt.setTiempoInicial(trozos[1]);
-					List<Integer> tiemposPaso = new ArrayList<Integer>();
+					mt.setTiempoFinal(trozos[2]);
+					tiempos.add(mt);
+				} else if (trozos.length > 3) {
+					ndatos++;
+					mt = new MarcaTiempo();
+					mt.setDorsal(trozos[0]);
+					mt.setTiempoInicial(trozos[1]);
+					System.out.println(trozos[1]);
+					Integer[] tiemposPaso = new Integer[4];
 					for (int i = 2; i < trozos.length - 1; i++)
 						try {
-							tiemposPaso.add(Integer.valueOf(trozos[i]));
+							tiemposPaso[i - 2] = Integer.valueOf(trozos[i]);
 						} catch (NumberFormatException n) {
 							JOptionPane.showMessageDialog(this,
 									"Los Tiempos no ha podido cargarse. (Formato de fichero incorrecto)");
 						}
 					mt.setTiemposPaso(tiemposPaso);
-					mt.setTiempoFinal(trozos[2]);
+					System.out.println(trozos[trozos.length - 1]);
+					mt.setTiempoFinal(trozos[trozos.length - 1]);
 					tiempos.add(mt);
 				} else {
 					JOptionPane.showMessageDialog(this,

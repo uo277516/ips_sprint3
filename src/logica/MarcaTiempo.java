@@ -1,7 +1,5 @@
 package logica;
 
-import java.util.List;
-
 public class MarcaTiempo {
 
 	String nombre;
@@ -14,7 +12,7 @@ public class MarcaTiempo {
 	String categoria;
 
 	String club;
-	List<Integer> tiemposPaso;
+	Integer[] tiemposPaso;
 	double minutosKm;
 	int diferencia;
 
@@ -29,11 +27,11 @@ public class MarcaTiempo {
 		this.club = club;
 	}
 
-	public List<Integer> getTiemposPaso() {
+	public Integer[] getTiemposPaso() {
 		return tiemposPaso;
 	}
 
-	public void setTiemposPaso(List<Integer> tiemposPaso2) {
+	public void setTiemposPaso(Integer[] tiemposPaso2) {
 		this.tiemposPaso = tiemposPaso2;
 	}
 

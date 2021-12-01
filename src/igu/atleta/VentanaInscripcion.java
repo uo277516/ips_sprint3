@@ -23,6 +23,7 @@ import logica.AtletaDto;
 import logica.AtletaModel;
 import logica.CompeticionDto;
 import logica.CompeticionModel;
+import logica.InscripcionDto;
 import logica.InscripcionModel;
 
 public class VentanaInscripcion extends JFrame {
@@ -37,10 +38,12 @@ public class VentanaInscripcion extends JFrame {
 	private Label lblEmail;
 	private JButton btnValidar;
 	private JLabel lblInfoJus;
+
 	private InscripcionModel ins;
 	private AtletaModel atl;
 	private CompeticionModel comp;
 	private CompeticionDto cSeleccionada;
+
 	@SuppressWarnings("unused")
 	private VentanaMostrarCarreras vC;
 	private JTextArea textArea;
@@ -111,12 +114,10 @@ public class VentanaInscripcion extends JFrame {
 		return txtEmail;
 	}
 
-	public void setEmail(String e)
-	{
+	public void setEmail(String e) {
 		txtEmail.setText(e);
 	}
-	
-	
+
 	private Label getLblEmail() {
 		if (lblEmail == null) {
 			lblEmail = new Label("E-mail:");
@@ -178,7 +179,7 @@ public class VentanaInscripcion extends JFrame {
 	private void mostrarVentanaRegistro() {
 		// this.dispose();
 		// CompeticionDto competicion = crearCompeticion();
-		VentanaRegistro vPal = new VentanaRegistro(this,null);
+		VentanaRegistro vPal = new VentanaRegistro(this, null);
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
 	}
@@ -217,7 +218,7 @@ public class VentanaInscripcion extends JFrame {
 		float n = 10.0f + cSeleccionada.getCuota1();
 		ins.agregarInscripcion(txtEmail.getText(), cSeleccionada.getId(), n, cambiarFormatoFecha());
 		int numeroplazasact = cSeleccionada.getNum_plazas();
-		comp.reducirNumPlazas(numeroplazasact-1, cSeleccionada.getId());
+		comp.reducirNumPlazas(numeroplazasact - 1, cSeleccionada.getId());
 
 	}
 
@@ -252,9 +253,10 @@ public class VentanaInscripcion extends JFrame {
 	}
 
 	/*
-	 * Como resultado de la inscripci�n, el atleta recibir� un justificante con su
-	 * nombre, la competici�n, categor�a en la que participar� (ver siguientes HUs),
-	 * fecha inscripci�n y cantidad que debe abonar en concepto de inscripci�n.
+	 * Como resultado de la inscripci�n, el atleta recibir� un justificante con
+	 * su nombre, la competici�n, categor�a en la que participar� (ver
+	 * siguientes HUs), fecha inscripci�n y cantidad que debe abonar en concepto
+	 * de inscripci�n.
 	 */
 	private String getInformacion() {
 		String s = "";
@@ -277,7 +279,7 @@ public class VentanaInscripcion extends JFrame {
 
 		try {
 			fechaActual = formato.parse(cambiarFormatoFecha());
-			if (cSeleccionada.getF_inicio1() != null) { 
+			if (cSeleccionada.getF_inicio1() != null) {
 				fechaInicio1 = formato.parse(cSeleccionada.getF_inicio1());
 				fechaFin1 = formato.parse(cSeleccionada.getF_fin1());
 			}
@@ -296,16 +298,19 @@ public class VentanaInscripcion extends JFrame {
 		}
 
 		if (cSeleccionada.getF_inicio1() != null) {
-			if (fechaActual.before(fechaFin1) && (  fechaActual.after(fechaInicio1) || fechaActual.equals(fechaInicio1) )) {
+			if (fechaActual.before(fechaFin1)
+					&& (fechaActual.after(fechaInicio1) || fechaActual.equals(fechaInicio1))) {
 				System.out.println(cSeleccionada.getCuota1());
 				return cSeleccionada.getCuota1();
 			}
 		} else if (cSeleccionada.getF_inicio2() != null) {
-			if (fechaActual.before(fechaFin2) && ( fechaActual.after(fechaInicio2) || fechaActual.equals(fechaInicio2))) {
+			if (fechaActual.before(fechaFin2)
+					&& (fechaActual.after(fechaInicio2) || fechaActual.equals(fechaInicio2))) {
 				return cSeleccionada.getCuota2();
 			}
 		} else if (cSeleccionada.getF_inicio3() != null) {
-			if (fechaActual.before(fechaFin3) && ( fechaActual.after(fechaInicio3) || fechaActual.equals(fechaInicio3))) {
+			if (fechaActual.before(fechaFin3)
+					&& (fechaActual.after(fechaInicio3) || fechaActual.equals(fechaInicio3))) {
 				return cSeleccionada.getCuota3();
 			}
 		}
@@ -326,7 +331,7 @@ public class VentanaInscripcion extends JFrame {
 
 	private JLabel getLblInfoJus() {
 		if (lblInfoJus == null) {
-			lblInfoJus = new JLabel("A continuación, se imprimirá el siguiente justificante informante:");
+			lblInfoJus = new JLabel("A continuaci�n, se imprimir� el siguiente justificante informante:");
 			lblInfoJus.setVisible(false);
 			lblInfoJus.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			lblInfoJus.setBounds(20, 172, 374, 21);
@@ -349,7 +354,7 @@ public class VentanaInscripcion extends JFrame {
 			btnSiguiente.setEnabled(false);
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int seleccion = JOptionPane.showOptionDialog(null, "Método de pago",
+					int seleccion = JOptionPane.showOptionDialog(null, "M�todo de pago",
 							"Seleccione una opción para pagar su inscripción", JOptionPane.YES_NO_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null, // null para icono por defecto.
 							new Object[] { "Tarjeta de crédito", "Tranferencia" }, // null para YES, NO y CANCEL
@@ -376,6 +381,7 @@ public class VentanaInscripcion extends JFrame {
 	protected void mostrarVentanaTransferencia() {
 		this.dispose();
 		VentanaTransferencia vPal = new VentanaTransferencia();
+		ins.actualizarInscripcionEstado(InscripcionDto.PENDIENTE, atleta.getDni(), cSeleccionada.getId());
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
 
@@ -383,7 +389,6 @@ public class VentanaInscripcion extends JFrame {
 
 	protected void mostrarVentanaTarjetaDeCredito() {
 		this.dispose();
-		// CompeticionDto competicion = crearCompeticion();
 		VentanaTarjetaCredito vPal = new VentanaTarjetaCredito(this, cSeleccionada, atleta);
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
