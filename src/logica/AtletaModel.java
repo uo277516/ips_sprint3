@@ -417,7 +417,7 @@ public class AtletaModel {
 
 	private void addAtletaP(String dni, String nombre, String sexo, String fecha, String email) throws SQLException {
 
-		// Conexión a la base de datos
+		// Conexiï¿½n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
 		// ResultSet rs = null;
@@ -587,8 +587,8 @@ public class AtletaModel {
 	public int calcularEdad(String fechaNac) {
 		if (fechaNac != null) {
 			String[] trozos = fechaNac.split("/");
-			Integer añoNac = Integer.parseInt(trozos[2]);
-			return LocalDateTime.now().getYear() - añoNac;
+			Integer aux = Integer.parseInt(trozos[2]);
+			return LocalDateTime.now().getYear() - aux;
 		}
 		return 0;
 	}
