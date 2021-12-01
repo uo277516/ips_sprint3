@@ -775,8 +775,10 @@ public class CompeticionModel {
 	}
 
 	private double calcularMinutosKm(InscripcionDto i) {
-		return Integer.parseInt(getCompeticionById(i.getId_c()).get(0).getDistancia())
-				/ (i.getHoras() * 60 + i.getMinutos());
+		if (i.getHoras() > 0 || i.getMinutos() > 0)
+			return Double.parseDouble(getCompeticionById(i.getId_c()).get(0).getDistancia())
+					/ (i.getHoras() * 60 + i.getMinutos());
+		return 0;
 	}
 
 }

@@ -124,10 +124,10 @@ public class VentanaClasificacion extends JFrame {
 			modelo.addColumn("Minutos");
 			modelo.addColumn("Categoria");
 			modelo.addColumn("Club");
-			modelo.addColumn("Tiempo de paso 1");
-			modelo.addColumn("Tiempo de paso 2");
-			modelo.addColumn("Tiempo de paso 3");
-			modelo.addColumn("Tiempo de paso 4");
+			modelo.addColumn("Tp1");
+			modelo.addColumn("Tp2");
+			modelo.addColumn("Tp3");
+			modelo.addColumn("Tp4");
 			modelo.addColumn("Min/km");
 			modelo.addColumn("Diferencia (Minutos)");
 			String[][] info = new String[tiempos.size()][15];
@@ -374,7 +374,7 @@ public class VentanaClasificacion extends JFrame {
 
 	private JCheckBox getChTiempos() {
 		if (chTiempos == null) {
-			chTiempos = new JCheckBox("Tiempos de paso");
+			chTiempos = new JCheckBox("Tiempos de paso (TP)");
 		}
 		return chTiempos;
 	}
