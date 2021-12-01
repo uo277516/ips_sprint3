@@ -29,6 +29,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import igu.VentanaInicial;
 import igu.atleta.VentanaAtletaListaEspera;
 import logica.CompeticionDto;
 import logica.CompeticionModel;
@@ -90,11 +91,13 @@ public class VentanaCrearCompeticion extends JFrame {
 	private JRadioButton rdbtnSiLista;
 	private JRadioButton rdbtnNoLista;
 	private final ButtonGroup buttonGroupListaEspera = new ButtonGroup();
+	private VentanaInicial vi;
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaCrearCompeticion() {
+	public VentanaCrearCompeticion(VentanaInicial vi) {
+		this.vi=vi;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
 
 		comp = new CompeticionModel();
@@ -862,7 +865,8 @@ public class VentanaCrearCompeticion extends JFrame {
 						listam.addLista(idLista, id_comp);
 						comp.actualizarCompeticionIdLista(idLista, id_comp);
 					}
-					System.exit(0);
+					vi.setVisible(true);
+					dispose();
 				}
 			});
 			btnFinalizar.setForeground(Color.WHITE);

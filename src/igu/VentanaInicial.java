@@ -154,12 +154,12 @@ public class VentanaInicial extends JFrame {
 	}
 
 	private void mostrarVentanaCrearCompeticion() {
-		this.dispose();
+		//this.dispose();
 		// CompeticionDto competicion = crearCompeticion();
-		VentanaCrearCompeticion vPal = new VentanaCrearCompeticion();
+		VentanaCrearCompeticion vPal = new VentanaCrearCompeticion(this);
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
-
+		this.setVisible(false);
 	}
 
 	private boolean actualizarClasificaciones() throws FileNotFoundException {
