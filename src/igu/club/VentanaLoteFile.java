@@ -60,14 +60,15 @@ public class VentanaLoteFile extends JFrame {
 	private JLabel lblFichero;
 	private JLabel lblNewLabel;
 	private JButton btnValidar;
-
+	private VentanaMostrarCarrerasClub vc;
 
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaLoteFile(CompeticionDto com) {
+	public VentanaLoteFile(VentanaMostrarCarrerasClub vc,CompeticionDto com) {
 		this.comp=com;
+		this.vc = vc;
 		setTitle("Ventana Inscripcion Club");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 599, 497);
@@ -368,7 +369,7 @@ public class VentanaLoteFile extends JFrame {
 			btnFinalizar = new JButton("Finalizar");
 			btnFinalizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					dispose();
+					volverInicio();
 				}
 			});
 			btnFinalizar.setForeground(Color.WHITE);
@@ -380,6 +381,13 @@ public class VentanaLoteFile extends JFrame {
 		}
 		return btnFinalizar;
 	}
+	
+	private void volverInicio() {
+		vc.getVentanaInicial().setVisible(true);
+		this.dispose();
+		
+	}
+	
 	private JTextField getTxtFichero() {
 		if (txtFichero == null) {
 			txtFichero = new JTextField();

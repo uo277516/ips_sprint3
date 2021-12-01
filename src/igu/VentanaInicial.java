@@ -324,12 +324,12 @@ public class VentanaInicial extends JFrame {
 	}
 	
 	private void mostrarVentanaCarrerasClub() {
-		this.dispose();
+		//this.dispose();
 		// CompeticionDto competicion = crearCompeticion();
 		VentanaMostrarCarrerasClub vPal = new VentanaMostrarCarrerasClub(this);
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
-
+		this.setVisible(false);
 	}
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
