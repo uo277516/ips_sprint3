@@ -303,7 +303,7 @@ public class VentanaMostrarCarrerasClub extends JFrame {
 	private void mostrarVentanaLote() throws SQLException  {
 		this.dispose();
 		CompeticionDto competicion;
-
+		if (table.getSelectedRow()==-1) JOptionPane.showMessageDialog(this, "Error: seleccione una competicion");
 		competicion = crearCompeticion();
 		
 		VentanaLoteFile vPal = new VentanaLoteFile(this,competicion);

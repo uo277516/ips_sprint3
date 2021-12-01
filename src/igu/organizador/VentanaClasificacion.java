@@ -2,7 +2,6 @@ package igu.organizador;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -45,26 +44,28 @@ public class VentanaClasificacion extends JFrame {
 	private JCheckBox chDiferencia;
 	private JButton btChecks;
 	private JLabel lblNewLabel;
+	private String id;
+	private CompeticionModel comp;
 
 	private DefaultTableModel modelo;
 
 	private List<MarcaTiempo> tiempos;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaClasificacion frame = new VentanaClasificacion("00");
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					VentanaClasificacion frame = new VentanaClasificacion("00");
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
@@ -74,10 +75,10 @@ public class VentanaClasificacion extends JFrame {
 	public VentanaClasificacion(String id) throws SQLException {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAtletaListaEspera.class
 				.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
-
+		this.id=id;
 		tiempos = cm.ordenarPorCategoria(cm.getClasificacion(id));
-		setTitle("Clasificación:");
-
+		setTitle("Clasificacion:");
+		comp = new CompeticionModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 825, 488);
 		contentPane = new JPanel();
@@ -121,14 +122,14 @@ public class VentanaClasificacion extends JFrame {
 			modelo.addColumn("Edad");
 			modelo.addColumn("Horas");
 			modelo.addColumn("Minutos");
-			modelo.addColumn("Categoría");
+			modelo.addColumn("Categoria");
 			modelo.addColumn("Club");
 			modelo.addColumn("Tiempo de paso 1");
 			modelo.addColumn("Tiempo de paso 2");
 			modelo.addColumn("Tiempo de paso 3");
 			modelo.addColumn("Tiempo de paso 4");
 			modelo.addColumn("Min/km");
-			modelo.addColumn("Diferencia 1º (Minutos)");
+			modelo.addColumn("Diferencia (Minutos)");
 			String[][] info = new String[tiempos.size()][15];
 
 			for (int i = 0; i < tiempos.size(); i++) {
@@ -345,6 +346,8 @@ public class VentanaClasificacion extends JFrame {
 	private JLabel getLabel() {
 		if (label == null) {
 			label = new JLabel("A continuaci\u00F3n se muestra la clasificacion de <dynamic>");
+			String nombreCompeticion = comp.getCompeticionById(id).get(0).getNombre();
+			label = new JLabel("A continuaci\u00F3n se muestra la clasificacion de " + nombreCompeticion);
 			label.setFont(new Font("Dialog", Font.BOLD, 14));
 		}
 		return label;
