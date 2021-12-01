@@ -91,6 +91,7 @@ public class VentanaCrearCompeticion extends JFrame {
 	private JRadioButton rdbtnSiLista;
 	private JRadioButton rdbtnNoLista;
 	private final ButtonGroup buttonGroupListaEspera = new ButtonGroup();
+	@SuppressWarnings("unused")
 	private VentanaInicial vi;
 
 	/**
@@ -816,7 +817,7 @@ public class VentanaCrearCompeticion extends JFrame {
 		if (lblGestionarCat == null) {
 			lblGestionarCat = new JLabel("Gestionar las categorias de la competici\u00F3n:");
 			lblGestionarCat.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			lblGestionarCat.setBounds(619, 311, 256, 30);
+			lblGestionarCat.setBounds(619, 429, 256, 30);
 		}
 		return lblGestionarCat;
 	}
@@ -833,7 +834,7 @@ public class VentanaCrearCompeticion extends JFrame {
 			btnGestionar.setBackground(Color.GREEN);
 			btnGestionar.setForeground(Color.WHITE);
 			btnGestionar.setFont(new Font("Tahoma", Font.PLAIN, 15));
-			btnGestionar.setBounds(876, 314, 103, 23);
+			btnGestionar.setBounds(897, 432, 103, 23);
 		}
 		return btnGestionar;
 	}
@@ -865,7 +866,7 @@ public class VentanaCrearCompeticion extends JFrame {
 						listam.addLista(idLista, id_comp);
 						comp.actualizarCompeticionIdLista(idLista, id_comp);
 					}
-					vi.setVisible(true);
+					vi.dispose();
 					dispose();
 				}
 			});
@@ -1015,7 +1016,7 @@ public class VentanaCrearCompeticion extends JFrame {
 					new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 					"Lista de espera", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 			pnlListaEspera.setBackground(Color.WHITE);
-			pnlListaEspera.setBounds(619, 352, 551, 97);
+			pnlListaEspera.setBounds(619, 310, 551, 97);
 			pnlListaEspera.setLayout(null);
 			pnlListaEspera.add(getLblListaEspera());
 			pnlListaEspera.add(getRdbtnSiLista());

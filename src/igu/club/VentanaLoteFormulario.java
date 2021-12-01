@@ -71,6 +71,7 @@ public class VentanaLoteFormulario extends JFrame {
 	private CompeticionDto comp;
 	private AtletaModel amodel = new AtletaModel();
 	private JButton btnFinalizar;
+	@SuppressWarnings("unused")
 	private VentanaMostrarCarrerasClub vc;
 
 	/**
@@ -618,7 +619,7 @@ public class VentanaLoteFormulario extends JFrame {
 	}
 	
 	private void volverInicio() {
-		vc.getVentanaInicial().setVisible(true);
+		vc.getVentanaInicial().dispose();
 		this.dispose();
 		
 	}

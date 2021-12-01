@@ -60,6 +60,7 @@ public class VentanaLoteFile extends JFrame {
 	private JLabel lblFichero;
 	private JLabel lblNewLabel;
 	private JButton btnValidar;
+	@SuppressWarnings("unused")
 	private VentanaMostrarCarrerasClub vc;
 
 
@@ -383,7 +384,7 @@ public class VentanaLoteFile extends JFrame {
 	}
 	
 	private void volverInicio() {
-		vc.getVentanaInicial().setVisible(true);
+		vc.getVentanaInicial().dispose();
 		this.dispose();
 		
 	}
