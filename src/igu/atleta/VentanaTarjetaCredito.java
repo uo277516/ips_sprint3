@@ -410,6 +410,11 @@ public class VentanaTarjetaCredito extends JFrame {
 	private JButton getBtnFinalizar() {
 		if (btnFinalizar == null) {
 			btnFinalizar = new JButton("Finalizar");
+			btnFinalizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
 			btnFinalizar.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			btnFinalizar.setForeground(Color.WHITE);
 			btnFinalizar.setBackground(Color.RED);
