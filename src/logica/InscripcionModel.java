@@ -40,7 +40,7 @@ public class InscripcionModel {
 	public static String sqlActualizarDorsales = "update inscripcion set dorsal=? where id_c=? and dni_a=?";
 	public static String sqlActEnComp = "update competicion set d_asig=1 where id=?";
 
-	public static String updateTimes = "update inscripcion set horas = ? , minutos = ? where dorsal = ? and id_c = ?";
+	public static String updateTimes = "update inscripcion set horas = ? , minutos = ? , tp1 = ?, tp2 = ?, tp3 = ?, tp4 = ? where dorsal = ? and id_c = ?";
 
 	public static String findInscripcionByDniId = "select * from inscripcion where dni_a=? and id_c=?";
 
@@ -48,11 +48,10 @@ public class InscripcionModel {
 
 	public static String findInscripcionByEmailId = "select * from inscripcion where email=? and id_c=?";
 
-
-	public List<InscripcionDto> findInscripcionByDniId(String dni,String id_c){
+	public List<InscripcionDto> findInscripcionByDniId(String dni, String id_c) {
 		List<InscripcionDto> a = new ArrayList<>();
 		try {
-			a = findInscripcionByDniIdP(dni,id_c);
+			a = findInscripcionByDniIdP(dni, id_c);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -70,7 +69,7 @@ public class InscripcionModel {
 		try {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(findInscripcionByDniId);
-			pst.setString(1,dni);
+			pst.setString(1, dni);
 			pst.setString(2, id_c);
 			rs = pst.executeQuery();
 
@@ -223,12 +222,12 @@ public class InscripcionModel {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
-			//        	if (rs==null) return false;
-			//        	else {
+			// if (rs==null) return false;
+			// else {
 			rs.close();
 			pst.close();
 			c.close();
-			//        	}
+			// }
 		}
 
 		if (listaAtletas.size() > 0)
@@ -253,7 +252,7 @@ public class InscripcionModel {
 		// Conexi�n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
-		//        ResultSet rs = null;
+		// ResultSet rs = null;
 		try {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(sql3);
@@ -284,15 +283,15 @@ public class InscripcionModel {
 		int yearActual = LocalDate.now().getYear();
 		int cat = yearActual - year;
 
-		String retorno="";
+		String retorno = "";
 
 		for (CategoriaDto c : categorias) {
 			if (c.getEdad_min() <= cat && cat <= c.getEdad_max()) {
-				retorno= c.getNombre();
+				retorno = c.getNombre();
 			}
 		}
 		if (retorno.equals(""))
-			retorno="Absoluta";
+			retorno = "Absoluta";
 		return retorno;
 	}
 
@@ -469,7 +468,7 @@ public class InscripcionModel {
 			pst.setString(1, dni_a);
 			pst.setString(2, id_c);
 			rs = pst.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				a = DtoAssembler.toInscripcionDto(rs);
 			}
 
@@ -496,7 +495,7 @@ public class InscripcionModel {
 		// Conexi�n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
-		//        ResultSet rs = null;
+		// ResultSet rs = null;
 		try {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(sql7UpdateEstado);
@@ -527,7 +526,7 @@ public class InscripcionModel {
 		// Conexi�n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
-		//        ResultSet rs = null;
+		// ResultSet rs = null;
 		try {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(sql7UpdateFecha);
@@ -558,7 +557,7 @@ public class InscripcionModel {
 		// Conexi�n a la base de datos
 		Connection c = null;
 		PreparedStatement pst = null;
-		//        ResultSet rs = null;
+		// ResultSet rs = null;
 		try {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(sql7UpdatePago);
@@ -627,7 +626,7 @@ public class InscripcionModel {
 		return listaInscripciones;
 	}
 
-	//aver
+	// aver
 	public List<InscripcionDto> getInscripcionesPorTiempoYSexo(String carreraId, String sexo) throws SQLException {
 		List<InscripcionDto> listaInscripciones = new ArrayList<InscripcionDto>();
 
@@ -789,17 +788,22 @@ public class InscripcionModel {
 
 	}
 
-	public void actualizarTiempoDorsal(String competicionId, String dorsal, int horas, int minutos)
-			throws SQLException {
+	public void actualizarTiempoDorsal(String competicionId, String dorsal, int horas, int minutos,
+			List<Integer> tiemposPaso) throws SQLException {
 		Connection c = null;
 		PreparedStatement pst = null;
 		try {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(updateTimes);
-			pst.setString(3, dorsal);
-			pst.setString(4, competicionId);
+
 			pst.setInt(1, horas);
 			pst.setInt(2, minutos);
+			Integer[] tiempos = new Integer[4];
+			tiempos = (Integer[]) tiemposPaso.toArray();
+			for (int i = 0; i < tiempos.length; i++)
+				pst.setInt(i + 3, tiempos[i]);
+			pst.setString(tiemposPaso.size(), dorsal);
+			pst.setString(tiemposPaso.size() + 1, competicionId);
 			pst.executeUpdate();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -860,7 +864,8 @@ public class InscripcionModel {
 		return ins;
 	}
 
-	private List<InscripcionDto> getInscripcionesMetodoPagoEstadoP(String metodoPago, String estado) throws SQLException {
+	private List<InscripcionDto> getInscripcionesMetodoPagoEstadoP(String metodoPago, String estado)
+			throws SQLException {
 		List<InscripcionDto> listaInscrpcines = new ArrayList<InscripcionDto>();
 
 		// Conexi�n a la base de datos
@@ -891,10 +896,10 @@ public class InscripcionModel {
 		return listaInscrpcines;
 	}
 
-	public void insertarInscripcionClub(String dni, String id, String categoria, String email,
-			String fecha,String metodo, float cuota, String estado, String club) {
+	public void insertarInscripcionClub(String dni, String id, String categoria, String email, String fecha,
+			String metodo, float cuota, String estado, String club) {
 		try {
-			insertarInscripcionClubP(dni, id,categoria,email,fecha,metodo,cuota,estado,club);
+			insertarInscripcionClubP(dni, id, categoria, email, fecha, metodo, cuota, estado, club);
 		} catch (SQLException e) {
 			System.out.println("no se pudo a�adir -- inscripcion model");
 			e.printStackTrace();
@@ -902,23 +907,23 @@ public class InscripcionModel {
 
 	}
 
-	private void insertarInscripcionClubP(String dni, String id, String categoria, String email, String fecha,String metodo,
-			float cuota, String estado, String club) throws SQLException {
+	private void insertarInscripcionClubP(String dni, String id, String categoria, String email, String fecha,
+			String metodo, float cuota, String estado, String club) throws SQLException {
 		Connection c = null;
 		PreparedStatement pst = null;
 		// ResultSet rs = null;
 		try {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(sqlInsertarClub);
-			pst.setString(1,dni);
-			pst.setString(2,id);
-			pst.setString(3,categoria);
-			pst.setString(4,email);
-			pst.setString(5,fecha);
-			pst.setString(6,metodo);
-			pst.setFloat(7,cuota);
-			pst.setString(8,estado);
-			pst.setString(9,club);
+			pst.setString(1, dni);
+			pst.setString(2, id);
+			pst.setString(3, categoria);
+			pst.setString(4, email);
+			pst.setString(5, fecha);
+			pst.setString(6, metodo);
+			pst.setFloat(7, cuota);
+			pst.setString(8, estado);
+			pst.setString(9, club);
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
@@ -930,9 +935,7 @@ public class InscripcionModel {
 
 	}
 
-
-	public void cancelarInscripcion(String dni_a, String id_c)  
-	{
+	public void cancelarInscripcion(String dni_a, String id_c) {
 		try {
 			cancelarInscripcionP(dni_a, id_c);
 		} catch (SQLException e) {
@@ -948,8 +951,8 @@ public class InscripcionModel {
 		try {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement("update inscripcion set estado='Cancelado' where dni_a=? and id_c=?");
-			pst.setString(1,dni_a);
-			pst.setString(2,id_c);
+			pst.setString(1, dni_a);
+			pst.setString(2, id_c);
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
@@ -960,10 +963,7 @@ public class InscripcionModel {
 		}
 	}
 
-
-
-	public void cancelarInscripcionPagada(String dni_a, String id_c)  
-	{
+	public void cancelarInscripcionPagada(String dni_a, String id_c) {
 		try {
 			cancelarInscripcionPagadaP(dni_a, id_c);
 		} catch (SQLException e) {
@@ -978,9 +978,10 @@ public class InscripcionModel {
 		// ResultSet rs = null;
 		try {
 			c = BaseDatos.getConnection();
-			pst = c.prepareStatement("update inscripcion set estado='Cancelado-Pendiente de devolucion' where dni_a=? and id_c=?");
-			pst.setString(1,dni_a);
-			pst.setString(2,id_c);
+			pst = c.prepareStatement(
+					"update inscripcion set estado='Cancelado-Pendiente de devolucion' where dni_a=? and id_c=?");
+			pst.setString(1, dni_a);
+			pst.setString(2, id_c);
 			pst.executeUpdate();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -1011,7 +1012,7 @@ public class InscripcionModel {
 		try {
 			c = BaseDatos.getConnection();
 			pst = c.prepareStatement(findInscripcionByEmailId);
-			pst.setString(1,email);
+			pst.setString(1, email);
 			pst.setString(2, id);
 			rs = pst.executeQuery();
 
@@ -1027,7 +1028,5 @@ public class InscripcionModel {
 		}
 		return listaInscrpcines;
 
-
 	}
 }
-

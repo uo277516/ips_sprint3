@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -68,7 +69,8 @@ public class VentanaInicial extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaInicial() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaInicial.class.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaInicial.class
+				.getResource("/img/icono-plano-de-la-bandera-carreras-con-sombra-larga-colorido-198376094.jpg")));
 		ndatos = 0;
 		cm = new CompeticionModel();
 		setLocationRelativeTo(null);
@@ -141,10 +143,12 @@ public class VentanaInicial extends JFrame {
 			mostrarVentanaClasificaciones();
 		} // moises
 		else if (seleccion == 2) {
-			if (actualizarClasificaciones())
-				JOptionPane.showMessageDialog(this, "Datos de " + cm.getCompeticionById(competicionId).get(0).getNombre() + " cargados. \n"
-						+ "Se han actualizado los tiempos de " + ndatos + " atletas");
-			else
+			if (actualizarClasificaciones()) {
+				JOptionPane.showMessageDialog(this,
+						"Datos de " + cm.getCompeticionById(competicionId).get(0).getNombre() + " cargados. \n"
+								+ "Se han actualizado los tiempos de " + ndatos + " atletas");
+				ndatos = 0;
+			} else
 				JOptionPane.showMessageDialog(this, "Los Tiempos no ha podido cargarse."); // moises
 		} else if (seleccion == 3) {
 			asignarDorsales();
@@ -154,7 +158,7 @@ public class VentanaInicial extends JFrame {
 	}
 
 	private void mostrarVentanaCrearCompeticion() {
-		//this.dispose();
+		// this.dispose();
 		// CompeticionDto competicion = crearCompeticion();
 		VentanaCrearCompeticion vPal = new VentanaCrearCompeticion(this);
 		vPal.setLocationRelativeTo(this);
@@ -164,9 +168,7 @@ public class VentanaInicial extends JFrame {
 
 	private boolean actualizarClasificaciones() throws FileNotFoundException {
 		File file = cargarFicherosTiempos();
-		if (!getValues(file))
-			return false;
-		return true;
+		return getValues(file);
 
 	}
 
@@ -197,11 +199,20 @@ public class VentanaInicial extends JFrame {
 				String[] trozos = strLine.split(" ");
 				if (trozos.length == 1)
 					competicionId = trozos[0];
-				else if (trozos.length == 3) {
+				else if (trozos.length >= 3) {
 					ndatos++;
 					mt = new MarcaTiempo();
 					mt.setDorsal(trozos[0]);
 					mt.setTiempoInicial(trozos[1]);
+					List<Integer> tiemposPaso = new ArrayList<Integer>();
+					for (int i = 2; i < trozos.length - 1; i++)
+						try {
+							tiemposPaso.add(Integer.valueOf(trozos[i]));
+						} catch (NumberFormatException n) {
+							JOptionPane.showMessageDialog(this,
+									"Los Tiempos no ha podido cargarse. (Formato de fichero incorrecto)");
+						}
+					mt.setTiemposPaso(tiemposPaso);
 					mt.setTiempoFinal(trozos[2]);
 					tiempos.add(mt);
 				} else {
@@ -238,7 +249,6 @@ public class VentanaInicial extends JFrame {
 
 	private void asignarDorsales() {
 		this.dispose();
-		// CompeticionDto competicion = crearCompeticion();
 		VentanaAsignarDorsales vPal = new VentanaAsignarDorsales(this);
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
@@ -247,7 +257,6 @@ public class VentanaInicial extends JFrame {
 
 	private void mostrarVentanaClasificaciones() {
 		this.dispose();
-		// CompeticionDto competicion = crearCompeticion();
 		VentanaMostrarCarrerasOrganizador vPal = new VentanaMostrarCarrerasOrganizador("c");
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
@@ -256,7 +265,6 @@ public class VentanaInicial extends JFrame {
 
 	private void mostrarVentanaInscripciones() {
 		this.dispose();
-		// CompeticionDto competicion = crearCompeticion();
 		VentanaMostrarCarrerasOrganizador vPal = new VentanaMostrarCarrerasOrganizador("i");
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
@@ -288,12 +296,12 @@ public class VentanaInicial extends JFrame {
 
 	private void mostrarVentanaCarreras() {
 		this.dispose();
-		// CompeticionDto competicion = crearCompeticion();
 		VentanaMostrarCarreras vPal = new VentanaMostrarCarreras(this);
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
 
 	}
+
 	private JButton getBtnClub() {
 		if (btnClub == null) {
 			btnClub = new JButton("Club");
@@ -307,12 +315,15 @@ public class VentanaInicial extends JFrame {
 		}
 		return btnClub;
 	}
-	
+
 	protected void elegirSiNoClub() {
-		int seleccion = JOptionPane.showOptionDialog(this,
-				"¿Desea inscribir un lote de atletas?", "Inscripcion de lotes",
-				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null para icono por defecto.
-				new Object[] { "Si"}, // null para YES, NO y CANCEL
+		int seleccion = JOptionPane.showOptionDialog(this, "¿Desea inscribir un lote de atletas?",
+				"Inscripcion de lotes", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, // null
+																												// para
+																												// icono
+																												// por
+																												// defecto.
+				new Object[] { "Si" }, // null para YES, NO y CANCEL
 				"opcion 1");
 
 		if (seleccion != -1)
@@ -322,15 +333,16 @@ public class VentanaInicial extends JFrame {
 			mostrarVentanaCarrerasClub();
 		}
 	}
-	
+
 	private void mostrarVentanaCarrerasClub() {
-		//this.dispose();
+		// this.dispose();
 		// CompeticionDto competicion = crearCompeticion();
 		VentanaMostrarCarrerasClub vPal = new VentanaMostrarCarrerasClub(this);
 		vPal.setLocationRelativeTo(this);
 		vPal.setVisible(true);
 		this.setVisible(false);
 	}
+
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("");

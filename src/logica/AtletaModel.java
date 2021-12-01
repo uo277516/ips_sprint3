@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,14 +27,13 @@ public class AtletaModel {
 	public static String sqlFindById = "select * from atleta where id=?";
 	// String dni, String nombre, String sexo, String fecha, String email
 	public static String sqlAdd = "insert into Atleta(dni, nombre, sexo, f_nac, email) values (?,?,?,?,?)";
-	
-	public static String findAtletaByDniId= "select * from atleta, inscripcion, competicion" + "		where "
+
+	public static String findAtletaByDniId = "select * from atleta, inscripcion, competicion" + "		where "
 			+ " 	atleta.dni = inscripcion.dni_a and " + "     inscripcion.id_c = competicion.id and "
 			+ "		inscripcion.dni_a=? and " + "     competicion.nombre=?";
 	public static String addAtletaAListaEspera = "insert into en_espera(id_listaespera, dni_atleta, num_orden) values(?,?,?)";
 	public static String hayGenteEnLista = "select * from atleta a, en_espera e where e.id_listaespera = ? and e.dni_atleta = a.dni";
-	
-	
+
 	public List<AtletaDto> getAtletas() throws SQLException {
 		return getAllAtletas();
 	}
@@ -118,7 +118,7 @@ public class AtletaModel {
 			return false;
 		}
 	}
-	
+
 	public boolean findAtletaByDniId(String dni, String cmpe) {
 		boolean op = false;
 		try {
@@ -306,7 +306,7 @@ public class AtletaModel {
 		}
 		return years;
 	}
-	
+
 	public AtletaDto findAtletaByDni(String dni) {
 		AtletaDto a = null;
 		try {
@@ -317,7 +317,6 @@ public class AtletaModel {
 		}
 		return a;
 	}
-	
 
 	private AtletaDto findAtletaByDniP(String dni) throws SQLException {
 		AtletaDto a;
@@ -344,8 +343,8 @@ public class AtletaModel {
 		}
 		return a;
 	}
-	
-	public AtletaDto  findAtletaByEmail(String email) {
+
+	public AtletaDto findAtletaByEmail(String email) {
 		AtletaDto a = null;
 		try {
 			a = findAtletaByEmailP(email);
@@ -354,7 +353,7 @@ public class AtletaModel {
 			e.printStackTrace();
 		}
 		return a;
-		
+
 	}
 
 	private AtletaDto findAtletaByEmailP(String email) throws SQLException {
@@ -406,7 +405,6 @@ public class AtletaModel {
 		}
 		return a;
 	}
-
 
 	public void addAtleta(String dni, String nombre, String sexo, String fecha, String email) {
 		try {
@@ -479,8 +477,6 @@ public class AtletaModel {
 
 		return atletas;
 	}
-	
-	
 
 	public List<AtletaDto> atletaYaRegistradoEnLaBaseDni(String dni) {
 		List<AtletaDto> atletas = new ArrayList<AtletaDto>();
@@ -518,7 +514,7 @@ public class AtletaModel {
 
 		return atletas;
 	}
-	
+
 	public void addAtletaAListaEspera(String dniA, String idL, int orden) {
 		try {
 			addAtletaAListaEsperaP(dniA, idL, orden);
@@ -586,5 +582,14 @@ public class AtletaModel {
 			System.out.println("no registrado, puede registrarse");
 			return false;
 		}
+	}
+
+	public int calcularEdad(String fechaNac) {
+		if (fechaNac != null) {
+			String[] trozos = fechaNac.split("/");
+			Integer añoNac = Integer.parseInt(trozos[2]);
+			return LocalDateTime.now().getYear() - añoNac;
+		}
+		return 0;
 	}
 }

@@ -1,17 +1,57 @@
 package logica;
 
+import java.util.List;
+
 public class MarcaTiempo {
 
 	String nombre;
 	String posicion;
 	String sexo;
-	String edad;
+	int edad;
 	String dorsal;
 	String tiempoInicial;
 	String tiempoFinal;
 	String categoria;
+
+	String club;
+	List<Integer> tiemposPaso;
+	double minutosKm;
+	int diferencia;
+
 	int horas;
 	int minutos;
+
+	public String getClub() {
+		return club;
+	}
+
+	public void setClub(String club) {
+		this.club = club;
+	}
+
+	public List<Integer> getTiemposPaso() {
+		return tiemposPaso;
+	}
+
+	public void setTiemposPaso(List<Integer> tiemposPaso2) {
+		this.tiemposPaso = tiemposPaso2;
+	}
+
+	public double getMinutosKm() {
+		return minutosKm;
+	}
+
+	public void setMinutosKm(double minutosKm) {
+		this.minutosKm = minutosKm;
+	}
+
+	public int getDiferencia() {
+		return diferencia;
+	}
+
+	public void setDiferencia(int i) {
+		this.diferencia = i;
+	}
 
 	public String getCategoria() {
 		return categoria;
@@ -45,11 +85,11 @@ public class MarcaTiempo {
 		this.sexo = sexo;
 	}
 
-	public String getEdad() {
+	public int getEdad() {
 		return edad;
 	}
 
-	public void setEdad(String edad) {
+	public void setEdad(int edad) {
 		this.edad = edad;
 	}
 
