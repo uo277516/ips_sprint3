@@ -1,4 +1,4 @@
-package logica;
+package logica.inscripcion;
 
 public class InscripcionDto {
 

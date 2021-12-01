@@ -19,12 +19,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-import logica.AtletaDto;
-import logica.AtletaModel;
-import logica.CompeticionDto;
-import logica.CompeticionModel;
-import logica.InscripcionDto;
-import logica.InscripcionModel;
+import logica.atleta.AtletaDto;
+import logica.atleta.AtletaModel;
+import logica.competicion.CompeticionDto;
+import logica.competicion.CompeticionModel;
+import logica.inscripcion.InscripcionDto;
+import logica.inscripcion.InscripcionModel;
 
 public class VentanaInscripcion extends JFrame {
 

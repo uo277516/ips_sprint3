@@ -1,4 +1,4 @@
-package logica;
+package logica.atleta;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

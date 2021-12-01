@@ -19,8 +19,8 @@ import javax.swing.border.EmptyBorder;
 import igu.VentanaInicial;
 import igu.atleta.VentanaAtletaInscripcion;
 import igu.atleta.VentanaAtletaListaEspera;
-import logica.CompeticionDto;
-import logica.CompeticionModel;
+import logica.competicion.CompeticionDto;
+import logica.competicion.CompeticionModel;
 
 public class VentanaMostrarCarrerasOrganizador extends JFrame {
 

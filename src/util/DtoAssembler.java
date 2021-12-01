@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import logica.AtletaDto;
-import logica.CategoriaDto;
-import logica.CompeticionDto;
-import logica.InscripcionDto;
-import logica.ListaEsperaDto;
+import logica.atleta.AtletaDto;
+import logica.categoria.CategoriaDto;
+import logica.competicion.CompeticionDto;
+import logica.inscripcion.InscripcionDto;
+import logica.listaEspera.ListaEsperaDto;
 
 @SuppressWarnings("unused")
 public class DtoAssembler {

@@ -22,8 +22,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import igu.atleta.VentanaAtletaListaEspera;
-import logica.CategoriaDto;
-import logica.CategoriaModel;
+import logica.categoria.CategoriaDto;
+import logica.categoria.CategoriaModel;
 
 @SuppressWarnings("serial")
 public class VentanaCategorias extends JFrame {

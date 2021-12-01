@@ -1,4 +1,4 @@
-package logica;
+package logica.categoria;
 
 public class CategoriaDto {
 	

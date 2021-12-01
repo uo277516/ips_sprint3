@@ -1,4 +1,4 @@
-package logica;
+package logica.competicion;
 
 public class MarcaTiempo {
 

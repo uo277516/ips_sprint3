@@ -23,10 +23,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import igu.VentanaInicial;
-import logica.AtletaModel;
-import logica.CompeticionDto;
-import logica.CompeticionModel;
-import logica.InscripcionModel;
+import logica.atleta.AtletaModel;
+import logica.competicion.CompeticionDto;
+import logica.competicion.CompeticionModel;
+import logica.inscripcion.InscripcionModel;
 
 public class VentanaMostrarCarrerasClub extends JFrame {
 

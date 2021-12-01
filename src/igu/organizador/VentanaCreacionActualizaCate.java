@@ -17,8 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import igu.atleta.VentanaAtletaListaEspera;
-import logica.CategoriaDto;
-import logica.CategoriaModel;
+import logica.categoria.CategoriaDto;
+import logica.categoria.CategoriaModel;
 
 @SuppressWarnings("serial")
 public class VentanaCreacionActualizaCate extends JFrame {

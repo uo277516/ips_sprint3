@@ -23,11 +23,11 @@ import javax.swing.table.DefaultTableModel;
 
 import igu.VentanaInicial;
 import igu.atleta.VentanaAtletaListaEspera;
-import logica.AtletaModel;
-import logica.CompeticionDto;
-import logica.CompeticionModel;
-import logica.InscripcionDto;
-import logica.InscripcionModel;
+import logica.atleta.AtletaModel;
+import logica.competicion.CompeticionDto;
+import logica.competicion.CompeticionModel;
+import logica.inscripcion.InscripcionDto;
+import logica.inscripcion.InscripcionModel;
 
 public class VentanaAsignarDorsales extends JFrame {
 

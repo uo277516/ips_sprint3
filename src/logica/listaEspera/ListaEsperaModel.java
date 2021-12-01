@@ -1,4 +1,4 @@
-package logica;
+package logica.listaEspera;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

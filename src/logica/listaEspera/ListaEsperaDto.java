@@ -1,4 +1,4 @@
-package logica;
+package logica.listaEspera;
 
 public class ListaEsperaDto {
 

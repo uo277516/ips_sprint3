@@ -12,11 +12,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import logica.AtletaDto;
-import logica.AtletaModel;
-import logica.CompeticionDto;
-import logica.ListaEsperaDto;
-import logica.ListaEsperaModel;
+import logica.atleta.AtletaDto;
+import logica.atleta.AtletaModel;
+import logica.competicion.CompeticionDto;
+import logica.listaEspera.ListaEsperaDto;
+import logica.listaEspera.ListaEsperaModel;
+
 import java.awt.Toolkit;
 
 public class VentanaAtletaListaEspera extends JFrame {

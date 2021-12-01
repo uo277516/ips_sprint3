@@ -24,11 +24,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import logica.AtletaDto;
-import logica.AtletaModel;
-import logica.CompeticionDto;
-import logica.InscripcionDto;
-import logica.InscripcionModel;
+import logica.atleta.AtletaDto;
+import logica.atleta.AtletaModel;
+import logica.competicion.CompeticionDto;
+import logica.inscripcion.InscripcionDto;
+import logica.inscripcion.InscripcionModel;
+
 import java.awt.Toolkit;
 
 public class VentanaAtletaInscripcion extends JFrame {

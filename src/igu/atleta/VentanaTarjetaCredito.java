@@ -22,11 +22,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import logica.AtletaDto;
-import logica.AtletaModel;
-import logica.CompeticionDto;
-import logica.InscripcionDto;
-import logica.InscripcionModel;
+import logica.atleta.AtletaDto;
+import logica.atleta.AtletaModel;
+import logica.competicion.CompeticionDto;
+import logica.inscripcion.InscripcionDto;
+import logica.inscripcion.InscripcionModel;
 import util.DtoAssembler;
 
 @SuppressWarnings("serial")

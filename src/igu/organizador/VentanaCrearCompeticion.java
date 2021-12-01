@@ -31,9 +31,9 @@ import javax.swing.border.TitledBorder;
 
 import igu.VentanaInicial;
 import igu.atleta.VentanaAtletaListaEspera;
-import logica.CompeticionDto;
-import logica.CompeticionModel;
-import logica.ListaEsperaModel;
+import logica.competicion.CompeticionDto;
+import logica.competicion.CompeticionModel;
+import logica.listaEspera.ListaEsperaModel;
 
 @SuppressWarnings("serial")
 public class VentanaCrearCompeticion extends JFrame {

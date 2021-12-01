@@ -1,4 +1,4 @@
-package logica;
+package logica.competicion;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import logica.atleta.AtletaDto;
+import logica.atleta.AtletaModel;
+import logica.categoria.CategoriaDto;
+import logica.inscripcion.InscripcionDto;
+import logica.inscripcion.InscripcionModel;
 import util.BaseDatos;
 import util.DtoAssembler;
 
@@ -775,10 +780,12 @@ public class CompeticionModel {
 	}
 
 	private double calcularMinutosKm(InscripcionDto i) {
-		if (i.getHoras() > 0 || i.getMinutos() > 0)
-			return Double.parseDouble(getCompeticionById(i.getId_c()).get(0).getDistancia())
+		double minKm = 0;
+		if (i.getHoras() > 0 || i.getMinutos() > 0) {
+			minKm = Double.parseDouble(getCompeticionById(i.getId_c()).get(0).getDistancia())
 					/ (i.getHoras() * 60 + i.getMinutos());
-		return 0;
+		}
+		return Math.round(minKm * 100.0) / 100.0;
 	}
 
 }

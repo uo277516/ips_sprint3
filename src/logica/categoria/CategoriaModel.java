@@ -1,4 +1,4 @@
-package logica;
+package logica.categoria;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

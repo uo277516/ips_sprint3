@@ -22,8 +22,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import igu.atleta.VentanaAtletaListaEspera;
-import logica.CompeticionModel;
-import logica.MarcaTiempo;
+import logica.competicion.CompeticionModel;
+import logica.competicion.MarcaTiempo;
 
 public class VentanaClasificacion extends JFrame {
 

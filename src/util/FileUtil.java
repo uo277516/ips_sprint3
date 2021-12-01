@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import logica.AtletaDto;
+import logica.atleta.AtletaDto;
 
 public abstract class FileUtil{
 

@@ -30,8 +30,8 @@ import igu.club.VentanaMostrarCarrerasClub;
 import igu.organizador.VentanaAsignarDorsales;
 import igu.organizador.VentanaCrearCompeticion;
 import igu.organizador.VentanaMostrarCarrerasOrganizador;
-import logica.CompeticionModel;
-import logica.MarcaTiempo;
+import logica.competicion.CompeticionModel;
+import logica.competicion.MarcaTiempo;
 
 public class VentanaInicial extends JFrame {
 
@@ -210,7 +210,6 @@ public class VentanaInicial extends JFrame {
 					mt = new MarcaTiempo();
 					mt.setDorsal(trozos[0]);
 					mt.setTiempoInicial(trozos[1]);
-					System.out.println(trozos[1]);
 					Integer[] tiemposPaso = new Integer[4];
 					for (int i = 2; i < trozos.length - 1; i++)
 						try {
@@ -220,7 +219,6 @@ public class VentanaInicial extends JFrame {
 									"Los Tiempos no ha podido cargarse. (Formato de fichero incorrecto)");
 						}
 					mt.setTiemposPaso(tiemposPaso);
-					System.out.println(trozos[trozos.length - 1]);
 					mt.setTiempoFinal(trozos[trozos.length - 1]);
 					tiempos.add(mt);
 				} else {

@@ -24,14 +24,14 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import logica.AtletaDto;
-import logica.AtletaModel;
-import logica.CategoriaDto;
-import logica.CategoriaModel;
-import logica.CompeticionDto;
-import logica.CompeticionModel;
-import logica.InscripcionDto;
-import logica.InscripcionModel;
+import logica.atleta.AtletaDto;
+import logica.atleta.AtletaModel;
+import logica.categoria.CategoriaDto;
+import logica.categoria.CategoriaModel;
+import logica.competicion.CompeticionDto;
+import logica.competicion.CompeticionModel;
+import logica.inscripcion.InscripcionDto;
+import logica.inscripcion.InscripcionModel;
 import util.FileUtil;
 
 @SuppressWarnings("serial")
