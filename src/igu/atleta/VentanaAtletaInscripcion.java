@@ -166,12 +166,12 @@ public class VentanaAtletaInscripcion extends JFrame {
 			table.setModel(modelo);
 			modelo.addColumn("DNI");
 			modelo.addColumn("Nombre");
-			modelo.addColumn("Categor�a");
+			modelo.addColumn("Categoria");
 			modelo.addColumn("Fecha");
 			modelo.addColumn("Estado");
 
 			TableColumn columna;
-			columna = table.getColumn("Categor�a");
+			columna = table.getColumn("Categoria");
 			columna.setMinWidth(100);
 			columna = table.getColumn("Estado");
 			columna.setMinWidth(150);
@@ -317,7 +317,7 @@ public class VentanaAtletaInscripcion extends JFrame {
 	private void updateFueraDelPlazo(String[] line, String dnia) {
 		if (Float.valueOf(line[2]) > 0) {
 			// Pagó y hay que devolvérselo
-			im.actualizarInscripcionEstado("Anulada - pendiente de devoluci�n", dnia, this.competition.getId());
+			im.actualizarInscripcionEstado("Anulada - pendiente de devolucion", dnia, this.competition.getId());
 		} else {
 			// No pagó
 			im.actualizarInscripcionEstado("Anulada", dnia, this.competition.getId());
@@ -333,14 +333,14 @@ public class VentanaAtletaInscripcion extends JFrame {
 			im.actualizarInscripcionCantPagada(pago, dnia, this.competition.getId());
 		} else if (cuotaAPagar < pago) {
 			// Paga de más
-			im.actualizarInscripcionEstado("Inscrito - pendiente de devoluci�n", dnia, this.competition.getId());
+			im.actualizarInscripcionEstado("Inscrito - pendiente de devolucion", dnia, this.competition.getId());
 			im.actualizarInscripcionCantPagada(pago, dnia, this.competition.getId());
 		} else {
 			// Paga de menos
 			if (pago == 0) {
 				im.actualizarInscripcionEstado("Anulada", dnia, this.competition.getId());
 			} else {
-				im.actualizarInscripcionEstado("Anulada - pendiente de devoluci�n", dnia, this.competition.getId());
+				im.actualizarInscripcionEstado("Anulada - pendiente de devolucion", dnia, this.competition.getId());
 			}
 
 		}

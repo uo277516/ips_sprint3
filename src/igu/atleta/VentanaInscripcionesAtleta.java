@@ -347,10 +347,9 @@ public class VentanaInscripcionesAtleta extends JFrame {
 		    				+ "\nDinero a devolver: " + dinero + "euros.");
 	
 				}
-				else if (ins.getEstado().toUpperCase().equals("CANCELADO") || 
-						ins.getEstado().toUpperCase().equals("CANCELADO-PENDIENTE DE DEVOLUCION"))
+				else if (ins.getEstado().toUpperCase().contains("CANC"))
 				{
-		    		JOptionPane.showMessageDialog(this, "Usted ya se ha desinscrito de esta competici�n");
+		    		JOptionPane.showMessageDialog(this, "Usted ya se ha desinscrito de esta competicion");
 
 				}
 				else {

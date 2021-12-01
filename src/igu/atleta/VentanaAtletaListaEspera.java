@@ -35,6 +35,7 @@ public class VentanaAtletaListaEspera extends JFrame {
 	private CompeticionDto competicion;
 	private AtletaModel atl;
 	private ListaEsperaModel lem;
+	private JLabel lblNewLabel;
 
 	/**
 	 * Create the frame.
@@ -49,7 +50,7 @@ public class VentanaAtletaListaEspera extends JFrame {
 		this.competicion = competicion;
 		this.atl = new AtletaModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 480, 208);
+		setBounds(100, 100, 489, 208);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -59,12 +60,13 @@ public class VentanaAtletaListaEspera extends JFrame {
 		contentPane.add(getLblEmail());
 		contentPane.add(getTxtEmail());
 		contentPane.add(getBtnSiguiente());
+		contentPane.add(getLblNewLabel());
 	}
 
 	private JLabel getLblMeterEmail() {
 		if (lblMeterEmail == null) {
-			lblMeterEmail = new JLabel("Para inscribirte en la lista de espera de la competición, por favor introduzca su email:");
-			lblMeterEmail.setBounds(16, 33, 441, 33);
+			lblMeterEmail = new JLabel("Para inscribirte en la lista de espera de la competición, por favor");
+			lblMeterEmail.setBounds(16, 10, 441, 33);
 		}
 		return lblMeterEmail;
 	}
@@ -114,7 +116,7 @@ public class VentanaAtletaListaEspera extends JFrame {
 	}
 
 	private void registroDeAtleta() {
-		int reply = JOptionPane.showConfirmDialog(this, "No est�s registrado, �quieres registrarte?",
+		int reply = JOptionPane.showConfirmDialog(this, "No estás registrado, ¿quieres registrarte?",
 				"Ventana registro", JOptionPane.YES_NO_OPTION);
 		if (reply == JOptionPane.YES_OPTION) {
 			// Se le envia a la ventana de registro
@@ -123,7 +125,7 @@ public class VentanaAtletaListaEspera extends JFrame {
 			vPal.setVisible(true);
 		} else {
 			// NO
-			JOptionPane.showMessageDialog(this, "�Hasta la pr�xima!");
+			JOptionPane.showMessageDialog(this, "Hasta la próxima");
 		}
 	}
 
@@ -141,12 +143,19 @@ public class VentanaAtletaListaEspera extends JFrame {
 		AtletaDto a = atl.findAtletaByEmail(email);
 		String dnia = a.getDni();
 		atl.addAtletaAListaEspera(dnia, lista.getId(), orden);
-		JOptionPane.showMessageDialog(this, "Ya est� a�adido a la lista de espera de " + this.competicion.getNombre()
-				+ ", su posici�n en la lista es " + orden);
+		JOptionPane.showMessageDialog(this, "Ya está añadido a la lista de espera de " + this.competicion.getNombre()
+				+ ", su posición en la lista es " + orden);
 		System.exit(0);
 	}
 
 	public CompeticionDto getCompeticion() {
 		return this.competicion;
+	}
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel(" introduzca su email:");
+			lblNewLabel.setBounds(16, 36, 117, 13);
+		}
+		return lblNewLabel;
 	}
 }
