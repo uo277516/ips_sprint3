@@ -28,11 +28,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import logica.competicion.CompeticionDto;
+import logica.competicion.CompeticionModel;
+import logica.inscripcion.*;
 import igu.VentanaInicial;
-import logica.CompeticionDto;
-import logica.CompeticionModel;
-import logica.InscripcionDto;
-import logica.InscripcionModel;
 
 public class VentanaInscripcionesAtleta extends JFrame {
 

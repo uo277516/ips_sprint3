@@ -261,10 +261,17 @@ public class VentanaMostrarCarreras extends JFrame {
 			for (CompeticionDto c : competiciones1) {
 				competiciones.add(c);
 			}
+			boolean esta = false;
 			for (CompeticionDto c : competiciones2) {
-				if (!competiciones1.contains(c)) {
+				for (CompeticionDto co : competiciones) {
+					if (co.getId().equals(c.getId())) {
+						esta = true;
+					}
+				}
+				if (!esta) {
 					competiciones.add(c);
 				}
+				esta = false;
 			}
 
 			String[][] info = new String[competiciones.size()][8];
